@@ -46,6 +46,25 @@ ci_package_source_xml="$(xml_escape "${NETWASM_CI_PACKAGE_SOURCE:-}")"
     '</configuration>'
 } > "${nuget_config}"
 
+package_cache="${NUGET_PACKAGES:-${test_root}/packages}"
+sdk_version="$(sed -n 's/.*"NetWasm.Sdk": "\([^"]*\)".*/\1/p' "${REPOSITORY_ROOT}/global.json")"
+if [[ -z "${sdk_version}" ]]; then
+  echo "Unable to read the NetWasm.Sdk version from global.json." >&2
+  exit 1
+fi
+
+seed_project="${test_root}/SeedSdk.csproj"
+printf '%s\n' \
+  '<Project Sdk="Microsoft.NET.Sdk">' \
+  '  <PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup>' \
+  "  <ItemGroup><PackageReference Include=\"NetWasm.Sdk\" Version=\"${sdk_version}\" PrivateAssets=\"all\" /></ItemGroup>" \
+  '</Project>' > "${seed_project}"
+NUGET_PACKAGES="${package_cache}" dotnet restore "${seed_project}" \
+  --configfile "${nuget_config}" \
+  --disable-build-servers \
+  --nologo
+export NUGET_PACKAGES="${package_cache}"
+
 tunit_test_projects=(
   tests/NetWasm.System.Linq.Tests/NetWasm.System.Linq.Tests.csproj
   tests/NetWasm.System.Linq.AsyncEnumerable.Tests/NetWasm.System.Linq.AsyncEnumerable.Tests.csproj
