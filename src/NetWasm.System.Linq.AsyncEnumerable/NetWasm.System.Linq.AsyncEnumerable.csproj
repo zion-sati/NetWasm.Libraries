@@ -1,0 +1,34 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.Linq.AsyncEnumerable</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);NET</DefineConstants>
+    <NoWarn>$(NoWarn);CS1998</NoWarn>
+    <PackageId>NetWasm.System.Linq.AsyncEnumerable</PackageId>
+    <Version>$(NetWasmSystemLinqAsyncEnumerablePackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemLinqAsyncEnumerablePackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of System.Linq.AsyncEnumerable.</Description>
+    <PackageTags>netwasm;system;linq;async;enumerable</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetWasm.System.Linq"
+                      Version="[$(NetWasmSystemLinqPackageVersion)]" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

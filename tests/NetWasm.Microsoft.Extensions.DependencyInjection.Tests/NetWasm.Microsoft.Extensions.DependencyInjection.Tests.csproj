@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.4" />
+    <PackageReference Include="coverlet.msbuild" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ServiceProviderTests.cs" />
+    <Compile Include="GeneratedActivationActorTests.cs" />
+    <Compile Include="CapabilityContractTests.cs" />
+    <Compile Include="DI01DTests.cs" />
+    <Compile Include="OpenGenericActivationClosureTests.cs" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Target/NetWasm.Microsoft.Extensions.DependencyInjection.Target.csproj" Aliases="netwasmTarget" />
+    <ProjectReference Include="../../tools/NetWasm.Microsoft.Extensions.DependencyInjection.Generator/NetWasm.Microsoft.Extensions.DependencyInjection.Generator.csproj" />
+  </ItemGroup>
+</Project>

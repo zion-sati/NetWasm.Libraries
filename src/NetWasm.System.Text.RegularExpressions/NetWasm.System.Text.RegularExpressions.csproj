@@ -1,0 +1,39 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.Text.RegularExpressions</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);NET;SYSTEM_TEXT_REGULAREXPRESSIONS</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <PackageId>NetWasm.System.Text.RegularExpressions</PackageId>
+    <Version>$(NetWasmSystemTextRegularExpressionsPackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemTextRegularExpressionsPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of System.Text.RegularExpressions.</Description>
+    <PackageTags>netwasm;system;text;regex;regular-expressions</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+    <NetWasmRegexSourceGenerator>$(NETCoreTargetingPackRoot)/Microsoft.NETCore.App.Ref/10.0.10/analyzers/dotnet/cs/System.Text.RegularExpressions.Generator.dll</NetWasmRegexSourceGenerator>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="System/Text/RegularExpressions/*.cs" />
+    <Compile Include="System/Text/RegularExpressions/Symbolic/*.cs" />
+    <None Include="$(NetWasmRegexSourceGenerator)"
+          Pack="true"
+          PackagePath="analyzers/dotnet/cs/System.Text.RegularExpressions.Generator.dll" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

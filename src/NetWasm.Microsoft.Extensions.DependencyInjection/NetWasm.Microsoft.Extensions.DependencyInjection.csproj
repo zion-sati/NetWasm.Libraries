@@ -1,0 +1,73 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.DependencyInjection</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.DependencyInjection</PackageId>
+    <Version>$(NetWasmDependencyInjectionPackageVersion)</Version>
+    <PackageVersion>$(NetWasmDependencyInjectionPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.DependencyInjection.</Description>
+    <PackageTags>netwasm;microsoft;extensions;dependency-injection;container</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+    <NetWasmDependencyInjectionGeneratorProject>../../tools/NetWasm.Microsoft.Extensions.DependencyInjection.Generator/NetWasm.Microsoft.Extensions.DependencyInjection.Generator.csproj</NetWasmDependencyInjectionGeneratorProject>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetWasmCollectDependencyInjectionGeneratorAsset</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Generated/GeneratedActivationDescriptor.cs" />
+    <Compile Include="Generated/GeneratedActivationRegistry.cs" />
+    <Compile Include="Generated/GeneratedServiceDescriptor.cs" />
+    <Compile Include="Generated/GeneratedActivationRegistrationExtensions.cs" />
+    <Compile Include="ServiceProviderOptions.cs" />
+    <Compile Include="ServiceProvider.cs" />
+    <Compile Include="ServiceCollectionContainerBuilderExtensions.cs" />
+    <Compile Include="DefaultServiceProviderFactory.cs" />
+    <Compile Include="ServiceLookup/*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
+                      Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
+    <ProjectReference Include="$(NetWasmDependencyInjectionGeneratorProject)"
+                      ReferenceOutputAssembly="false"
+                      PrivateAssets="all"
+                      SkipGetTargetFrameworkProperties="true"
+                      AdditionalProperties="TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+
+  <Target Name="NetWasmCollectDependencyInjectionGeneratorAsset"
+          Returns="@(TfmSpecificPackageFile)"
+          Condition="'$(TargetFrameworkIdentifier)' == 'NetWasm' AND '$(TargetFrameworkVersion)' == 'v0.1'">
+    <MSBuild Projects="$(NetWasmDependencyInjectionGeneratorProject)"
+             Targets="GetTargetPath"
+             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false"
+             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker;TargetFrameworks">
+      <Output TaskParameter="TargetOutputs" ItemName="_NetWasmDependencyInjectionGeneratorOutput" />
+    </MSBuild>
+
+    <Error Code="NWDI011"
+           Condition="'@(_NetWasmDependencyInjectionGeneratorOutput->Count())' != '1'"
+           Text="The dependency-injection generator build must produce exactly one analyzer assembly." />
+    <Error Code="NWDI012"
+           Condition="'@(_NetWasmDependencyInjectionGeneratorOutput)' != '' AND !Exists('@(_NetWasmDependencyInjectionGeneratorOutput)')"
+           Text="The dependency-injection generator analyzer assembly was not built before packaging." />
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(_NetWasmDependencyInjectionGeneratorOutput)">
+        <PackagePath>analyzers/dotnet/cs/%(Filename)%(Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+</Project>

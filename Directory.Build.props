@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <RepositorySourceRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)'))</RepositorySourceRoot>
+    <PathMap Condition="'$(PathMap)' == ''">$(RepositorySourceRoot)=/_/</PathMap>
+    <Authors>Zion Sati</Authors>
+    <PackageOwners>Zion Sati</PackageOwners>
+    <Copyright>Copyright © 2026 Zion Sati</Copyright>
+    <NetWasmPortedLibrariesRepositoryUrl>https://github.com/zion-sati/NetWasm.Libraries</NetWasmPortedLibrariesRepositoryUrl>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <BuildProjectReferences Condition="'$(NoBuild)' == 'true'">false</BuildProjectReferences>
+  </PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)eng/NetWasm.PublicPackageVersions.props" />
+</Project>

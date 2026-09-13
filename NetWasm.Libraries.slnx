@@ -1,0 +1,34 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NetWasm.System.Linq/NetWasm.System.Linq.csproj" />
+    <Project Path="src/NetWasm.System.Linq.AsyncEnumerable/NetWasm.System.Linq.AsyncEnumerable.csproj" />
+    <Project Path="src/NetWasm.System.Memory/NetWasm.System.Memory.csproj" />
+    <Project Path="src/NetWasm.System.Text.Encodings.Web/NetWasm.System.Text.Encodings.Web.csproj" />
+    <Project Path="src/NetWasm.System.IO.Pipelines/NetWasm.System.IO.Pipelines.csproj" />
+    <Project Path="src/NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" />
+    <Project Path="src/NetWasm.System.Text.RegularExpressions/NetWasm.System.Text.RegularExpressions.csproj" />
+    <Project Path="src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj" />
+    <Project Path="src/NetWasm.System.Xml/NetWasm.System.Xml.csproj" />
+    <Project Path="src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj" />
+    <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" />
+    <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/NetWasm.Microsoft.Extensions.DependencyInjection.Generator/NetWasm.Microsoft.Extensions.DependencyInjection.Generator.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NetWasm.System.Linq.Tests/NetWasm.System.Linq.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Linq.AsyncEnumerable.Tests/NetWasm.System.Linq.AsyncEnumerable.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Text.Encodings.Web.Tests/NetWasm.System.Text.Encodings.Web.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.IO.Pipelines.Tests/NetWasm.System.IO.Pipelines.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Net.Http.Tests/NetWasm.System.Net.Http.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Text.RegularExpressions.Tests/NetWasm.System.Text.RegularExpressions.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Text.Json.Tests/NetWasm.System.Text.Json.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Xml.Tests/NetWasm.System.Xml.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.IO.Hashing.Tests/NetWasm.System.IO.Hashing.Tests.csproj" />
+    <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj" />
+    <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj" />
+    <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Target/NetWasm.Microsoft.Extensions.DependencyInjection.Target.csproj" />
+    <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests.csproj" />
+  </Folder>
+</Solution>

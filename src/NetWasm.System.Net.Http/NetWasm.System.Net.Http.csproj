@@ -1,0 +1,56 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.Net.Http</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <PackageId>NetWasm.System.Net.Http</PackageId>
+    <Version>$(NetWasmSystemNetHttpPackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemNetHttpPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of System.Net.Http over WASI HTTP.</Description>
+    <PackageTags>netwasm;system;net;http;wasi</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="System/Net/Http/HttpTransport.cs" />
+    <Compile Include="System/Net/HttpStatusCode.cs" />
+    <Compile Include="System/Net/Http/HttpMessageHandler.cs" />
+    <Compile Include="System/Net/Http/HttpMessageInvoker.cs" />
+    <Compile Include="System/Net/Http/HttpClient.cs" />
+    <Compile Include="System/Net/Http/HttpRequestMessage.cs" />
+    <Compile Include="System/Net/Http/HttpResponseMessage.cs" />
+    <Compile Include="System/Net/Http/HttpContent.cs" />
+    <Compile Include="System/Net/Http/ByteArrayContent.cs" />
+    <Compile Include="System/Net/Http/StringContent.cs" />
+    <Compile Include="System/Net/Http/FormUrlEncodedContent.cs" />
+    <Compile Include="System/Net/Http/ReadOnlyMemoryContent.cs" />
+    <Compile Include="System/Net/Http/EmptyContent.cs" />
+    <Compile Include="System/Net/Http/HttpMethod.cs" />
+    <Compile Include="System/Net/Http/HttpCompletionOption.cs" />
+    <Compile Include="System/Net/Http/HttpRequestException.cs" />
+    <Compile Include="System/Net/Http/HttpRequestError.cs" />
+    <Compile Include="System/Net/Http/StreamContent.cs" />
+    <Compile Include="System/Net/Http/DelegatingHandler.cs" />
+    <Compile Include="System/Net/Http/Headers/HttpHeaders.cs" />
+    <Compile Include="System/Net/Http/Headers/HttpRequestHeaders.cs" />
+    <Compile Include="System/Net/Http/Headers/HttpResponseHeaders.cs" />
+    <Compile Include="System/Net/Http/Headers/HttpContentHeaders.cs" />
+    <Compile Include="System/Net/Http/Headers/MediaTypeHeaderValue.cs" />
+    <Compile Include="System/Net/Http/Wasi02/*.cs" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

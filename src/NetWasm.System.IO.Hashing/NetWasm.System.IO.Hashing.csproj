@@ -1,0 +1,54 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.IO.Hashing</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <PackageId>NetWasm.System.IO.Hashing</PackageId>
+    <Version>$(NetWasmSystemIOHashingPackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemIOHashingPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of System.IO.Hashing.</Description>
+    <PackageTags>netwasm;system;io;hashing;crc;xxhash</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="System/IO/Hashing/Adler32.cs" />
+    <Compile Include="System/IO/Hashing/Crc32.cs" />
+    <Compile Include="System/IO/Hashing/Crc32ParameterSet.cs" />
+    <Compile Include="System/IO/Hashing/Crc32ParameterSet.Table.cs" />
+    <Compile Include="System/IO/Hashing/Crc32ParameterSet.WellKnown.cs" />
+    <Compile Include="System/IO/Hashing/Crc64.cs" />
+    <Compile Include="System/IO/Hashing/Crc64ParameterSet.cs" />
+    <Compile Include="System/IO/Hashing/Crc64ParameterSet.Table.cs" />
+    <Compile Include="System/IO/Hashing/Crc64ParameterSet.WellKnown.cs" />
+    <Compile Include="System/IO/Hashing/NonCryptographicHashAlgorithm.cs" />
+    <Compile Include="System/IO/Hashing/XxHash128.cs" />
+    <Compile Include="System/IO/Hashing/XxHash3.cs" />
+    <Compile Include="System/IO/Hashing/XxHash32.cs" />
+    <Compile Include="System/IO/Hashing/XxHash32.State.cs" />
+    <Compile Include="System/IO/Hashing/XxHash64.cs" />
+    <Compile Include="System/IO/Hashing/XxHash64.State.cs" />
+    <Compile Include="System/IO/Hashing/XxHashShared.cs" />
+    <Compile Include="System/ThrowHelper.cs" />
+    <Compile Include="System/IO/Hashing/SR.cs" />
+    <PackageReference Include="NetWasm.System.Memory"
+                      Version="[$(NetWasmSystemMemoryPackageVersion)]" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,51 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.Memory</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET;MAKE_ABW_PUBLIC</DefineConstants>
+    <PackageId>NetWasm.System.Memory</PackageId>
+    <Version>$(NetWasmSystemMemoryPackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemMemoryPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 support assembly for System.Memory.</Description>
+    <PackageTags>netwasm;memory;buffers;support</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="System/Buffers/IBufferWriter.cs" />
+    <Compile Include="System/Buffers/ArrayBufferWriter.cs" />
+    <Compile Include="System/Buffers/BuffersExtensions.cs" />
+    <Compile Include="System/Buffers/ReadOnlySequence.cs" />
+    <Compile Include="System/Buffers/ReadOnlySequence.Helpers.cs" />
+    <Compile Include="System/Buffers/ReadOnlySequenceSegment.cs" />
+    <Compile Include="System/Buffers/ReadOnlySequenceDebugView.cs" />
+    <Compile Include="System/SequencePosition.cs" />
+    <Compile Include="System/ThrowHelper.cs" />
+    <Compile Include="System/SR.cs" />
+    <Compile Include="System/Buffers/SequenceReader.cs" />
+    <Compile Include="System/Buffers/SequenceReader.Search.cs" />
+    <Compile Include="System/Buffers/SequenceReaderExtensions.Binary.cs" />
+    <Compile Include="System/Buffers/MemoryPool.cs" />
+    <Compile Include="System/Buffers/ArrayMemoryPool.cs" />
+    <Compile Include="System/Buffers/ArrayMemoryPool.ArrayMemoryPoolBuffer.cs" />
+    <Compile Include="System/Buffers/ReadOnlySequenceStream.cs" />
+    <Compile Include="System/Runtime/InteropServices/SequenceMarshal.cs" />
+    <Compile Include="System/Text/EncodingExtensions.cs" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

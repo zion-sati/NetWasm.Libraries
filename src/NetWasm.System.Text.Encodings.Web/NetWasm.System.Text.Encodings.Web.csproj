@@ -1,0 +1,49 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.Text.Encodings.Web</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET</DefineConstants>
+    <PackageId>NetWasm.System.Text.Encodings.Web</PackageId>
+    <Version>$(NetWasmSystemTextEncodingsWebPackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemTextEncodingsWebPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 support assembly for System.Text.Encodings.Web.</Description>
+    <PackageTags>netwasm;encoding;unicode;text;web</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="System/Text/Encodings/Web/AllowedBmpCodePointsBitmap.cs" />
+    <Compile Include="System/Text/Encodings/Web/AsciiByteMap.cs" />
+    <Compile Include="System/Text/Encodings/Web/DefaultJavaScriptEncoder.cs" />
+    <Compile Include="System/Text/Encodings/Web/JavaScriptEncoder.cs" />
+    <Compile Include="System/Text/Encodings/Web/OptimizedInboxTextEncoder.Ascii.cs" />
+    <Compile Include="System/Text/Encodings/Web/OptimizedInboxTextEncoder.cs" />
+    <Compile Include="System/Text/Encodings/Web/ScalarEscaperBase.cs" />
+    <Compile Include="System/Text/Encodings/Web/TextEncoder.cs" />
+    <Compile Include="System/Text/Encodings/Web/TextEncoderSettings.cs" />
+    <Compile Include="System/Text/Encodings/Web/ThrowHelper.cs" />
+    <Compile Include="System/Text/Unicode/UnicodeHelpers.cs" />
+    <Compile Include="System/Text/Unicode/UnicodeHelpers.generated.cs" />
+    <Compile Include="System/Text/Unicode/UnicodeRange.cs" />
+    <Compile Include="System/Text/Unicode/UnicodeRanges.cs" />
+    <Compile Include="System/Text/Unicode/UnicodeRuntimePrimitives.cs" />
+    <Compile Include="System/Text/Encodings/Web/EncoderDebug.cs" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

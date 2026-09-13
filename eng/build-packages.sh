@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+OUTPUT_DIR="${1:-${REPOSITORY_ROOT}/artifacts/packages}"
+mkdir -p "${OUTPUT_DIR}"
+OUTPUT_DIR="$(cd "${OUTPUT_DIR}" && pwd -P)"
+
+case "${OUTPUT_DIR}" in
+  "${REPOSITORY_ROOT}/artifacts"|"${REPOSITORY_ROOT}/artifacts"/*)
+    ;;
+  "${REPOSITORY_ROOT}"|"${REPOSITORY_ROOT}"/*)
+    echo "Package output inside the repository must stay under artifacts/: ${OUTPUT_DIR}" >&2
+    exit 2
+    ;;
+esac
+
+find "${OUTPUT_DIR}" -maxdepth 1 -type f \
+  \( -name 'NetWasm.*.nupkg' -o -name 'NetWasm.*.snupkg' \) -delete
+
+build_root="$(mktemp -d "${TMPDIR:-/tmp}/netwasm-libraries-build.XXXXXX")"
+build_root="$(cd "${build_root}" && pwd -P)"
+cleanup() {
+  rm -rf "${build_root}"
+}
+trap cleanup EXIT
+
+nuget_config="${build_root}/NuGet.Config"
+xml_escape() {
+  printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/"/\&quot;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
+}
+output_dir_xml="$(xml_escape "${OUTPUT_DIR}")"
+ci_package_source_xml="$(xml_escape "${NETWASM_CI_PACKAGE_SOURCE:-}")"
+{
+  printf '%s\n' \
+    '<?xml version="1.0" encoding="utf-8"?>' \
+    '<configuration>' \
+    '  <packageSources>' \
+    '    <clear />' \
+    "    <add key=\"current-build\" value=\"${output_dir_xml}\" />"
+  if [[ -n "${NETWASM_CI_PACKAGE_SOURCE:-}" ]]; then
+    printf '    <add key="ci-artifacts" value="%s" />\n' "${ci_package_source_xml}"
+  fi
+  printf '%s\n' \
+    '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />' \
+    '  </packageSources>' \
+    '</configuration>'
+} > "${nuget_config}"
+
+package_cache="${NUGET_PACKAGES:-${build_root}/packages}"
+
+root_projects=(
+  src/NetWasm.System.Linq/NetWasm.System.Linq.csproj
+  src/NetWasm.System.Memory/NetWasm.System.Memory.csproj
+  src/NetWasm.System.Text.Encodings.Web/NetWasm.System.Text.Encodings.Web.csproj
+  src/NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj
+  src/NetWasm.System.Text.RegularExpressions/NetWasm.System.Text.RegularExpressions.csproj
+  src/NetWasm.System.Xml/NetWasm.System.Xml.csproj
+  src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj
+)
+
+dependent_projects=(
+  src/NetWasm.System.Linq.AsyncEnumerable/NetWasm.System.Linq.AsyncEnumerable.csproj
+  src/NetWasm.System.IO.Pipelines/NetWasm.System.IO.Pipelines.csproj
+  src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj
+  src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj
+  src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj
+)
+
+pack_project() {
+  local project="$1"
+  NUGET_PACKAGES="${package_cache}" \
+    dotnet pack "${REPOSITORY_ROOT}/${project}" \
+      -c Release \
+      --configfile "${nuget_config}" \
+      --nologo \
+      -o "${OUTPUT_DIR}" \
+      -p:UseArtifactsOutput=true \
+      -p:ArtifactsPath="${build_root}/artifacts"
+}
+
+for project in "${root_projects[@]}"; do
+  pack_project "${project}"
+done
+for project in "${dependent_projects[@]}"; do
+  pack_project "${project}"
+done
+
+package_count="$(find "${OUTPUT_DIR}" -maxdepth 1 -type f -name 'NetWasm.*.nupkg' | wc -l | tr -d ' ')"
+if [[ "${package_count}" -ne 12 ]]; then
+  echo "Expected exactly 12 NetWasm library packages, found ${package_count}." >&2
+  exit 1
+fi
+
+echo "Built 12 NetWasm library packages in ${OUTPUT_DIR}"

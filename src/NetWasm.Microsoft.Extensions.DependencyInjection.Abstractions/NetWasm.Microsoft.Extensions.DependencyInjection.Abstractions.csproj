@@ -1,0 +1,56 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.DependencyInjection.Abstractions</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions</PackageId>
+    <Version>$(NetWasmDependencyInjectionAbstractionsPackageVersion)</Version>
+    <PackageVersion>$(NetWasmDependencyInjectionAbstractionsPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.DependencyInjection.Abstractions.</Description>
+    <PackageTags>netwasm;microsoft;extensions;dependency-injection;abstractions</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Microsoft.Extensions.DependencyInjection" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IServiceCollection.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IServiceProviderFactory.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IKeyedServiceProvider.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IServiceProviderIsKeyedService.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IServiceProviderIsService.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IServiceScope.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IServiceScopeFactory.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ISupportRequiredService.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ObjectFactory.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/IGeneratedActivator.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/KeyedService.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceKeyLookupMode.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/FromKeyedServicesAttribute.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ActivatorUtilitiesConstructorAttribute.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/Generated/*.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ActivatorUtilities.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/AsyncServiceScope.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/SR.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceLifetime.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceCollection.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceDescriptor.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/Extensions/ServiceCollectionDescriptorExtensions.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceCollectionServiceExtensions.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceProviderServiceExtensions.cs" />
+    <Compile Include="Properties/AssemblyInfo.cs" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

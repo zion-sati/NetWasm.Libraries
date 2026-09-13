@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <!-- Production package graph. These versions are replaced exactly once
+         when the immutable release candidate is allocated. -->
+    <NetWasmSystemLinqPackageVersion>0.1.0-rc.1</NetWasmSystemLinqPackageVersion>
+    <NetWasmSystemLinqAsyncEnumerablePackageVersion>0.1.0-rc.1</NetWasmSystemLinqAsyncEnumerablePackageVersion>
+    <NetWasmSystemMemoryPackageVersion>0.1.0-rc.1</NetWasmSystemMemoryPackageVersion>
+    <NetWasmSystemIOPipelinesPackageVersion>0.1.0-rc.1</NetWasmSystemIOPipelinesPackageVersion>
+    <NetWasmSystemTextEncodingsWebPackageVersion>0.1.0-rc.1</NetWasmSystemTextEncodingsWebPackageVersion>
+    <NetWasmSystemTextJsonPackageVersion>0.1.0-rc.1</NetWasmSystemTextJsonPackageVersion>
+    <NetWasmSystemXmlPackageVersion>0.1.0-rc.1</NetWasmSystemXmlPackageVersion>
+    <NetWasmSystemTextRegularExpressionsPackageVersion>0.1.0-rc.1</NetWasmSystemTextRegularExpressionsPackageVersion>
+    <NetWasmSystemIOHashingPackageVersion>0.1.0-rc.1</NetWasmSystemIOHashingPackageVersion>
+    <NetWasmSystemNetHttpPackageVersion>0.1.0-rc.1</NetWasmSystemNetHttpPackageVersion>
+    <NetWasmDependencyInjectionAbstractionsPackageVersion>0.1.0-rc.1</NetWasmDependencyInjectionAbstractionsPackageVersion>
+    <NetWasmDependencyInjectionPackageVersion>0.1.0-rc.1</NetWasmDependencyInjectionPackageVersion>
+
+    <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
+    <NetWasmTUnitPackageVersion>1.66.27-rc.1</NetWasmTUnitPackageVersion>
+  </PropertyGroup>
+</Project>
