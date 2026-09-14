@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "repository": "zion-sati/NetWasm.Libraries",
+  "repositoryUrl": "https://github.com/zion-sati/NetWasm.Libraries",
+  "releaseVersion": "0.1.0-rc.1",
+  "releaseTag": "v0.1.0-rc.1",
+  "sourceCommit": "b821e695c3808bce79fe9104bd211272bd2509f0",
+  "packages": [
+    "NetWasm.Microsoft.Extensions.DependencyInjection",
+    "NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions",
+    "NetWasm.System.IO.Hashing",
+    "NetWasm.System.IO.Pipelines",
+    "NetWasm.System.Linq",
+    "NetWasm.System.Linq.AsyncEnumerable",
+    "NetWasm.System.Memory",
+    "NetWasm.System.Net.Http",
+    "NetWasm.System.Text.Encodings.Web",
+    "NetWasm.System.Text.Json",
+    "NetWasm.System.Text.RegularExpressions",
+    "NetWasm.System.Xml"
+  ]
+}
