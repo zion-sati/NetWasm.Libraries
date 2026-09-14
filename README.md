@@ -9,7 +9,7 @@ Install the NetWasm SDK and the selected libraries from NuGet.org. For example:
 
 ```sh
 dotnet new install NetWasm.Templates@0.1.0-rc.1
-dotnet new netwasm-console -n HelloNetWasm
+dotnet new netwasm-app -n HelloNetWasm
 cd HelloNetWasm
 dotnet add package NetWasm.System.Linq --version 0.1.0-rc.1
 dotnet publish -c Release
