@@ -2,20 +2,20 @@
   <PropertyGroup>
     <!-- Production package graph. These versions are replaced exactly once
          when the immutable release candidate is allocated. -->
-    <NetWasmSystemLinqPackageVersion>0.1.0-rc.3</NetWasmSystemLinqPackageVersion>
-    <NetWasmSystemLinqAsyncEnumerablePackageVersion>0.1.0-rc.3</NetWasmSystemLinqAsyncEnumerablePackageVersion>
-    <NetWasmSystemMemoryPackageVersion>0.1.0-rc.3</NetWasmSystemMemoryPackageVersion>
-    <NetWasmSystemIOPipelinesPackageVersion>0.1.0-rc.3</NetWasmSystemIOPipelinesPackageVersion>
-    <NetWasmSystemTextEncodingsWebPackageVersion>0.1.0-rc.3</NetWasmSystemTextEncodingsWebPackageVersion>
-    <NetWasmSystemTextJsonPackageVersion>0.1.0-rc.3</NetWasmSystemTextJsonPackageVersion>
-    <NetWasmSystemXmlPackageVersion>0.1.0-rc.3</NetWasmSystemXmlPackageVersion>
-    <NetWasmSystemTextRegularExpressionsPackageVersion>0.1.0-rc.3</NetWasmSystemTextRegularExpressionsPackageVersion>
-    <NetWasmSystemIOHashingPackageVersion>0.1.0-rc.3</NetWasmSystemIOHashingPackageVersion>
-    <NetWasmSystemNetHttpPackageVersion>0.1.0-rc.3</NetWasmSystemNetHttpPackageVersion>
-    <NetWasmDependencyInjectionAbstractionsPackageVersion>0.1.0-rc.3</NetWasmDependencyInjectionAbstractionsPackageVersion>
-    <NetWasmDependencyInjectionPackageVersion>0.1.0-rc.3</NetWasmDependencyInjectionPackageVersion>
+    <NetWasmSystemLinqPackageVersion>0.1.0</NetWasmSystemLinqPackageVersion>
+    <NetWasmSystemLinqAsyncEnumerablePackageVersion>0.1.0</NetWasmSystemLinqAsyncEnumerablePackageVersion>
+    <NetWasmSystemMemoryPackageVersion>0.1.0</NetWasmSystemMemoryPackageVersion>
+    <NetWasmSystemIOPipelinesPackageVersion>0.1.0</NetWasmSystemIOPipelinesPackageVersion>
+    <NetWasmSystemTextEncodingsWebPackageVersion>0.1.0</NetWasmSystemTextEncodingsWebPackageVersion>
+    <NetWasmSystemTextJsonPackageVersion>0.1.0</NetWasmSystemTextJsonPackageVersion>
+    <NetWasmSystemXmlPackageVersion>0.1.0</NetWasmSystemXmlPackageVersion>
+    <NetWasmSystemTextRegularExpressionsPackageVersion>0.1.0</NetWasmSystemTextRegularExpressionsPackageVersion>
+    <NetWasmSystemIOHashingPackageVersion>0.1.0</NetWasmSystemIOHashingPackageVersion>
+    <NetWasmSystemNetHttpPackageVersion>0.1.0</NetWasmSystemNetHttpPackageVersion>
+    <NetWasmDependencyInjectionAbstractionsPackageVersion>0.1.0</NetWasmDependencyInjectionAbstractionsPackageVersion>
+    <NetWasmDependencyInjectionPackageVersion>0.1.0</NetWasmDependencyInjectionPackageVersion>
 
     <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
-    <NetWasmTUnitPackageVersion>0.1.0-rc.3</NetWasmTUnitPackageVersion>
+    <NetWasmTUnitPackageVersion>0.1.0</NetWasmTUnitPackageVersion>
   </PropertyGroup>
 </Project>
