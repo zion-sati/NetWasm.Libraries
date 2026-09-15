@@ -8,12 +8,17 @@ pay-for-what-you-use deployment model.
 Install the NetWasm SDK and the selected libraries from NuGet.org. For example:
 
 ```sh
-dotnet new install NetWasm.Templates@0.1.0-rc.1
-dotnet new netwasm-app -n HelloNetWasm
+dotnet new install "NetWasm.Templates@*-*"
+dotnet new netwasm-app -n HelloNetWasm -o HelloNetWasm
 cd HelloNetWasm
-dotnet add package NetWasm.System.Linq --version 0.1.0-rc.1
+dotnet add package NetWasm.System.Linq --prerelease
 dotnet publish -c Release
 ```
+
+`@*-*` selects the latest templates, including prereleases. `--prerelease`
+includes experimental library releases; package-add records a concrete version
+in your project. The project name and output directory are
+examples: use your own application and reference only the libraries it needs.
 
 The repository currently contains LINQ, Async LINQ, Memory, Pipelines,
 Encodings.Web, HTTP, regular expressions, JSON, XML, hashing, and the
