@@ -5,5 +5,4 @@
 ports such as Pipelines, JSON and Hashing, rather than a broad compatibility
 claim for arbitrary desktop or `netstandard` applications.
 
-Applications normally reference the public package they use. NuGet selects
-this package's exact `NetWasm,Version=v0.1` asset through that dependency.
+The package contains the `NetWasm,Version=v0.1` asset.

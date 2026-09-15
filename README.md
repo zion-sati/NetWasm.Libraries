@@ -1,11 +1,11 @@
 # NetWasm ported libraries
 
-This repository contains ordinary `NetWasm.Sdk` library packages adapted from
+This repository contains `NetWasm.Sdk` library packages adapted from
 the MIT-licensed .NET libraries. Each package targets `netwasm0.1`; applications
 reference only the packages they use, preserving NetWasm's closed-world,
 pay-for-what-you-use deployment model.
 
-Install the NetWasm SDK and the selected libraries from NuGet.org. For example:
+Try LINQ in a NetWasm application:
 
 ```sh
 dotnet new install "NetWasm.Templates@*-*"
@@ -16,9 +16,7 @@ dotnet publish -c Release
 ```
 
 `@*-*` selects the latest templates, including prereleases. `--prerelease`
-includes experimental library releases; package-add records a concrete version
-in your project. The project name and output directory are
-examples: use your own application and reference only the libraries it needs.
+includes experimental library releases.
 
 The repository currently contains LINQ, Async LINQ, Memory, Pipelines,
 Encodings.Web, HTTP, regular expressions, JSON, XML, hashing, and the

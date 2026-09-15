@@ -5,5 +5,5 @@
 for applications that opt into the NetWasm XML surface.
 
 The package carries the `NetWasm,Version=v0.1` asset and preserves the public
-`System.Xml.ReaderWriter` assembly identity. It does not replace the desktop
-framework's built-in `System.Xml.ReaderWriter` reference.
+`System.Xml.ReaderWriter` assembly identity. The package targets only
+`netwasm0.1`.

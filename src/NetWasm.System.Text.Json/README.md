@@ -15,11 +15,8 @@ schema export, and asynchronous node parsing remain outside the
 reflection-free `netwasm0.1` support boundary.
 
 The package carries the `NetWasm,Version=v0.1` asset and preserves the public
-`System.Text.Json` assembly identity. It also carries the matching ordinary
-Roslyn source generator under `analyzers/dotnet/cs`, so a consumer needs only
-the package reference and its `[JsonSerializable]` declarations; no manual
-analyzer path or NetWasm-specific generator setup is required. It directly
+`System.Text.Json` assembly identity. Its Roslyn source generator uses
+`[JsonSerializable]` declarations to produce reflection-free metadata. It directly
 supplies the exact `NetWasm.System.Memory`,
 `NetWasm.System.Text.Encodings.Web`, and `NetWasm.System.IO.Pipelines` support
-packages required by this port. It does not replace the desktop framework's
-built-in `System.Text.Json` reference.
+packages required by this port. The package targets only `netwasm0.1`.

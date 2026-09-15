@@ -6,5 +6,4 @@ identity while packaging the NetWasm implementation under the non-conflicting
 NetWasm package ID.
 
 Reference this package from a `netwasm0.1` project. It supplies the library
-asset for that profile and does not select a deployment host or grant runtime
-capabilities.
+asset for that profile.

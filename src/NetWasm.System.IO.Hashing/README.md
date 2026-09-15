@@ -6,5 +6,4 @@ for applications that opt into the NetWasm hashing surface.
 
 The package carries the `NetWasm,Version=v0.1` asset and transitively supplies
 the exact `NetWasm.System.Memory` support package required by the hashing
-implementation. It supplies no desktop target asset; desktop consumers retain
-their normal framework or package selection.
+implementation. The package targets only `netwasm0.1`.

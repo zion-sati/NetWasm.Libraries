@@ -1,8 +1,7 @@
 # Building and testing
 
 Install the .NET SDK pinned by `global.json`, Node.js 24 or later, and the
-prerequisites documented by the core NetWasm quickstart. Normal package and SDK
-restore uses NuGet.org.
+prerequisites documented by the core NetWasm quickstart.
 
 Build the source package graph in dependency order with:
 

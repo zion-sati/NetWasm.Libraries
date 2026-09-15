@@ -6,6 +6,4 @@
 for applications that opt into the NetWasm dependency-injection contracts.
 
 The package carries the `NetWasm,Version=v0.1` asset and preserves the standard
-assembly identity. It supplies no desktop target asset; desktop consumers keep
-using the normal `Microsoft.Extensions.DependencyInjection.Abstractions`
-package.
+assembly identity. The package targets only `netwasm0.1`.

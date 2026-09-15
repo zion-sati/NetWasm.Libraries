@@ -7,10 +7,9 @@ applications that opt into the NetWasm dependency-injection container.
 
 The package carries the `NetWasm,Version=v0.1` asset and depends on the exact
 matching `NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions`
-package. It supplies no desktop target asset; desktop consumers keep using the
-normal `Microsoft.Extensions.DependencyInjection` package.
+package. The package targets only `netwasm0.1`.
 
-Applications use the ordinary `IServiceCollection` registration and
+Applications use `IServiceCollection` registration and
 `IServiceProvider` resolution APIs. The package-owned source generator closes
 constructor activation, keyed services, sequences, and statically requested
 open generics at build time. Referenced libraries publish only compile-time
