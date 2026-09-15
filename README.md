@@ -1,5 +1,9 @@
 # NetWasm ported libraries
 
+[![Publication](https://img.shields.io/github/actions/workflow/status/zion-sati/NetWasm.Libraries/release.yml?label=publish&event=release)](https://github.com/zion-sati/NetWasm.Libraries/actions/workflows/release.yml)
+[![NuGet](https://img.shields.io/badge/NuGet-NetWasm.System.Linq-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Linq)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE-MAP.md)
+
 This repository contains `NetWasm.Sdk` library packages adapted from
 the MIT-licensed .NET libraries. Each package targets `netwasm0.1`; applications
 reference only the packages they use, preserving NetWasm's closed-world,
