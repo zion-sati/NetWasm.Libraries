@@ -8,15 +8,12 @@ pay-for-what-you-use deployment model.
 Try LINQ in a NetWasm application:
 
 ```sh
-dotnet new install "NetWasm.Templates@*-*"
+dotnet new install NetWasm.Templates
 dotnet new netwasm-app -n HelloNetWasm -o HelloNetWasm
 cd HelloNetWasm
-dotnet add package NetWasm.System.Linq --prerelease
+dotnet add package NetWasm.System.Linq
 dotnet publish -c Release
 ```
-
-`@*-*` selects the latest templates, including prereleases. `--prerelease`
-includes experimental library releases.
 
 The repository currently contains LINQ, Async LINQ, Memory, Pipelines,
 Encodings.Web, HTTP, regular expressions, JSON, XML, hashing, and the
