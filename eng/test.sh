@@ -4,6 +4,7 @@ set -euo pipefail
 
 REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 PACKAGE_DIR="${1:-${REPOSITORY_ROOT}/artifacts/packages}"
+TEST_VERSION="${NETWASM_LIBRARIES_TEST_VERSION:-$(tr -d '[:space:]' < "${REPOSITORY_ROOT}/eng/NetWasm.ReleaseVersion.txt")}"
 TEST_ARTIFACTS_DIR="${NETWASM_TEST_ARTIFACTS_DIR:-${REPOSITORY_ROOT}/artifacts/test}"
 mkdir -p "${PACKAGE_DIR}" "${TEST_ARTIFACTS_DIR}"
 PACKAGE_DIR="$(cd "${PACKAGE_DIR}" && pwd -P)"
@@ -13,7 +14,9 @@ if [[ ! "${MAX_PARALLELISM}" =~ ^[1-9][0-9]*$ ]]; then
   echo "NETWASM_TEST_MAX_PARALLELISM must be a positive integer." >&2
   exit 2
 fi
-"${REPOSITORY_ROOT}/eng/build-packages.sh" "${PACKAGE_DIR}"
+"${REPOSITORY_ROOT}/eng/build-packages.sh" \
+  --version "${TEST_VERSION}" \
+  --output "${PACKAGE_DIR}"
 
 test_root="$(mktemp -d "${TMPDIR:-/tmp}/netwasm-libraries-test.XXXXXX")"
 test_root="$(cd "${test_root}" && pwd -P)"

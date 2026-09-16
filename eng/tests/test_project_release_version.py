@@ -31,7 +31,8 @@ class ProjectReleaseVersionTests(unittest.TestCase):
         (self.root / "src/Example").mkdir(parents=True)
         (self.root / "eng/NetWasm.ReleaseVersion.txt").write_text("0.1.0\n")
         (self.root / "eng/NetWasm.PublicPackageVersions.props").write_text(
-            "Package=0.1.0\nDependency=0.1.0\nAssembly=0.1.0.4\n"
+            "Package=0.1.0\nInternalDependency=0.1.0\n"
+            "TUnitDependency=0.2.1\nAssembly=0.1.0.4\n"
         )
         (self.root / "global.json").write_text('{"msbuild-sdks":{"NetWasm.Sdk":"0.1.0"}}\n')
         (self.root / "src/Example/protocol.wit").write_text("package wasi:io@0.1.0;\n")
@@ -46,6 +47,8 @@ class ProjectReleaseVersionTests(unittest.TestCase):
 
         self.assertEqual("0.2.0-preview.1\n", (self.root / "eng/NetWasm.ReleaseVersion.txt").read_text())
         self.assertIn("Package=0.2.0-preview.1", (self.root / "eng/NetWasm.PublicPackageVersions.props").read_text())
+        self.assertIn("InternalDependency=0.2.0-preview.1", (self.root / "eng/NetWasm.PublicPackageVersions.props").read_text())
+        self.assertIn("TUnitDependency=0.2.1", (self.root / "eng/NetWasm.PublicPackageVersions.props").read_text())
         self.assertIn('"NetWasm.Sdk":"0.2.0-preview.1"', (self.root / "global.json").read_text())
         self.assertEqual("package wasi:io@0.1.0;\n", (self.root / "src/Example/protocol.wit").read_text())
         self.assertEqual(4, receipt["replacementCount"])

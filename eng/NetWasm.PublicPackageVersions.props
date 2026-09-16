@@ -16,6 +16,6 @@
     <NetWasmDependencyInjectionPackageVersion>0.1.0</NetWasmDependencyInjectionPackageVersion>
 
     <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
-    <NetWasmTUnitPackageVersion>0.1.0</NetWasmTUnitPackageVersion>
+    <NetWasmTUnitPackageVersion>0.2.1</NetWasmTUnitPackageVersion>
   </PropertyGroup>
 </Project>
