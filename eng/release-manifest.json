@@ -8,6 +8,9 @@
   "packages": [
     "NetWasm.Microsoft.Extensions.DependencyInjection",
     "NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions",
+    "NetWasm.Microsoft.Extensions.Logging",
+    "NetWasm.Microsoft.Extensions.Logging.Abstractions",
+    "NetWasm.Microsoft.Extensions.Options",
     "NetWasm.System.IO.Hashing",
     "NetWasm.System.IO.Pipelines",
     "NetWasm.System.Linq",
