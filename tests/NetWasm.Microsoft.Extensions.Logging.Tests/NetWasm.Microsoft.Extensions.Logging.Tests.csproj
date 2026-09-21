@@ -31,6 +31,9 @@
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection"
                       Version="[$(NetWasmDependencyInjectionPackageVersion)]"
                       Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <PackageReference Include="NetWasm.System.Text.Json"
+                      Version="[$(NetWasmSystemTextJsonPackageVersion)]"
+                      Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <PackageReference Include="Microsoft.Extensions.Logging"
                       Version="10.0.0"
                       Condition="'$(TargetFramework)' == 'net10.0'" />

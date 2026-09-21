@@ -12,7 +12,8 @@ namespace Microsoft.Extensions.Logging
     public static class LoggerFactoryExtensions
     {
         /// <summary>
-        /// Creates a new <see cref="ILogger"/> instance using the full name of the given type.
+        /// Rejects reflection-based category discovery. Resolve <see cref="ILogger{T}"/>
+        /// through dependency injection or call <see cref="ILoggerFactory.CreateLogger(string)"/>.
         /// </summary>
         /// <param name="factory">The factory.</param>
         /// <typeparam name="T">The type.</typeparam>

@@ -1,9 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using TUnit.Assertions;
@@ -18,7 +20,7 @@ public sealed partial class LoggingTests
     {
 #if NETWASM
         var output = new StringWriter();
-        using var provider = new ConsoleLoggerProvider(new ConsoleLoggerOptions(), output, output);
+        using var provider = new ConsoleLoggerProvider(new ConsoleLoggerOptions { IncludeScopes = true }, output, output);
         var filters = new LoggerFilterOptions { MinLevel = LogLevel.Trace };
         filters.AddFilter<ConsoleLoggerProvider>(null, LogLevel.Information);
         using var factory = new LoggerFactory(new[] { provider }, new StaticOptionsMonitor<LoggerFilterOptions>(filters),
@@ -105,6 +107,77 @@ public sealed partial class LoggingTests
         await Assert.That(provider.GetRequiredService<ILoggerFactory>()).IsNotNull();
     }
 
+    [Test]
+    public async Task DirectGenericLoggerUsesConcreteCategoryName()
+    {
+        using var factory = new CapturingLoggerFactory();
+#if NETWASM
+        bool rejected = false;
+        try
+        {
+            _ = new Logger<LoggingTests>(factory);
+        }
+        catch (PlatformNotSupportedException exception)
+        {
+            rejected = exception.Message.IndexOf("dependency injection", StringComparison.Ordinal) >= 0;
+        }
+
+        await Assert.That(rejected).IsTrue();
+        await Assert.That(factory.CategoryName).IsNull();
+#else
+        _ = new Logger<LoggingTests>(factory);
+
+        await Assert.That(factory.CategoryName)
+            .IsEqualTo("NetWasm.Microsoft.Extensions.Logging.Tests.LoggingTests");
+#endif
+    }
+
+    [Test]
+    public async Task JsonProviderQuotesNonFiniteNumbers()
+    {
+#if NETWASM
+        var output = new StringWriter();
+        using var consoleProvider = new ConsoleLoggerProvider(
+            new ConsoleLoggerOptions { FormatterName = ConsoleFormatterNames.Json },
+            output,
+            output);
+        using var factory = new LoggerFactory(
+            new[] { consoleProvider },
+            new LoggerFilterOptions { MinLevel = LogLevel.Information });
+        ILogger logger = factory.CreateLogger("JsonCategory");
+
+        logger.LogInformation("values {NaN} {PositiveInfinity} {NegativeInfinity}",
+            double.NaN, double.PositiveInfinity, double.NegativeInfinity);
+
+        string text = output.ToString();
+        using JsonDocument document = JsonDocument.Parse(text);
+        JsonElement state = document.RootElement.GetProperty("State");
+        await Assert.That(text.IndexOf("\"NaN\":\"NaN\"", StringComparison.Ordinal) >= 0).IsTrue();
+        await Assert.That(text.IndexOf("\"PositiveInfinity\":\"Infinity\"", StringComparison.Ordinal) >= 0).IsTrue();
+        await Assert.That(text.IndexOf("\"NegativeInfinity\":\"-Infinity\"", StringComparison.Ordinal) >= 0).IsTrue();
+        await Assert.That(state.GetProperty("NaN").GetString()).IsEqualTo("NaN");
+#else
+        await Assert.That(double.IsFinite(double.NaN)).IsFalse();
+#endif
+    }
+
+    [Test]
+    public async Task OptionsMonitorCachesConfiguredInstance()
+    {
+        int configureCount = 0;
+        var services = new ServiceCollection();
+        services.Configure<CounterOptions>(options => options.Value = ++configureCount);
+        using var provider = services.BuildServiceProvider();
+        IOptionsMonitor<CounterOptions> monitor = provider.GetRequiredService<IOptionsMonitor<CounterOptions>>();
+
+        CounterOptions first = monitor.CurrentValue;
+        CounterOptions second = monitor.CurrentValue;
+
+        await Assert.That(ReferenceEquals(first, second)).IsTrue();
+        await Assert.That(first.Value).IsEqualTo(1);
+        await Assert.That(configureCount).IsEqualTo(1);
+    }
+
     [LoggerMessage(EventId = 11, Level = LogLevel.Warning, Message = "generated {Value}")]
     private static partial void Generated(ILogger logger, int value);
 
@@ -136,5 +209,29 @@ public sealed partial class LoggingTests
         public T Get(string? name) => CurrentValue;
 
         public IDisposable? OnChange(Action<T, string?> listener) => null;
+    }
+
+    public sealed class CounterOptions
+    {
+        public int Value { get; set; }
+    }
+
+    private sealed class CapturingLoggerFactory : ILoggerFactory
+    {
+        public string? CategoryName { get; private set; }
+
+        public ILogger CreateLogger(string categoryName)
+        {
+            CategoryName = categoryName;
+            return NullLogger.Instance;
+        }
+
+        public void AddProvider(ILoggerProvider provider)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
     }
 }

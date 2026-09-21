@@ -180,6 +180,12 @@ namespace Microsoft.Extensions.Logging.Console
                 case bool boolean:
                     json.Append(boolean ? "true" : "false");
                     break;
+                case float single when !float.IsFinite(single):
+                    AppendJsonString(json, single.ToString(CultureInfo.InvariantCulture));
+                    break;
+                case double number when !double.IsFinite(number):
+                    AppendJsonString(json, number.ToString(CultureInfo.InvariantCulture));
+                    break;
                 case byte or sbyte or short or ushort or int or uint or long or ulong or float or double or decimal:
                     json.Append(Convert.ToString(value, CultureInfo.InvariantCulture));
                     break;

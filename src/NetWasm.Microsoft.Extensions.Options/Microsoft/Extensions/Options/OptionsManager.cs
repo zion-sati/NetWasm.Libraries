@@ -32,12 +32,23 @@ namespace Microsoft.Extensions.Options
     public sealed class OptionsMonitor<TOptions> : IOptionsMonitor<TOptions>, IDisposable where TOptions : class
     {
         private readonly IOptionsFactory<TOptions> _factory;
+        private readonly System.Collections.Generic.Dictionary<string, TOptions> _cache = new(StringComparer.Ordinal);
 
         public OptionsMonitor(IOptionsFactory<TOptions> factory) => _factory = factory ?? throw new ArgumentNullException(nameof(factory));
 
         public TOptions CurrentValue => Get(Options.DefaultName);
 
-        public TOptions Get(string? name) => _factory.Create(name ?? Options.DefaultName);
+        public TOptions Get(string? name)
+        {
+            name ??= Options.DefaultName;
+            if (!_cache.TryGetValue(name, out TOptions? options))
+            {
+                options = _factory.Create(name);
+                _cache.Add(name, options);
+            }
+
+            return options;
+        }
 
         // NetWasm logging intentionally uses static options. There is no configuration reload or
         // background change-token subscription in this port.
@@ -45,6 +56,7 @@ namespace Microsoft.Extensions.Options
 
         public void Dispose()
         {
+            _cache.Clear();
         }
     }
 }

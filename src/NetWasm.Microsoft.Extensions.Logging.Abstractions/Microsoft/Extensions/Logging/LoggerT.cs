@@ -18,13 +18,19 @@ namespace Microsoft.Extensions.Logging
     {
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         private readonly ILogger _logger;
+        private readonly string _categoryName;
 
         /// <summary>
-        /// Creates a new <see cref="Logger{T}"/>.
+        /// Rejects reflection-based category discovery. Resolve <see cref="ILogger{T}"/>
+        /// through dependency injection or use an explicit category string instead.
         /// </summary>
         /// <param name="factory">The factory.</param>
-        public Logger(ILoggerFactory factory) : this(factory, nameof(T))
+        public Logger(ILoggerFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(factory);
+            throw new PlatformNotSupportedException(
+                "NetWasm cannot discover generic logger category names through reflection. " +
+                "Resolve ILogger<T> through dependency injection, or call ILoggerFactory.CreateLogger(string).");
         }
 
         /// <summary>
@@ -37,6 +43,7 @@ namespace Microsoft.Extensions.Logging
             ArgumentNullException.ThrowIfNull(factory);
             ArgumentNullException.ThrowIfNull(categoryName);
 
+            _categoryName = categoryName;
             _logger = factory.CreateLogger(categoryName);
         }
 
@@ -58,11 +65,9 @@ namespace Microsoft.Extensions.Logging
             _logger.Log(logLevel, eventId, state, exception, formatter);
         }
 
-        private static string GetCategoryName() => nameof(T);
-
         internal string DebuggerToString()
         {
-            return DebuggerDisplayFormatting.DebuggerToString(GetCategoryName(), this);
+            return DebuggerDisplayFormatting.DebuggerToString(_categoryName, this);
         }
     }
 }
