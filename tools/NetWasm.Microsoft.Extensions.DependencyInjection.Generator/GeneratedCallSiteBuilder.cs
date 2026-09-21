@@ -11,7 +11,8 @@ internal sealed class GeneratedCallSiteBuilder : IGeneratedCallSiteBuilder
                 parameter.HasDefaultValue,
                 parameter.DefaultExpression,
                 parameter.ServiceKeyExpression,
-                parameter.LookupMode))
+                parameter.LookupMode,
+                parameter.ConstantExpression))
             .ToArray();
         return new GeneratedCallSiteModel(activation, parameters);
     }

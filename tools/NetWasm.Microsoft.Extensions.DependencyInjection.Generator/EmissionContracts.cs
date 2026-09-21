@@ -57,13 +57,15 @@ internal sealed class GeneratedCallSiteParameter
         bool hasDefaultValue,
         string? defaultExpression,
         string? serviceKeyExpression = null,
-        string lookupMode = "NullKey")
+        string lookupMode = "NullKey",
+        string? constantExpression = null)
     {
         TypeDisplay = typeDisplay;
         HasDefaultValue = hasDefaultValue;
         DefaultExpression = defaultExpression;
         ServiceKeyExpression = serviceKeyExpression;
         LookupMode = lookupMode;
+        ConstantExpression = constantExpression;
     }
 
     internal string TypeDisplay { get; }
@@ -71,6 +73,7 @@ internal sealed class GeneratedCallSiteParameter
     internal string? DefaultExpression { get; }
     internal string? ServiceKeyExpression { get; }
     internal string LookupMode { get; }
+    internal string? ConstantExpression { get; }
 }
 
 internal interface IGeneratedCallSiteBuilder

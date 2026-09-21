@@ -1191,6 +1191,17 @@ public sealed class GeneratedActivationActorTests
         var multi = new ActivationModel(multiFacts);
         var source = new ActivationSourceEmitter(new GeneratedCallSiteBuilder()).Emit(model);
         var multiSource = new ActivationSourceEmitter(new GeneratedCallSiteBuilder()).Emit(multi);
+        var openSource = new ActivationSourceEmitter(new GeneratedCallSiteBuilder()).Emit(
+            new ActivationModel(new RegistrationFacts(
+                "open",
+                "Fixture",
+                "GeneratedProductActivation_open",
+                "global::Fixture.IProduct<T>",
+                "global::Fixture.Product<T>",
+                "Transient",
+                Array.Empty<GeneratedParameterModel>(),
+                isOpenGenericTemplate: true,
+                genericTypeParameterList: "<T>")));
         var manifest = GeneratorComposition.CreateActivationManifestEmitter().Emit(new[] { model, empty });
         var sequence = new GeneratedSequenceModel(
             "global::System.Collections.Generic.IEnumerable<global::Fixture.Product>",
@@ -1213,6 +1224,8 @@ public sealed class GeneratedActivationActorTests
         Assert.DoesNotContain('\r', multiSource);
         Assert.Contains("ServiceLifetime.Transient", source, StringComparison.Ordinal);
         Assert.Contains("GeneratedProductActivation", source, StringComparison.Ordinal);
+        Assert.Contains("internal static class GeneratedProductActivation", source, StringComparison.Ordinal);
+        Assert.Contains("public static class GeneratedProductActivation_open<T>", openSource, StringComparison.Ordinal);
         Assert.Contains("multi-second", multiSource, StringComparison.Ordinal);
         Assert.Contains("GeneratedActivationManifest", manifest, StringComparison.Ordinal);
         Assert.Contains('\n', manifest);

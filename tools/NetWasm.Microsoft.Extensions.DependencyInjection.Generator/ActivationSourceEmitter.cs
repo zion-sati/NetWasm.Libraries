@@ -24,7 +24,11 @@ internal sealed class ActivationSourceEmitter : IActivationSourceEmitter
         builder.AppendLine("using Microsoft.Extensions.DependencyInjection;");
         builder.AppendLine("using Microsoft.Extensions.DependencyInjection.Generated;");
         builder.Append("namespace ").Append(facts.NamespaceName).AppendLine(";");
-        builder.Append("public static class ").Append(facts.TypeName).Append(facts.GenericTypeParameterList).AppendLine();
+        builder.Append(facts.IsOpenGenericTemplate ? "public" : "internal")
+            .Append(" static class ")
+            .Append(facts.TypeName)
+            .Append(facts.GenericTypeParameterList)
+            .AppendLine();
         foreach (var constraint in facts.GenericConstraintClauses)
         {
             builder.Append("    ").AppendLine(constraint);
@@ -139,7 +143,8 @@ internal sealed class ActivationSourceEmitter : IActivationSourceEmitter
                 parameter.HasDefaultValue,
                 parameter.DefaultExpression,
                 parameter.ServiceKeyExpression,
-                parameter.LookupMode))
+                parameter.LookupMode,
+                parameter.ConstantExpression))
             .ToArray();
         EmitParameters(builder, parameters, indent + "    ");
         builder.AppendLine(",");
@@ -154,6 +159,7 @@ internal sealed class ActivationSourceEmitter : IActivationSourceEmitter
         string indent)
     {
         builder.Append(indent).Append("static values => new ").Append(implementationTypeDisplay).Append('(');
+        var valueIndex = 0;
         for (var index = 0; index < parameters.Count; index++)
         {
             if (index != 0)
@@ -162,7 +168,15 @@ internal sealed class ActivationSourceEmitter : IActivationSourceEmitter
             }
 
             var parameter = parameters[index];
-            builder.Append('(').Append(parameter.TypeDisplay).Append(")values[").Append(index).Append("]!");
+            if (parameter.ConstantExpression is not null)
+            {
+                builder.Append(parameter.ConstantExpression);
+            }
+            else
+            {
+                builder.Append('(').Append(parameter.TypeDisplay).Append(")values[").Append(valueIndex).Append("]!");
+                valueIndex++;
+            }
         }
 
         builder.Append(')');
@@ -173,11 +187,12 @@ internal sealed class ActivationSourceEmitter : IActivationSourceEmitter
         IReadOnlyList<GeneratedCallSiteParameter> parameters,
         string indent)
     {
+        var serviceParameters = parameters.Where(parameter => parameter.ConstantExpression is null).ToArray();
         builder.Append(indent).AppendLine("new GeneratedParameter[]");
         builder.Append(indent).AppendLine("{");
-        for (var index = 0; index < parameters.Count; index++)
+        for (var index = 0; index < serviceParameters.Length; index++)
         {
-            var parameter = parameters[index];
+            var parameter = serviceParameters[index];
             builder.Append(indent).Append("    new GeneratedParameter(typeof(").Append(parameter.TypeDisplay).Append(')');
             if (parameter.ServiceKeyExpression is not null)
             {
@@ -194,7 +209,7 @@ internal sealed class ActivationSourceEmitter : IActivationSourceEmitter
                 builder.Append(", hasDefaultValue: true, defaultValue: ").Append(parameter.DefaultExpression);
             }
 
-            builder.AppendLine(index == parameters.Count - 1 ? ")" : "),");
+            builder.AppendLine(index == serviceParameters.Length - 1 ? ")" : "),");
         }
 
         builder.Append(indent).Append('}');
