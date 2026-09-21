@@ -1,7 +1,7 @@
 # Building and testing
 
-Install the .NET SDK pinned by `global.json`, Node.js 24 or later, and the
-prerequisites documented by the core NetWasm quickstart.
+Install the .NET SDK pinned by `global.json`. Restoring `NetWasm.Sdk`
+supplies the matching native build tools.
 
 Build the source package graph in dependency order with:
 

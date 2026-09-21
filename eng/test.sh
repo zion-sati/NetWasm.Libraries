@@ -123,6 +123,7 @@ restore_and_test_netwasm() {
       --disable-build-servers \
       --nologo \
       -p:TargetFrameworks=netwasm0.1 \
+      -p:NetWasmOptimization=None \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
     dotnet test "${project}" \
@@ -132,6 +133,7 @@ restore_and_test_netwasm() {
       --disable-build-servers \
       --nologo \
       -p:TargetFrameworks=netwasm0.1 \
+      -p:NetWasmOptimization=None \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
   ) > "${log}" 2>&1
