@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Using Remove="Xunit" />
+    <NetWasmClockGrant Include="wall" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <Compile Include="LoggingTests.cs" />
     <PackageReference Include="NetWasm.TUnit" Version="[$(NetWasmTUnitPackageVersion)]" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.Logging"
