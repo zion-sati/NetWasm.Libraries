@@ -1,0 +1,68 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Logging.Abstractions</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.Logging.Abstractions</PackageId>
+    <Version>$(NetWasmLoggingAbstractionsPackageVersion)</Version>
+    <PackageVersion>$(NetWasmLoggingAbstractionsPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.Logging.Abstractions.</Description>
+    <PackageTags>netwasm;microsoft;extensions;logging;abstractions</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+    <NetWasmLoggingGeneratorProject>../../tools/NetWasm.Microsoft.Extensions.Logging.Generator/NetWasm.Microsoft.Extensions.Logging.Generator.csproj</NetWasmLoggingGeneratorProject>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetWasmCollectLoggingGeneratorAsset</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Logging/*.cs" />
+    <Compile Include="TypeNameHelper.cs" />
+    <Compile Include="ValueStringBuilder.cs" />
+    <Compile Include="DebuggerDisplayFormatting.cs" />
+    <Compile Include="NullScope.cs" />
+    <ProjectReference Include="$(NetWasmLoggingGeneratorProject)"
+                      ReferenceOutputAssembly="false"
+                      PrivateAssets="all"
+                      SkipGetTargetFrameworkProperties="true"
+                      AdditionalProperties="TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
+                      Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+
+  <Target Name="NetWasmCollectLoggingGeneratorAsset"
+          Returns="@(TfmSpecificPackageFile)"
+          Condition="'$(TargetFrameworkIdentifier)' == 'NetWasm' AND '$(TargetFrameworkVersion)' == 'v0.1'">
+    <MSBuild Projects="$(NetWasmLoggingGeneratorProject)"
+             Targets="GetTargetPath"
+             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false"
+             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker;TargetFrameworks">
+      <Output TaskParameter="TargetOutputs" ItemName="_NetWasmLoggingGeneratorOutput" />
+    </MSBuild>
+    <Error Code="NWLG011"
+           Condition="'@(_NetWasmLoggingGeneratorOutput->Count())' != '1'"
+           Text="The logging generator build must produce exactly one analyzer assembly." />
+    <Error Code="NWLG012"
+           Condition="'@(_NetWasmLoggingGeneratorOutput)' != '' AND !Exists('@(_NetWasmLoggingGeneratorOutput)')"
+           Text="The logging generator analyzer assembly was not built before packaging." />
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(_NetWasmLoggingGeneratorOutput)">
+        <PackagePath>analyzers/dotnet/cs/%(Filename)%(Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+</Project>

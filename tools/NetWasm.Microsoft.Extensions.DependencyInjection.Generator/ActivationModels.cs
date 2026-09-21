@@ -11,13 +11,15 @@ internal sealed class GeneratedParameterModel
         bool hasDefaultValue,
         string? defaultExpression,
         string? serviceKeyExpression = null,
-        string lookupMode = "NullKey")
+        string lookupMode = "NullKey",
+        string? constantExpression = null)
     {
         TypeDisplay = typeDisplay;
         HasDefaultValue = hasDefaultValue;
         DefaultExpression = defaultExpression;
         ServiceKeyExpression = serviceKeyExpression;
         LookupMode = lookupMode;
+        ConstantExpression = constantExpression;
     }
 
     internal string TypeDisplay { get; }
@@ -25,6 +27,7 @@ internal sealed class GeneratedParameterModel
     internal string? DefaultExpression { get; }
     internal string? ServiceKeyExpression { get; }
     internal string LookupMode { get; }
+    internal string? ConstantExpression { get; }
 }
 
 internal sealed class GeneratedConstructorModel
@@ -178,7 +181,8 @@ internal sealed class ActivationModelBuilder : IActivationModelBuilder
             parameter.HasExplicitDefaultValue,
             parameter.HasExplicitDefaultValue ? _formatter.Format(parameter.Type, parameter.ExplicitDefaultValue) : null,
             GetServiceKeyExpression(parameter),
-            GetServiceKeyLookupMode(parameter))).ToArray();
+            GetServiceKeyLookupMode(parameter),
+            GetConstantExpression(parameter, implementation))).ToArray();
         return new GeneratedConstructorModel(
             BuildIdentity(input, implementation, constructor),
             parameters,
@@ -210,6 +214,29 @@ internal sealed class ActivationModelBuilder : IActivationModelBuilder
 
     private static bool IsFromKeyedServicesAttribute(AttributeData attribute) =>
         attribute.AttributeClass!.Name is "FromKeyedServicesAttribute" or "FromKeyedServices";
+
+    private static string? GetConstantExpression(IParameterSymbol parameter, INamedTypeSymbol implementation)
+    {
+        var attribute = parameter.GetAttributes().FirstOrDefault(candidate =>
+            candidate.AttributeClass?.ToDisplayString() == "Microsoft.Extensions.Logging.LoggerCategoryNameAttribute");
+        if (attribute is null)
+        {
+            return null;
+        }
+
+        if (parameter.Type.SpecialType != SpecialType.System_String || implementation.TypeArguments.Length != 1)
+        {
+            throw new GeneratorDiagnosticException(
+                "NWDI019",
+                "Logger category injection requires a string parameter on a single-argument generic implementation.");
+        }
+
+        var categoryNameFormat = new SymbolDisplayFormat(
+            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+            genericsOptions: SymbolDisplayGenericsOptions.None);
+        var categoryName = implementation.TypeArguments[0].ToDisplayString(categoryNameFormat);
+        return global::Microsoft.CodeAnalysis.CSharp.SymbolDisplay.FormatLiteral(categoryName, quote: true);
+    }
 
     private static string FormatKeyConstant(TypedConstant constant)
     {

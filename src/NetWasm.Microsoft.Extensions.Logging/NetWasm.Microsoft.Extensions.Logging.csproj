@@ -1,0 +1,43 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Logging</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.Logging</PackageId>
+    <Version>$(NetWasmLoggingPackageVersion)</Version>
+    <PackageVersion>$(NetWasmLoggingPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.Logging with synchronous stdout providers.</Description>
+    <PackageTags>netwasm;microsoft;extensions;logging;console</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Logging/**/*.cs" />
+    <Compile Include="ProviderAliasUtilities.cs" />
+    <Compile Include="TypeNameHelper.cs" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Logging.Abstractions"
+                      Version="[$(NetWasmLoggingAbstractionsPackageVersion)]" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Options"
+                      Version="[$(NetWasmOptionsPackageVersion)]" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
+                      Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection"
+                      Version="[$(NetWasmDependencyInjectionPackageVersion)]" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

@@ -41,7 +41,7 @@ internal sealed class ActivationManifestEmitter : IActivationManifestEmitter
         builder.AppendLine("using Microsoft.Extensions.DependencyInjection;");
         builder.AppendLine("using Microsoft.Extensions.DependencyInjection.Generated;");
         builder.AppendLine("namespace Generated;");
-        builder.AppendLine("public static class GeneratedActivationManifestSource");
+        builder.AppendLine("internal static class GeneratedActivationManifestSource");
         builder.AppendLine("{");
         builder.AppendLine("    public static GeneratedActivationManifest Create()");
         builder.AppendLine("    {");

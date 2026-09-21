@@ -146,6 +146,9 @@ dependent_projects=(
   src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj
   src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj
+  src/NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj
+  src/NetWasm.Microsoft.Extensions.Logging.Abstractions/NetWasm.Microsoft.Extensions.Logging.Abstractions.csproj
+  src/NetWasm.Microsoft.Extensions.Logging/NetWasm.Microsoft.Extensions.Logging.csproj
 )
 
 pack_project() {
@@ -168,9 +171,9 @@ for project in "${dependent_projects[@]}"; do
 done
 
 package_count="$(find "${OUTPUT_DIR}" -maxdepth 1 -type f -name 'NetWasm.*.nupkg' | wc -l | tr -d ' ')"
-if [[ "${package_count}" -ne 12 ]]; then
-  echo "Expected exactly 12 NetWasm library packages, found ${package_count}." >&2
+if [[ "${package_count}" -ne 15 ]]; then
+  echo "Expected exactly 15 NetWasm library packages, found ${package_count}." >&2
   exit 1
 fi
 
-echo "Built 12 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
+echo "Built 15 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"

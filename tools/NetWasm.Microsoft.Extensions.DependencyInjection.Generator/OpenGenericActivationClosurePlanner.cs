@@ -84,7 +84,10 @@ internal sealed class OpenGenericActivationClosurePlanner : IOpenGenericActivati
                     template.ServiceDefinition,
                     template.ImplementationDefinition,
                     registrationKey,
-                    BuildFactoryInvocation(template.Registration.FactoryTypeName, typeArguments));
+                    BuildFactoryInvocation(
+                        template.Registration.FactoryTypeName,
+                        template.ImplementationDefinition,
+                        typeArguments));
                 activations.Add(activation);
                 AddConstructorClosure(activation, resolvedTemplates, pending, sequences);
             }
@@ -301,10 +304,22 @@ internal sealed class OpenGenericActivationClosurePlanner : IOpenGenericActivati
 
     private static string? BuildFactoryInvocation(
         string? factoryTypeName,
+        INamedTypeSymbol implementationDefinition,
         IReadOnlyList<ITypeSymbol> typeArguments)
     {
         if (factoryTypeName is null)
         {
+            return null;
+        }
+
+        if (implementationDefinition.InstanceConstructors
+            .SelectMany(constructor => constructor.Parameters)
+            .Any(parameter => parameter.GetAttributes().Any(attribute =>
+                attribute.AttributeClass?.ToDisplayString() == "Microsoft.Extensions.Logging.LoggerCategoryNameAttribute")))
+        {
+            // The category literal depends on the closed type argument, so emit
+            // this activation in the consuming compilation instead of reusing
+            // the package's open-template factory.
             return null;
         }
 

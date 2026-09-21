@@ -12,9 +12,13 @@
     <Project Path="src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" />
+    <Project Path="src/NetWasm.Microsoft.Extensions.Logging.Abstractions/NetWasm.Microsoft.Extensions.Logging.Abstractions.csproj" />
+    <Project Path="src/NetWasm.Microsoft.Extensions.Logging/NetWasm.Microsoft.Extensions.Logging.csproj" />
+    <Project Path="src/NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/NetWasm.Microsoft.Extensions.DependencyInjection.Generator/NetWasm.Microsoft.Extensions.DependencyInjection.Generator.csproj" />
+    <Project Path="tools/NetWasm.Microsoft.Extensions.Logging.Generator/NetWasm.Microsoft.Extensions.Logging.Generator.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/NetWasm.System.Linq.Tests/NetWasm.System.Linq.Tests.csproj" />
@@ -30,5 +34,6 @@
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Target/NetWasm.Microsoft.Extensions.DependencyInjection.Target.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests.csproj" />
+    <Project Path="tests/NetWasm.Microsoft.Extensions.Logging.Tests/NetWasm.Microsoft.Extensions.Logging.Tests.csproj" />
   </Folder>
 </Solution>

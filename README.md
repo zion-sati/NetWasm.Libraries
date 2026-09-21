@@ -19,14 +19,18 @@ dotnet publish -c Release
 ```
 
 The repository currently contains LINQ, Async LINQ, Memory, Pipelines,
-Encodings.Web, HTTP, regular expressions, JSON, XML, hashing, and the
-dependency-injection abstractions and container. Their exact supported
+Encodings.Web, HTTP, regular expressions, JSON, XML, hashing, dependency
+injection, Options, and synchronous text and JSON logging with
+`LoggerMessage` source generation. Their exact supported
 surfaces remain deliberately smaller than desktop .NET where APIs require
 reflection, dynamic code generation, managed threads, file I/O, sockets, or
 other platform services outside the current NetWasm profile.
 
 ## Packages
 
+[![NuGet: NetWasm.Microsoft.Extensions.Logging](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Logging-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Logging)
+[![NuGet: NetWasm.Microsoft.Extensions.Logging.Abstractions](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Logging.Abstractions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Logging.Abstractions)
+[![NuGet: NetWasm.Microsoft.Extensions.Options](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Options-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Options)
 [![NuGet: NetWasm.Microsoft.Extensions.DependencyInjection](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.DependencyInjection-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.DependencyInjection)
 [![NuGet: NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions)
 [![NuGet: NetWasm.System.IO.Hashing](https://img.shields.io/badge/NuGet-NetWasm.System.IO.Hashing-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.IO.Hashing)
