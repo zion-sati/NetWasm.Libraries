@@ -1,0 +1,39 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Caching.Memory</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.Caching.Memory</PackageId>
+    <Version>$(NetWasmMicrosoftExtensionsCachingMemoryPackageVersion)</Version>
+    <PackageVersion>$(NetWasmMicrosoftExtensionsCachingMemoryPackageVersion)</PackageVersion>
+    <Description>NetWasm deterministic in-process memory cache.</Description>
+    <PackageTags>netwasm;microsoft;extensions;caching;memory</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Caching/Memory/*.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/*.cs" />
+    <Compile Include="Microsoft/Extensions/Caching/Distributed/*.cs" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Caching.Abstractions/NetWasm.Microsoft.Extensions.Caching.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Caching.Abstractions" Version="[$(NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Options" Version="[$(NetWasmOptionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

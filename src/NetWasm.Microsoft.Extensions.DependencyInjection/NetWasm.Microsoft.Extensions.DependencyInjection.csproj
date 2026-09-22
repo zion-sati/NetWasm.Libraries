@@ -44,7 +44,7 @@
                       ReferenceOutputAssembly="false"
                       PrivateAssets="all"
                       SkipGetTargetFrameworkProperties="true"
-                      AdditionalProperties="TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false" />
+                      AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 
@@ -53,8 +53,8 @@
           Condition="'$(TargetFrameworkIdentifier)' == 'NetWasm' AND '$(TargetFrameworkVersion)' == 'v0.1'">
     <MSBuild Projects="$(NetWasmDependencyInjectionGeneratorProject)"
              Targets="GetTargetPath"
-             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false"
-             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker;TargetFrameworks">
+             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false"
+             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker">
       <Output TaskParameter="TargetOutputs" ItemName="_NetWasmDependencyInjectionGeneratorOutput" />
     </MSBuild>
 

@@ -31,6 +31,10 @@ internal sealed class RegistrationInvocationReader : IRegistrationInvocationRead
         "Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions";
     private const string ServiceProviderKeyedExtensions =
         "Microsoft.Extensions.DependencyInjection.ServiceProviderKeyedServiceExtensions";
+    private const string HttpClientFactoryServiceCollectionExtensions =
+        "Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions";
+    private const string HttpClientBuilderExtensions =
+        "Microsoft.Extensions.DependencyInjection.HttpClientBuilderExtensions";
     private const string ServiceProviderContract = "System.IServiceProvider";
     private const string KeyedServiceProviderContract =
         "Microsoft.Extensions.DependencyInjection.IKeyedServiceProvider";
@@ -90,6 +94,11 @@ internal sealed class RegistrationInvocationReader : IRegistrationInvocationRead
         openGenericRegistration = null;
         var target = invocation.TargetMethod.ReducedFrom ?? invocation.TargetMethod;
         var containingType = target.ContainingType.ToDisplayString();
+        if (TryReadHttpClientActivation(invocation, containingType, target.Name, out registration))
+        {
+            return true;
+        }
+
         if (containingType is not (ServiceCollectionExtensions or ServiceCollectionDescriptorExtensions) ||
             !TryGetLifetime(target.Name, out var lifetime))
         {
@@ -150,6 +159,37 @@ internal sealed class RegistrationInvocationReader : IRegistrationInvocationRead
             Identity: null,
             lifetime,
             serviceKeyExpression);
+        return true;
+    }
+
+    private static bool TryReadHttpClientActivation(
+        IInvocationOperation invocation,
+        string containingType,
+        string methodName,
+        out RegistrationSyntaxInput registration)
+    {
+        registration = null!;
+        if (containingType is not (HttpClientFactoryServiceCollectionExtensions or HttpClientBuilderExtensions) ||
+            methodName is not ("AddHttpClient" or "AddTypedClient" or "AddHttpMessageHandler" or "ConfigurePrimaryHttpMessageHandler"))
+        {
+            return false;
+        }
+
+        var typeArguments = invocation.TargetMethod.TypeArguments;
+        if (typeArguments.Length == 0 || typeArguments.Any(static type => type.TypeKind == TypeKind.TypeParameter))
+        {
+            return false;
+        }
+
+        var serviceType = RequireNamedType(typeArguments[0], invocation.Syntax);
+        var implementationType = typeArguments.Length > 1
+            ? RequireNamedType(typeArguments[1], invocation.Syntax)
+            : serviceType;
+        registration = new RegistrationSyntaxInput(
+            serviceType,
+            implementationType,
+            Identity: null,
+            Lifetime: "Transient");
         return true;
     }
 

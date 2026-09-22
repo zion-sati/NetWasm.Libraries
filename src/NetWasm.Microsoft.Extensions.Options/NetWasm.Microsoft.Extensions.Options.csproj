@@ -27,8 +27,19 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Microsoft/Extensions/Options/*.cs" />
     <Compile Include="Microsoft/Extensions/Options/DependencyInjection/*.cs" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="[$(NetWasmDependencyInjectionPackageVersion)]" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="[$(NetWasmDependencyInjectionPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="[$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../../tools/NetWasm.Microsoft.Extensions.DependencyInjection.Generator/NetWasm.Microsoft.Extensions.DependencyInjection.Generator.csproj"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer"
+                      PrivateAssets="all"
+                      SkipGetTargetFrameworkProperties="true"
+                      Condition="'$(NetWasmPackPackageGraph)' != 'true'"
+                      AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

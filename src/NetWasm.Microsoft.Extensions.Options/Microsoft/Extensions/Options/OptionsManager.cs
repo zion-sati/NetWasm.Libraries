@@ -2,61 +2,126 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Primitives;
 
-namespace Microsoft.Extensions.Options
+namespace Microsoft.Extensions.Options;
+
+/// <summary>Provides configured options with a scope-local named cache.</summary>
+public class OptionsManager<TOptions> : IOptions<TOptions>, IOptionsSnapshot<TOptions> where TOptions : class
 {
-    /// <summary>Provides configured options with a small in-memory named cache.</summary>
-    public class OptionsManager<TOptions> : IOptions<TOptions>, IOptionsSnapshot<TOptions> where TOptions : class
+    private readonly IOptionsFactory<TOptions> _factory;
+    private readonly OptionsCache<TOptions> _cache = new();
+
+    public OptionsManager(IOptionsFactory<TOptions> factory) => _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+
+    public TOptions Value => Get(Options.DefaultName);
+
+    public virtual TOptions Get(string? name) =>
+        _cache.GetOrAdd(name, () => _factory.Create(name ?? Options.DefaultName));
+}
+
+/// <summary>Provides configured options and invalidates named values from change tokens.</summary>
+public class OptionsMonitor<TOptions> : IOptionsMonitor<TOptions>, IDisposable where TOptions : class
+{
+    private readonly IOptionsFactory<TOptions> _factory;
+    private readonly IOptionsMonitorCache<TOptions> _cache;
+    private readonly List<IDisposable> _registrations = new();
+    private readonly object _listenerGate = new();
+    private Action<TOptions, string?>? _onChange;
+
+    public OptionsMonitor(IOptionsFactory<TOptions> factory)
+        : this(factory, Array.Empty<IOptionsChangeTokenSource<TOptions>>(), new OptionsCache<TOptions>())
     {
-        private readonly IOptionsFactory<TOptions> _factory;
-        private readonly System.Collections.Generic.Dictionary<string, TOptions> _cache = new(StringComparer.Ordinal);
+    }
 
-        public OptionsManager(IOptionsFactory<TOptions> factory) => _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+    public OptionsMonitor(
+        IOptionsFactory<TOptions> factory,
+        IEnumerable<IOptionsChangeTokenSource<TOptions>> sources,
+        IOptionsMonitorCache<TOptions> cache)
+    {
+        _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+        ArgumentNullException.ThrowIfNull(sources);
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 
-        public TOptions Value => Get(Options.DefaultName);
-
-        public virtual TOptions Get(string? name)
+        foreach (var source in sources)
         {
-            name ??= Options.DefaultName;
-            if (!_cache.TryGetValue(name, out TOptions? options))
-            {
-                options = _factory.Create(name);
-                _cache.Add(name, options);
-            }
-
-            return options;
+            ArgumentNullException.ThrowIfNull(source);
+            _registrations.Add(ChangeToken.OnChange(source.GetChangeToken, InvokeChanged, source.Name));
         }
     }
 
-    /// <summary>Provides configured options while retaining the monitor contract.</summary>
-    public sealed class OptionsMonitor<TOptions> : IOptionsMonitor<TOptions>, IDisposable where TOptions : class
+    public TOptions CurrentValue => Get(Options.DefaultName);
+
+    public virtual TOptions Get(string? name) =>
+        _cache.GetOrAdd(name, () => _factory.Create(name ?? Options.DefaultName));
+
+    public IDisposable? OnChange(Action<TOptions, string?> listener)
     {
-        private readonly IOptionsFactory<TOptions> _factory;
-        private readonly System.Collections.Generic.Dictionary<string, TOptions> _cache = new(StringComparer.Ordinal);
-
-        public OptionsMonitor(IOptionsFactory<TOptions> factory) => _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-
-        public TOptions CurrentValue => Get(Options.DefaultName);
-
-        public TOptions Get(string? name)
+        ArgumentNullException.ThrowIfNull(listener);
+        var subscription = new ChangeSubscription(this, listener);
+        lock (_listenerGate)
         {
-            name ??= Options.DefaultName;
-            if (!_cache.TryGetValue(name, out TOptions? options))
-            {
-                options = _factory.Create(name);
-                _cache.Add(name, options);
-            }
-
-            return options;
+            _onChange += subscription.Invoke;
         }
 
-        // NetWasm logging intentionally uses static options. There is no configuration reload or
-        // background change-token subscription in this port.
-        public IDisposable? OnChange(Action<TOptions, string?> listener) => null;
+        return subscription;
+    }
+
+    public void Dispose()
+    {
+        foreach (var registration in _registrations)
+        {
+            registration.Dispose();
+        }
+
+        _registrations.Clear();
+        lock (_listenerGate)
+        {
+            _onChange = null;
+        }
+    }
+
+    private void InvokeChanged(string? name)
+    {
+        var normalizedName = name ?? Options.DefaultName;
+        _cache.TryRemove(normalizedName);
+        var options = Get(normalizedName);
+        Action<TOptions, string?>? listeners;
+        lock (_listenerGate)
+        {
+            listeners = _onChange;
+        }
+
+        listeners?.Invoke(options, normalizedName);
+    }
+
+    private sealed class ChangeSubscription : IDisposable
+    {
+        private readonly OptionsMonitor<TOptions> _monitor;
+        private readonly Action<TOptions, string?> _listener;
+        private bool _disposed;
+
+        public ChangeSubscription(OptionsMonitor<TOptions> monitor, Action<TOptions, string?> listener)
+        {
+            _monitor = monitor;
+            _listener = listener;
+        }
+
+        public void Invoke(TOptions options, string? name) => _listener(options, name);
 
         public void Dispose()
         {
-            _cache.Clear();
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+            lock (_monitor._listenerGate)
+            {
+                _monitor._onChange -= Invoke;
+            }
         }
     }
 }

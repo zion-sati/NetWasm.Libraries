@@ -16,7 +16,18 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddScoped(typeof(Microsoft.Extensions.Options.IOptionsSnapshot<>), typeof(Microsoft.Extensions.Options.OptionsManager<>));
             services.TryAddSingleton(typeof(Microsoft.Extensions.Options.IOptionsMonitor<>), typeof(Microsoft.Extensions.Options.OptionsMonitor<>));
             services.TryAddTransient(typeof(Microsoft.Extensions.Options.IOptionsFactory<>), typeof(Microsoft.Extensions.Options.OptionsFactory<>));
+            services.TryAddSingleton(typeof(Microsoft.Extensions.Options.IOptionsMonitorCache<>), typeof(Microsoft.Extensions.Options.OptionsCache<>));
             return services;
+        }
+
+        public static Microsoft.Extensions.Options.OptionsBuilder<TOptions> AddOptions<TOptions>(
+            this IServiceCollection services,
+            string? name = null)
+            where TOptions : class
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            services.AddOptions();
+            return new Microsoft.Extensions.Options.OptionsBuilder<TOptions>(services, name);
         }
 
         public static IServiceCollection Configure<TOptions>(this IServiceCollection services, Action<TOptions> configureOptions)
@@ -28,14 +39,29 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(configureOptions);
-            services.AddOptions();
-            services.AddSingleton<Microsoft.Extensions.Options.IConfigureOptions<TOptions>>(
-                new Microsoft.Extensions.Options.ConfigureNamedOptions<TOptions>(name, configureOptions));
+            services.AddOptions<TOptions>(name).Configure(configureOptions);
             return services;
         }
 
         public static IServiceCollection ConfigureAll<TOptions>(this IServiceCollection services, Action<TOptions> configureOptions)
             where TOptions : class
-            => services.Configure(name: null, configureOptions);
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configureOptions);
+            services.AddOptions<TOptions>();
+            services.AddSingleton<Microsoft.Extensions.Options.IConfigureOptions<TOptions>>(
+                new Microsoft.Extensions.Options.ConfigureNamedOptions<TOptions>(name: null, configureOptions));
+            return services;
+        }
+
+        public static IServiceCollection PostConfigure<TOptions>(
+            this IServiceCollection services,
+            Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            ArgumentNullException.ThrowIfNull(services);
+            return services.AddOptions<TOptions>().PostConfigure(configureOptions).Services;
+        }
+
     }
 }

@@ -1,0 +1,36 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Configuration</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.Configuration</PackageId>
+    <Version>$(NetWasmMicrosoftExtensionsConfigurationPackageVersion)</Version>
+    <PackageVersion>$(NetWasmMicrosoftExtensionsConfigurationPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 layered configuration and in-memory providers.</Description>
+    <PackageTags>netwasm;microsoft;extensions;configuration;memory</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Configuration/*.cs" />
+    <Compile Include="Microsoft/Extensions/Configuration/Memory/*.cs" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="[$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="[$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

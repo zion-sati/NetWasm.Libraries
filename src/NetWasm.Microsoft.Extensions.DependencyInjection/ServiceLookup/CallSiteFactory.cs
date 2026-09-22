@@ -207,6 +207,31 @@ internal sealed class CallSiteFactory : IServiceProviderIsService
         if (!_implementationLookup.TryGetValue((implementationType, ServiceKey: serviceKey), out var descriptor) &&
             (serviceKey is null || !_implementationLookup.TryGetValue((implementationType, ServiceKey: KeyedService.AnyKey), out descriptor)))
         {
+            foreach (var pair in _generatedActivations)
+            {
+                if (pair.Key.ImplementationType == implementationType && pair.Key.ServiceKey == serviceKey)
+                {
+                    var activation = pair.Value;
+                    var generated = new GeneratedServiceDescriptor(
+                        activation.ServiceType,
+                        activation.ServiceKey,
+                        activation.ImplementationType,
+                        ServiceLifetime.Transient,
+                        activation);
+                    var generatedIdentifier = serviceKey is null
+                        ? ServiceIdentifier.FromServiceType(activation.ServiceType)
+                        : ServiceIdentifier.FromKeyedServiceType(activation.ServiceType, serviceKey);
+                    return CreateCallSite(
+                        generated,
+                        generatedIdentifier,
+                        callSiteChain,
+                        0,
+                        allowUnresolved,
+                        suppliedTypes,
+                        selectedIdentity);
+                }
+            }
+
             return null;
         }
 

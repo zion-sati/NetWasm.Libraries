@@ -338,6 +338,13 @@ internal sealed class Wasi02BindingOutgoingHandler(
 
     private static Bindings.OutgoingRequest CreateRequest(HttpRequestMessage request)
     {
+        Uri requestUri = request.RequestUri
+            ?? throw new InvalidOperationException("A request URI is required.");
+        if (!requestUri.IsAbsoluteUri)
+        {
+            throw new InvalidOperationException("The request URI must be absolute.");
+        }
+
         using var fields = Bindings.TypesImports.CreateFields();
         AppendHeaders(fields, request.Headers.Entries());
         if (request.Content is not null)
@@ -356,17 +363,17 @@ internal sealed class Wasi02BindingOutgoingHandler(
             RequireSet(
                 Bindings.TypesImports.SetScheme(
                     outgoing,
-                    new WitOption<Bindings.Scheme>(MapScheme(request.RequestUri.Scheme))),
+                    new WitOption<Bindings.Scheme>(MapScheme(requestUri.Scheme))),
                 Wasi02FailureKind.HttpRequestUriInvalid);
             RequireSet(
                 Bindings.TypesImports.SetAuthority(
                     outgoing,
-                    new WitOption<string>(request.RequestUri.Authority)),
+                    new WitOption<string>(requestUri.Authority)),
                 Wasi02FailureKind.HttpRequestUriInvalid);
             RequireSet(
                 Bindings.TypesImports.SetPathWithQuery(
                     outgoing,
-                    new WitOption<string>(request.RequestUri.PathAndQuery)),
+                    new WitOption<string>(requestUri.PathAndQuery)),
                 Wasi02FailureKind.HttpRequestUriInvalid);
             return outgoing;
         }

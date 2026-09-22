@@ -12,6 +12,18 @@
     <NetWasmSystemTextRegularExpressionsPackageVersion>0.4.0</NetWasmSystemTextRegularExpressionsPackageVersion>
     <NetWasmSystemIOHashingPackageVersion>0.4.0</NetWasmSystemIOHashingPackageVersion>
     <NetWasmSystemNetHttpPackageVersion>0.4.0</NetWasmSystemNetHttpPackageVersion>
+    <NetWasmSystemNetHttpJsonPackageVersion>0.4.0</NetWasmSystemNetHttpJsonPackageVersion>
+    <NetWasmMicrosoftExtensionsPrimitivesPackageVersion>0.4.0</NetWasmMicrosoftExtensionsPrimitivesPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>0.4.0</NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationPackageVersion>0.4.0</NetWasmMicrosoftExtensionsConfigurationPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>0.4.0</NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>0.4.0</NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>0.4.0</NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>0.4.0</NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>
+    <NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>0.4.0</NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>
+    <NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>0.4.0</NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>
+    <NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>0.4.0</NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>
+    <NetWasmMicrosoftExtensionsHttpPackageVersion>0.4.0</NetWasmMicrosoftExtensionsHttpPackageVersion>
     <NetWasmDependencyInjectionAbstractionsPackageVersion>0.4.0</NetWasmDependencyInjectionAbstractionsPackageVersion>
     <NetWasmDependencyInjectionPackageVersion>0.4.0</NetWasmDependencyInjectionPackageVersion>
     <NetWasmOptionsPackageVersion>0.4.0</NetWasmOptionsPackageVersion>
@@ -19,6 +31,6 @@
     <NetWasmLoggingPackageVersion>0.4.0</NetWasmLoggingPackageVersion>
 
     <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
-    <NetWasmTUnitPackageVersion>0.4.0</NetWasmTUnitPackageVersion>
+    <NetWasmTUnitPackageVersion>0.4.1</NetWasmTUnitPackageVersion>
   </PropertyGroup>
 </Project>

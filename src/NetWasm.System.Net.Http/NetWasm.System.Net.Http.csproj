@@ -29,6 +29,7 @@
     <Compile Include="System/Net/Http/HttpTransport.cs" />
     <Compile Include="System/Net/HttpStatusCode.cs" />
     <Compile Include="System/Net/Http/HttpMessageHandler.cs" />
+    <Compile Include="System/Net/Http/HttpClientHandler.cs" />
     <Compile Include="System/Net/Http/HttpMessageInvoker.cs" />
     <Compile Include="System/Net/Http/HttpClient.cs" />
     <Compile Include="System/Net/Http/HttpRequestMessage.cs" />

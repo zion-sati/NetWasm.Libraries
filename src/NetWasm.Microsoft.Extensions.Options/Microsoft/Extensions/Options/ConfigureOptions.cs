@@ -42,4 +42,34 @@ namespace Microsoft.Extensions.Options
 
         public void Configure(TOptions options) => Configure(Options.DefaultName, options);
     }
+
+    /// <summary>Configures named options with one generated DI dependency.</summary>
+    public class ConfigureNamedOptions<TOptions, TDependency> : IConfigureNamedOptions<TOptions>
+        where TOptions : class
+        where TDependency : class
+    {
+        public ConfigureNamedOptions(string? name, TDependency dependency, Action<TOptions, TDependency>? action)
+        {
+            Name = name;
+            Dependency = dependency ?? throw new ArgumentNullException(nameof(dependency));
+            Action = action;
+        }
+
+        public string? Name { get; }
+
+        public TDependency Dependency { get; }
+
+        public Action<TOptions, TDependency>? Action { get; }
+
+        public virtual void Configure(string? name, TOptions options)
+        {
+            ArgumentNullException.ThrowIfNull(options);
+            if (Name is null || Name == name)
+            {
+                Action?.Invoke(options, Dependency);
+            }
+        }
+
+        public void Configure(TOptions options) => Configure(Options.DefaultName, options);
+    }
 }

@@ -10,21 +10,20 @@ public sealed class HttpRequestMessage : IDisposable
 {
     private bool _disposed;
     private HttpMethod _method;
-    private Uri _requestUri;
+    private Uri? _requestUri;
     private HttpContent? _content;
 
-    public HttpRequestMessage(HttpMethod method, Uri requestUri)
+    public HttpRequestMessage(HttpMethod method, Uri? requestUri)
     {
         _method = method ?? throw new ArgumentNullException();
-        _requestUri = requestUri ?? throw new ArgumentNullException();
-        ValidateUri(_requestUri);
+        _requestUri = requestUri;
 
         Headers = new HttpRequestHeaders();
         Options = new HttpRequestOptions();
     }
 
-    public HttpRequestMessage(HttpMethod method, string requestUri)
-        : this(method, new Uri(requestUri ?? throw new ArgumentNullException(), UriKind.RelativeOrAbsolute))
+    public HttpRequestMessage(HttpMethod method, string? requestUri)
+        : this(method, requestUri is null ? null : new Uri(requestUri, UriKind.RelativeOrAbsolute))
     {
     }
 
@@ -34,14 +33,10 @@ public sealed class HttpRequestMessage : IDisposable
         set => _method = value ?? throw new ArgumentNullException();
     }
 
-    public Uri RequestUri
+    public Uri? RequestUri
     {
         get => _requestUri;
-        set
-        {
-            ValidateUri(value);
-            _requestUri = value;
-        }
+        set => _requestUri = value;
     }
 
     public HttpRequestHeaders Headers { get; }
@@ -75,13 +70,6 @@ public sealed class HttpRequestMessage : IDisposable
         }
     }
 
-    private static void ValidateUri(Uri uri)
-    {
-        if (!uri.IsAbsoluteUri)
-        {
-            throw new ArgumentException();
-        }
-    }
 }
 
 public sealed class HttpRequestOptions

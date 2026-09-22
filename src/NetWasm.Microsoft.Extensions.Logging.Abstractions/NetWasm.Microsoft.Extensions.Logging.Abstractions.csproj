@@ -38,7 +38,7 @@
                       ReferenceOutputAssembly="false"
                       PrivateAssets="all"
                       SkipGetTargetFrameworkProperties="true"
-                      AdditionalProperties="TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false" />
+                      AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
                       Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
@@ -49,8 +49,8 @@
           Condition="'$(TargetFrameworkIdentifier)' == 'NetWasm' AND '$(TargetFrameworkVersion)' == 'v0.1'">
     <MSBuild Projects="$(NetWasmLoggingGeneratorProject)"
              Targets="GetTargetPath"
-             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;DebugType=none;DebugSymbols=false"
-             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker;TargetFrameworks">
+             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false"
+             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker">
       <Output TaskParameter="TargetOutputs" ItemName="_NetWasmLoggingGeneratorOutput" />
     </MSBuild>
     <Error Code="NWLG011"

@@ -1,0 +1,32 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework></TargetFramework>
+    <TargetFrameworks>net10.0;netwasm0.1</TargetFrameworks>
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TUnitSourceGenerationMode>ClosedWorldCatalog</TUnitSourceGenerationMode>
+    <NoWarn>$(NoWarn);TUnit0034;TUnit0038</NoWarn>
+    <DisableImplicitFrameworkReferences Condition="'$(TargetFramework)' == 'net10.0'">false</DisableImplicitFrameworkReferences>
+    <NoStdLib Condition="'$(TargetFramework)' == 'net10.0'">false</NoStdLib>
+    <NoStandardLibraries Condition="'$(TargetFramework)' == 'net10.0'">false</NoStandardLibraries>
+    <NoCompilerStandardLib Condition="'$(TargetFramework)' == 'net10.0'">false</NoCompilerStandardLib>
+    <DisableStandardFrameworkResolution Condition="'$(TargetFramework)' == 'net10.0'">true</DisableStandardFrameworkResolution>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Remove="Xunit" />
+    <NetWasmClockGrant Include="wall" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <Compile Include="MemoryCacheTests.cs" />
+    <PackageReference Include="NetWasm.TUnit" Version="[$(NetWasmTUnitPackageVersion)]" />
+    <ProjectReference Include="../../src/NetWasm.Microsoft.Extensions.Caching.Abstractions/NetWasm.Microsoft.Extensions.Caching.Abstractions.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <ProjectReference Include="../../src/NetWasm.Microsoft.Extensions.Caching.Memory/NetWasm.Microsoft.Extensions.Caching.Memory.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <ProjectReference Include="../../src/NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
+  </ItemGroup>
+</Project>

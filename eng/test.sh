@@ -74,13 +74,19 @@ tunit_test_projects=(
   tests/NetWasm.System.Text.Encodings.Web.Tests/NetWasm.System.Text.Encodings.Web.Tests.csproj
   tests/NetWasm.System.IO.Pipelines.Tests/NetWasm.System.IO.Pipelines.Tests.csproj
   tests/NetWasm.System.Net.Http.Tests/NetWasm.System.Net.Http.Tests.csproj
+  tests/NetWasm.System.Net.Http.Json.Tests/NetWasm.System.Net.Http.Json.Tests.csproj
+  tests/NetWasm.Microsoft.Extensions.Primitives.Tests/NetWasm.Microsoft.Extensions.Primitives.Tests.csproj
+  tests/NetWasm.Microsoft.Extensions.Configuration.Tests/NetWasm.Microsoft.Extensions.Configuration.Tests.csproj
+  tests/NetWasm.Microsoft.Extensions.Caching.Memory.Tests/NetWasm.Microsoft.Extensions.Caching.Memory.Tests.csproj
+  tests/NetWasm.Microsoft.Extensions.Http.Tests/NetWasm.Microsoft.Extensions.Http.Tests.csproj
+  tests/NetWasm.Microsoft.Extensions.Options.Tests/NetWasm.Microsoft.Extensions.Options.Tests.csproj
+  tests/NetWasm.Microsoft.Extensions.Logging.Tests/NetWasm.Microsoft.Extensions.Logging.Tests.csproj
   tests/NetWasm.System.Text.RegularExpressions.Tests/NetWasm.System.Text.RegularExpressions.Tests.csproj
   tests/NetWasm.System.Text.Json.Tests/NetWasm.System.Text.Json.Tests.csproj
   tests/NetWasm.System.Xml.Tests/NetWasm.System.Xml.Tests.csproj
   tests/NetWasm.System.IO.Hashing.Tests/NetWasm.System.IO.Hashing.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj
-  tests/NetWasm.Microsoft.Extensions.Logging.Tests/NetWasm.Microsoft.Extensions.Logging.Tests.csproj
 )
 
 restore_and_run_desktop() {
@@ -95,7 +101,6 @@ restore_and_run_desktop() {
       --configfile "${nuget_config}" \
       --disable-build-servers \
       --nologo \
-      -p:TargetFrameworks=net10.0 \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
     dotnet run \
@@ -105,7 +110,6 @@ restore_and_run_desktop() {
       --no-restore \
       --no-launch-profile \
       --disable-build-servers \
-      -p:TargetFrameworks=net10.0 \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
   ) > "${log}" 2>&1
@@ -123,7 +127,6 @@ restore_and_test_netwasm() {
       --configfile "${nuget_config}" \
       --disable-build-servers \
       --nologo \
-      -p:TargetFrameworks=netwasm0.1 \
       -p:NetWasmOptimization=None \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
@@ -133,7 +136,6 @@ restore_and_test_netwasm() {
       --no-restore \
       --disable-build-servers \
       --nologo \
-      -p:TargetFrameworks=netwasm0.1 \
       -p:NetWasmOptimization=None \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"

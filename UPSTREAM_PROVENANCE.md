@@ -24,11 +24,3 @@ The dependency-injection packages are adapted from
 the MIT License. Runtime constructor discovery and delegate creation are
 replaced by deterministic source generation. The generator under `tools/` is
 NetWasm-authored MIT-licensed code and is shipped only as a build-time analyzer.
-
-The Options and Logging packages, including the `LoggerMessage` source
-generator, are adapted from the public .NET 10 release tag `v10.0.0`
-(`b0f34d51fccc69fd334253924abd8d6853fad7aa`) under the MIT License. The
-runtime profile replaces reflection-based provider discovery with explicit
-managed provider identity, keeps console output synchronous, and excludes the
-EventLog, EventSource, Debug, configuration-reload, background-queue, and
-Generic Host surfaces.
