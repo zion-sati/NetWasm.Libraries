@@ -32,6 +32,7 @@ internal sealed class Wasi02HttpTransport : IHttpTransport
         }
 
         Wasi02IncomingResponse? incoming = null;
+        HttpResponseMessage? response = null;
         var bodyTransferred = false;
         try
         {
@@ -49,28 +50,47 @@ internal sealed class Wasi02HttpTransport : IHttpTransport
                 throw new InvalidOperationException();
             }
 
-            var response = new HttpResponseMessage((HttpStatusCode)incoming.StatusCode);
-            foreach (var header in incoming.Headers)
-            {
-                response.Headers.Add(header.Key, header.Value);
-            }
-
             if (incoming.Body is null)
             {
-                response.Content = new EmptyContent();
+                response = new HttpResponseMessage((HttpStatusCode)incoming.StatusCode)
+                {
+                    Content = new EmptyContent(),
+                };
             }
             else
             {
                 var stream = _responseBodyFactory.Create(incoming.Body);
-                response.Content = new StreamContent(stream);
+                response = new HttpResponseMessage((HttpStatusCode)incoming.StatusCode)
+                {
+                    Content = new StreamContent(stream),
+                };
                 bodyTransferred = true;
+            }
+
+            foreach (var header in incoming.Headers)
+            {
+                if (header.Key.Equals("Content-Type", StringComparison.OrdinalIgnoreCase) ||
+                    header.Key.Equals("Content-Length", StringComparison.OrdinalIgnoreCase))
+                {
+                    response.Content!.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                }
+                else
+                {
+                    response.Headers.Add(header.Key, header.Value);
+                }
             }
 
             return response;
         }
         catch (Wasi02TransportFailureException failure)
         {
+            response?.Dispose();
             throw _failureMapper.Translate(failure.Facts);
+        }
+        catch
+        {
+            response?.Dispose();
+            throw;
         }
         finally
         {

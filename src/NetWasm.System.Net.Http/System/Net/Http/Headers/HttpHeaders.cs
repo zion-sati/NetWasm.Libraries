@@ -88,6 +88,9 @@ public abstract class HttpHeaders
         _values[name] = new List<string> { value ?? throw new ArgumentNullException() };
     }
 
+    internal bool Remove(string name) =>
+        name is not null && _values.Remove(name);
+
     internal IEnumerable<KeyValuePair<string, string>> Entries()
     {
         foreach (var pair in _values)

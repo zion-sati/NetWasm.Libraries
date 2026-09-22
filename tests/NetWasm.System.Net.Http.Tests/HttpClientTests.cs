@@ -70,6 +70,22 @@ public sealed class HttpClientTests
     }
 
     [Test]
+    public async Task NullRequestUriUsesBaseAddress()
+    {
+        var handler = new RecordingHandler(200, "ok");
+        using var client = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://example.test/base"),
+        };
+        using var request = new HttpRequestMessage(HttpMethod.Get, client.BaseAddress);
+        request.RequestUri = null!;
+
+        using var response = await client.SendAsync(request);
+
+        await Assert.That(handler.LastRequest!.RequestUri).IsEqualTo(client.BaseAddress);
+    }
+
+    [Test]
     public async Task DelegatingHandlerForwardsAndDisposesInnerHandler()
     {
         var inner = new CountingHandler();

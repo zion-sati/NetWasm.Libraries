@@ -1,0 +1,33 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Primitives</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <PackageId>NetWasm.Microsoft.Extensions.Primitives</PackageId>
+    <Version>$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)</Version>
+    <PackageVersion>$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.Primitives.</Description>
+    <PackageTags>netwasm;microsoft;extensions;primitives;change-token</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Primitives/*.cs" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>

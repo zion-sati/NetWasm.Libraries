@@ -138,6 +138,7 @@ root_projects=(
   src/NetWasm.System.Text.RegularExpressions/NetWasm.System.Text.RegularExpressions.csproj
   src/NetWasm.System.Xml/NetWasm.System.Xml.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj
+  src/NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj
 )
 
 dependent_projects=(
@@ -145,10 +146,21 @@ dependent_projects=(
   src/NetWasm.System.IO.Pipelines/NetWasm.System.IO.Pipelines.csproj
   src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj
   src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj
+  src/NetWasm.System.Net.Http.Json/NetWasm.System.Net.Http.Json.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj
+  src/NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj
+  src/NetWasm.Microsoft.Extensions.Configuration/NetWasm.Microsoft.Extensions.Configuration.csproj
+  src/NetWasm.Microsoft.Extensions.Configuration.Binder/NetWasm.Microsoft.Extensions.Configuration.Binder.csproj
+  src/NetWasm.Microsoft.Extensions.Configuration.EnvironmentVariables/NetWasm.Microsoft.Extensions.Configuration.EnvironmentVariables.csproj
+  src/NetWasm.Microsoft.Extensions.Configuration.CommandLine/NetWasm.Microsoft.Extensions.Configuration.CommandLine.csproj
+  src/NetWasm.Microsoft.Extensions.Configuration.Json/NetWasm.Microsoft.Extensions.Configuration.Json.csproj
   src/NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj
+  src/NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions/NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions.csproj
+  src/NetWasm.Microsoft.Extensions.Caching.Abstractions/NetWasm.Microsoft.Extensions.Caching.Abstractions.csproj
+  src/NetWasm.Microsoft.Extensions.Caching.Memory/NetWasm.Microsoft.Extensions.Caching.Memory.csproj
   src/NetWasm.Microsoft.Extensions.Logging.Abstractions/NetWasm.Microsoft.Extensions.Logging.Abstractions.csproj
   src/NetWasm.Microsoft.Extensions.Logging/NetWasm.Microsoft.Extensions.Logging.csproj
+  src/NetWasm.Microsoft.Extensions.Http/NetWasm.Microsoft.Extensions.Http.csproj
 )
 
 pack_project() {
@@ -160,7 +172,8 @@ pack_project() {
       --nologo \
       -o "${OUTPUT_DIR}" \
       -p:UseArtifactsOutput=true \
-      -p:ArtifactsPath="${build_root}/artifacts"
+      -p:ArtifactsPath="${build_root}/artifacts" \
+      -p:NetWasmPackPackageGraph=true
 }
 
 for project in "${root_projects[@]}"; do
@@ -171,9 +184,9 @@ for project in "${dependent_projects[@]}"; do
 done
 
 package_count="$(find "${OUTPUT_DIR}" -maxdepth 1 -type f -name 'NetWasm.*.nupkg' | wc -l | tr -d ' ')"
-if [[ "${package_count}" -ne 15 ]]; then
-  echo "Expected exactly 15 NetWasm library packages, found ${package_count}." >&2
+if [[ "${package_count}" -ne 27 ]]; then
+  echo "Expected exactly 27 NetWasm library packages, found ${package_count}." >&2
   exit 1
 fi
 
-echo "Built 15 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
+echo "Built 27 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"

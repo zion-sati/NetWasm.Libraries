@@ -54,6 +54,21 @@ public sealed class HttpResponseMessage : IDisposable
     public bool IsSuccessStatusCode =>
         (int)StatusCode >= 200 && (int)StatusCode <= 299;
 
+    public HttpResponseMessage EnsureSuccessStatusCode()
+    {
+        if (!IsSuccessStatusCode)
+        {
+            var exception = new HttpRequestException(
+                $"Response status code does not indicate success: {(int)StatusCode}.")
+            {
+                StatusCode = StatusCode,
+            };
+            throw exception;
+        }
+
+        return this;
+    }
+
     public void Dispose()
     {
         if (!_disposed)

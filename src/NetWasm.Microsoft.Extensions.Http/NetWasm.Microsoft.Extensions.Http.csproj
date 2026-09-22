@@ -1,0 +1,49 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Http</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.Http</PackageId>
+    <Version>$(NetWasmMicrosoftExtensionsHttpPackageVersion)</Version>
+    <PackageVersion>$(NetWasmMicrosoftExtensionsHttpPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.Http over the host-owned HTTP transport.</Description>
+    <PackageTags>netwasm;microsoft;extensions;http;httpclientfactory</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Http/*.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/*.cs" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.System.Net.Http" Version="[$(NetWasmSystemNetHttpPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="[$(NetWasmDependencyInjectionPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+  </ItemGroup>
+  <Target Name="NetWasmSuppressDependencyInjectionAnalyzerForPackageBuild"
+          BeforeTargets="CoreCompile"
+          Condition="'$(NetWasmPackPackageGraph)' == 'true'">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)"
+                Condition="'%(Analyzer.Filename)' == 'NetWasm.Microsoft.Extensions.DependencyInjection.Generator'" />
+    </ItemGroup>
+  </Target>
+</Project>

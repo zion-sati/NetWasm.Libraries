@@ -24,6 +24,10 @@ public sealed class StreamContent : HttpContent
         CancellationToken cancellationToken) =>
         _content.CopyToAsync(stream, cancellationToken);
 
+    protected override Task<Stream> CreateContentReadStreamAsync(
+        CancellationToken cancellationToken) =>
+        Task.FromResult<Stream>(_content);
+
     protected override bool TryComputeLength(out long length)
     {
         if (_content.CanSeek)
@@ -40,7 +44,10 @@ public sealed class StreamContent : HttpContent
     {
         if (disposing)
         {
-            _content.Dispose();
+            if (!ReferenceEquals(ContentReadStream, _content))
+            {
+                _content.Dispose();
+            }
         }
 
         base.Dispose(disposing);

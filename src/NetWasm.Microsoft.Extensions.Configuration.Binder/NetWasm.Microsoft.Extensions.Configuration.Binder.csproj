@@ -1,0 +1,59 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Microsoft.Extensions.Configuration.Binder</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <PackageId>NetWasm.Microsoft.Extensions.Configuration.Binder</PackageId>
+    <Version>$(NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion)</Version>
+    <PackageVersion>$(NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion)</PackageVersion>
+    <Description>NetWasm source-generated configuration binding contracts.</Description>
+    <PackageTags>netwasm;microsoft;extensions;configuration;binder;source-generator</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <NetWasmConfigurationBinderGeneratorProject>../../tools/NetWasm.Microsoft.Extensions.Configuration.Binder.Generator/NetWasm.Microsoft.Extensions.Configuration.Binder.Generator.csproj</NetWasmConfigurationBinderGeneratorProject>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetWasmCollectConfigurationBinderGeneratorAsset</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Microsoft/Extensions/Configuration/*.cs" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="[$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="$(NetWasmConfigurationBinderGeneratorProject)"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer"
+                      PrivateAssets="all"
+                      SkipGetTargetFrameworkProperties="true"
+                      AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+  <Target Name="NetWasmCollectConfigurationBinderGeneratorAsset"
+          Returns="@(TfmSpecificPackageFile)"
+          Condition="'$(TargetFrameworkIdentifier)' == 'NetWasm' AND '$(TargetFrameworkVersion)' == 'v0.1'">
+    <MSBuild Projects="$(NetWasmConfigurationBinderGeneratorProject)"
+             Targets="GetTargetPath"
+             Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false"
+             RemoveProperties="TargetFramework;TargetFrameworkIdentifier;TargetFrameworkVersion;TargetFrameworkMoniker">
+      <Output TaskParameter="TargetOutputs" ItemName="_NetWasmConfigurationBinderGeneratorOutput" />
+    </MSBuild>
+    <Error Code="NWCFG001"
+           Condition="'@(_NetWasmConfigurationBinderGeneratorOutput->Count())' != '1'"
+           Text="The configuration binder generator build must produce exactly one analyzer assembly." />
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="@(_NetWasmConfigurationBinderGeneratorOutput)">
+        <PackagePath>analyzers/dotnet/cs/%(Filename)%(Extension)</PackagePath>
+      </TfmSpecificPackageFile>
+    </ItemGroup>
+  </Target>
+</Project>

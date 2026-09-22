@@ -1,0 +1,37 @@
+<Project Sdk="NetWasm.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netwasm0.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AssemblyName>System.Net.Http.Json</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <IsPackable>true</IsPackable>
+    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <PackageId>NetWasm.System.Net.Http.Json</PackageId>
+    <Version>$(NetWasmSystemNetHttpJsonPackageVersion)</Version>
+    <PackageVersion>$(NetWasmSystemNetHttpJsonPackageVersion)</PackageVersion>
+    <Description>NetWasm netwasm0.1 metadata-first System.Net.Http.Json.</Description>
+    <PackageTags>netwasm;system;net;http;json;source-generation</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>$(NetWasmPortedLibrariesRepositoryUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
+    <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="System/Net/Http/Json/*.cs" />
+    <ProjectReference Include="../NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.System.Net.Http" Version="[$(NetWasmSystemNetHttpPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <ProjectReference Include="../NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
+    <PackageReference Include="NetWasm.System.Text.Json" Version="[$(NetWasmSystemTextJsonPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <None Update="README.md" Pack="true" PackagePath="README.md" />
+  </ItemGroup>
+</Project>
