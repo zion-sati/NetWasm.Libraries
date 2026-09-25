@@ -50,6 +50,7 @@
     <Compile Include="Microsoft/Extensions/DependencyInjection/Extensions/ServiceCollectionDescriptorExtensions.cs" />
     <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceCollectionServiceExtensions.cs" />
     <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceProviderServiceExtensions.cs" />
+    <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceProviderKeyedServiceExtensions.cs" />
     <Compile Include="Properties/AssemblyInfo.cs" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
