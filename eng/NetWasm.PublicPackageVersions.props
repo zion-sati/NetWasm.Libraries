@@ -2,33 +2,33 @@
   <PropertyGroup>
     <!-- Production package graph. These versions are replaced exactly once
          when the immutable release candidate is allocated. -->
-    <NetWasmSystemLinqPackageVersion>0.4.1</NetWasmSystemLinqPackageVersion>
-    <NetWasmSystemLinqAsyncEnumerablePackageVersion>0.4.1</NetWasmSystemLinqAsyncEnumerablePackageVersion>
-    <NetWasmSystemMemoryPackageVersion>0.4.1</NetWasmSystemMemoryPackageVersion>
-    <NetWasmSystemIOPipelinesPackageVersion>0.4.1</NetWasmSystemIOPipelinesPackageVersion>
-    <NetWasmSystemTextEncodingsWebPackageVersion>0.4.1</NetWasmSystemTextEncodingsWebPackageVersion>
-    <NetWasmSystemTextJsonPackageVersion>0.4.1</NetWasmSystemTextJsonPackageVersion>
-    <NetWasmSystemXmlPackageVersion>0.4.1</NetWasmSystemXmlPackageVersion>
-    <NetWasmSystemTextRegularExpressionsPackageVersion>0.4.1</NetWasmSystemTextRegularExpressionsPackageVersion>
-    <NetWasmSystemIOHashingPackageVersion>0.4.1</NetWasmSystemIOHashingPackageVersion>
-    <NetWasmSystemNetHttpPackageVersion>0.4.1</NetWasmSystemNetHttpPackageVersion>
-    <NetWasmSystemNetHttpJsonPackageVersion>0.4.1</NetWasmSystemNetHttpJsonPackageVersion>
-    <NetWasmMicrosoftExtensionsPrimitivesPackageVersion>0.4.1</NetWasmMicrosoftExtensionsPrimitivesPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>0.4.1</NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationPackageVersion>0.4.1</NetWasmMicrosoftExtensionsConfigurationPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>0.4.1</NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>0.4.1</NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>0.4.1</NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>0.4.1</NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>
-    <NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>0.4.1</NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>
-    <NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>0.4.1</NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>
-    <NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>0.4.1</NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>
-    <NetWasmMicrosoftExtensionsHttpPackageVersion>0.4.1</NetWasmMicrosoftExtensionsHttpPackageVersion>
-    <NetWasmDependencyInjectionAbstractionsPackageVersion>0.4.1</NetWasmDependencyInjectionAbstractionsPackageVersion>
-    <NetWasmDependencyInjectionPackageVersion>0.4.1</NetWasmDependencyInjectionPackageVersion>
-    <NetWasmOptionsPackageVersion>0.4.1</NetWasmOptionsPackageVersion>
-    <NetWasmLoggingAbstractionsPackageVersion>0.4.1</NetWasmLoggingAbstractionsPackageVersion>
-    <NetWasmLoggingPackageVersion>0.4.1</NetWasmLoggingPackageVersion>
+    <NetWasmSystemLinqPackageVersion>0.4.2-preview.1</NetWasmSystemLinqPackageVersion>
+    <NetWasmSystemLinqAsyncEnumerablePackageVersion>0.4.2-preview.1</NetWasmSystemLinqAsyncEnumerablePackageVersion>
+    <NetWasmSystemMemoryPackageVersion>0.4.2-preview.1</NetWasmSystemMemoryPackageVersion>
+    <NetWasmSystemIOPipelinesPackageVersion>0.4.2-preview.1</NetWasmSystemIOPipelinesPackageVersion>
+    <NetWasmSystemTextEncodingsWebPackageVersion>0.4.2-preview.1</NetWasmSystemTextEncodingsWebPackageVersion>
+    <NetWasmSystemTextJsonPackageVersion>0.4.2-preview.1</NetWasmSystemTextJsonPackageVersion>
+    <NetWasmSystemXmlPackageVersion>0.4.2-preview.1</NetWasmSystemXmlPackageVersion>
+    <NetWasmSystemTextRegularExpressionsPackageVersion>0.4.2-preview.1</NetWasmSystemTextRegularExpressionsPackageVersion>
+    <NetWasmSystemIOHashingPackageVersion>0.4.2-preview.1</NetWasmSystemIOHashingPackageVersion>
+    <NetWasmSystemNetHttpPackageVersion>0.4.2-preview.1</NetWasmSystemNetHttpPackageVersion>
+    <NetWasmSystemNetHttpJsonPackageVersion>0.4.2-preview.1</NetWasmSystemNetHttpJsonPackageVersion>
+    <NetWasmMicrosoftExtensionsPrimitivesPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsPrimitivesPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsConfigurationPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>
+    <NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>
+    <NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>
+    <NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>
+    <NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>
+    <NetWasmMicrosoftExtensionsHttpPackageVersion>0.4.2-preview.1</NetWasmMicrosoftExtensionsHttpPackageVersion>
+    <NetWasmDependencyInjectionAbstractionsPackageVersion>0.4.2-preview.1</NetWasmDependencyInjectionAbstractionsPackageVersion>
+    <NetWasmDependencyInjectionPackageVersion>0.4.2-preview.1</NetWasmDependencyInjectionPackageVersion>
+    <NetWasmOptionsPackageVersion>0.4.2-preview.1</NetWasmOptionsPackageVersion>
+    <NetWasmLoggingAbstractionsPackageVersion>0.4.2-preview.1</NetWasmLoggingAbstractionsPackageVersion>
+    <NetWasmLoggingPackageVersion>0.4.2-preview.1</NetWasmLoggingPackageVersion>
 
     <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
     <NetWasmTUnitPackageVersion>0.4.2</NetWasmTUnitPackageVersion>
