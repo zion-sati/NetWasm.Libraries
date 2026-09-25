@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "repository": "zion-sati/NetWasm.Libraries",
   "repositoryUrl": "https://github.com/zion-sati/NetWasm.Libraries",
-  "releaseVersion": "0.4.1",
-  "releaseTag": "v0.4.1",
-  "sourceCommit": "a1eef3dbdfe83204154e174b1dd0534b93894159",
+  "releaseVersion": "0.4.2-preview.1",
+  "releaseTag": "v0.4.2-preview.1",
+  "sourceCommit": "d648cc0d0cde747192a575251579377e74b48c91",
   "packages": [
     "NetWasm.Microsoft.Extensions.DependencyInjection",
     "NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions",
