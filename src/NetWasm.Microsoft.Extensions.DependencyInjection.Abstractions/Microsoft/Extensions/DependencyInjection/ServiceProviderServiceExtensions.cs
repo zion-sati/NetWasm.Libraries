@@ -94,56 +94,28 @@ namespace Microsoft.Extensions.DependencyInjection
                 "Dynamic service enumeration by Type requires generated NetWasm activation metadata.");
         }
 
-        public static T? GetKeyedService<T>(this IServiceProvider provider, object? serviceKey)
-        {
-            ArgumentNullException.ThrowIfNull(provider);
-            return (T?)provider.GetKeyedService(typeof(T), serviceKey);
-        }
+        // NetWasm 0.4.1 exposed keyed methods on this type. Keep their static
+        // signatures for existing callers, but only the upstream declaring type
+        // owns extension methods so source lookup remains unambiguous.
+        public static T? GetKeyedService<T>(IServiceProvider provider, object? serviceKey) =>
+            ServiceProviderKeyedServiceExtensions.GetKeyedService<T>(provider, serviceKey);
 
-        public static object? GetKeyedService(this IServiceProvider provider, Type serviceType, object? serviceKey)
-        {
-            ArgumentNullException.ThrowIfNull(provider);
-            ArgumentNullException.ThrowIfNull(serviceType);
-            if (provider is not IKeyedServiceProvider keyedProvider)
-            {
-                throw new InvalidOperationException("This service provider does not support keyed services.");
-            }
+        public static object? GetKeyedService(IServiceProvider provider, Type serviceType, object? serviceKey) =>
+            ServiceProviderKeyedServiceExtensions.GetKeyedService(provider, serviceType, serviceKey);
 
-            return keyedProvider.GetKeyedService(serviceType, serviceKey);
-        }
+        public static T GetRequiredKeyedService<T>(IServiceProvider provider, object? serviceKey)
+            where T : notnull =>
+            ServiceProviderKeyedServiceExtensions.GetRequiredKeyedService<T>(provider, serviceKey);
 
-        public static T GetRequiredKeyedService<T>(this IServiceProvider provider, object? serviceKey)
-            where T : notnull
-        {
-            ArgumentNullException.ThrowIfNull(provider);
-            return (T)provider.GetRequiredKeyedService(typeof(T), serviceKey);
-        }
+        public static object GetRequiredKeyedService(IServiceProvider provider, Type serviceType, object? serviceKey) =>
+            ServiceProviderKeyedServiceExtensions.GetRequiredKeyedService(provider, serviceType, serviceKey);
 
-        public static object GetRequiredKeyedService(this IServiceProvider provider, Type serviceType, object? serviceKey)
-        {
-            ArgumentNullException.ThrowIfNull(provider);
-            ArgumentNullException.ThrowIfNull(serviceType);
-            if (provider is not IKeyedServiceProvider keyedProvider)
-            {
-                throw new InvalidOperationException("This service provider does not support keyed services.");
-            }
+        public static IEnumerable<T> GetKeyedServices<T>(IServiceProvider provider, object? serviceKey) =>
+            ServiceProviderKeyedServiceExtensions.GetKeyedServices<T>(provider, serviceKey);
 
-            return keyedProvider.GetRequiredKeyedService(serviceType, serviceKey);
-        }
-
-        public static IEnumerable<T> GetKeyedServices<T>(this IServiceProvider provider, object? serviceKey)
-        {
-            ArgumentNullException.ThrowIfNull(provider);
-            return provider.GetRequiredKeyedService<IEnumerable<T>>(serviceKey);
-        }
-
-        public static IEnumerable<object?> GetKeyedServices(this IServiceProvider provider, Type serviceType, object? serviceKey)
-        {
-            ArgumentNullException.ThrowIfNull(provider);
-            ArgumentNullException.ThrowIfNull(serviceType);
-            throw new NotSupportedException(
-                "Dynamic keyed service enumeration by Type requires generated NetWasm activation metadata.");
-        }
+        [RequiresDynamicCode("The native code for an IEnumerable<serviceType> might not be available at runtime.")]
+        public static IEnumerable<object?> GetKeyedServices(IServiceProvider provider, Type serviceType, object? serviceKey) =>
+            ServiceProviderKeyedServiceExtensions.GetKeyedServices(provider, serviceType, serviceKey);
 
         /// <summary>
         /// Creates a new <see cref="IServiceScope"/> that can be used to resolve scoped services.
