@@ -337,6 +337,37 @@ public sealed class AbstractionsCompatibilityTests
     }
 
     [Test]
+    public async Task CanonicalKeyedDeclaringTypePreservesStaticAndExtensionCalls()
+    {
+        var instance = new FirstContract();
+        IServiceProvider provider = new KeyedDelegateProvider(instance);
+
+        await Assert.That(ReferenceEquals(ServiceProviderKeyedServiceExtensions.GetKeyedService<IContract>(provider, "key"), instance)).IsTrue();
+        await Assert.That(ReferenceEquals(ServiceProviderKeyedServiceExtensions.GetKeyedService(provider, typeof(IContract), "key"), instance)).IsTrue();
+        await Assert.That(ReferenceEquals(ServiceProviderKeyedServiceExtensions.GetRequiredKeyedService<IContract>(provider, "key"), instance)).IsTrue();
+        await Assert.That(ReferenceEquals(ServiceProviderKeyedServiceExtensions.GetRequiredKeyedService(provider, typeof(IContract), "key"), instance)).IsTrue();
+        await Assert.That(ServiceProviderKeyedServiceExtensions.GetKeyedServices<IContract>(provider, "key") is ContractSequence).IsTrue();
+        await Assert.That(ReferenceEquals(provider.GetRequiredKeyedService<IContract>("key"), instance)).IsTrue();
+
+#if NETWASM
+        await Assert.That(ReferenceEquals(ServiceProviderServiceExtensions.GetKeyedService<IContract>(provider, "key"), instance)).IsTrue();
+        await Assert.That(ReferenceEquals(ServiceProviderServiceExtensions.GetKeyedService(provider, typeof(IContract), "key"), instance)).IsTrue();
+        await Assert.That(ReferenceEquals(ServiceProviderServiceExtensions.GetRequiredKeyedService<IContract>(provider, "key"), instance)).IsTrue();
+        await Assert.That(ReferenceEquals(ServiceProviderServiceExtensions.GetRequiredKeyedService(provider, typeof(IContract), "key"), instance)).IsTrue();
+        await Assert.That(ServiceProviderServiceExtensions.GetKeyedServices<IContract>(provider, "key") is ContractSequence).IsTrue();
+        var canonicalFailure = Capture(() => ServiceProviderKeyedServiceExtensions.GetKeyedServices(provider, typeof(IContract), "key"));
+        var legacyFailure = Capture(() => ServiceProviderServiceExtensions.GetKeyedServices(provider, typeof(IContract), "key"));
+        await Assert.That(canonicalFailure is NotSupportedException).IsTrue();
+        await Assert.That(legacyFailure is NotSupportedException).IsTrue();
+        await Assert.That(canonicalFailure?.Message).IsEqualTo(legacyFailure?.Message);
+#else
+        using var enumerator = ServiceProviderKeyedServiceExtensions.GetKeyedServices(provider, typeof(IContract), "key").GetEnumerator();
+        await Assert.That(enumerator.MoveNext()).IsTrue();
+        await Assert.That(ReferenceEquals(enumerator.Current, instance)).IsTrue();
+#endif
+    }
+
+    [Test]
     public async Task KeyedProviderExtensionsForwardGenericLookupContract()
     {
         var instance = new FirstContract();
