@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netwasm0.1'">
-    <NetWasmJsonSourceGenerator>$(NETCoreTargetingPackRoot)/Microsoft.NETCore.App.Ref/10.0.10/analyzers/dotnet/cs/System.Text.Json.SourceGeneration.dll</NetWasmJsonSourceGenerator>
+    <NetWasmJsonSourceGenerator>$(NETCoreTargetingPackRoot)/Microsoft.NETCore.App.Ref/$(BundledNETCoreAppPackageVersion)/analyzers/dotnet/cs/System.Text.Json.SourceGeneration.dll</NetWasmJsonSourceGenerator>
   </PropertyGroup>
 
   <ItemGroup>
