@@ -24,7 +24,7 @@
     <RepositoryUrl>$(NetWasmPortedLibrariesRepositoryUrl)</RepositoryUrl>
     <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' == ''">false</PublishRepositoryUrl>
     <PublishRepositoryUrl Condition="'$(NetWasmPortedLibrariesRepositoryUrl)' != ''">true</PublishRepositoryUrl>
-    <NetWasmJsonSourceGenerator>$(NETCoreTargetingPackRoot)/Microsoft.NETCore.App.Ref/10.0.10/analyzers/dotnet/cs/System.Text.Json.SourceGeneration.dll</NetWasmJsonSourceGenerator>
+    <NetWasmJsonSourceGenerator>$(NETCoreTargetingPackRoot)/Microsoft.NETCore.App.Ref/$(BundledNETCoreAppPackageVersion)/analyzers/dotnet/cs/System.Text.Json.SourceGeneration.dll</NetWasmJsonSourceGenerator>
   </PropertyGroup>
 
   <ItemGroup>
