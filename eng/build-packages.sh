@@ -86,6 +86,9 @@ python3 "${source_root}/eng/project-release-version.py" \
   --source-root "${source_root}" \
   --version "${RELEASE_VERSION}" \
   --receipt "${OUTPUT_DIR}/NetWasm.Libraries.release-version-projection.json"
+python3 "${source_root}/eng/project-dependency-versions.py" \
+  --source-root "${source_root}" \
+  --check
 # global.json discovery follows the process working directory, not an absolute
 # project argument. Anchor every dotnet invocation to the detached source.
 cd "${source_root}"

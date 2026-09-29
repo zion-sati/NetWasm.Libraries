@@ -12,7 +12,7 @@ before opening a pull request, then run the public test lane described in
 ## Maintainer releases
 
 Publish a GitHub Release using a `vVERSION` tag targeted at a signed commit on
-`main`. The GitHub Release tag sets the coordinated package version; the
+`main`. The GitHub Release tag sets the package version; the
 release workflow validates the tagged source and exact package set before
 trusted NuGet.org publishing. Publish matching core NetWasm and TUnit packages
 first.
