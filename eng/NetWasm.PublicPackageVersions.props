@@ -31,6 +31,6 @@
     <NetWasmLoggingPackageVersion>0.4.2</NetWasmLoggingPackageVersion>
 
     <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
-    <NetWasmTUnitPackageVersion>0.4.3</NetWasmTUnitPackageVersion>
+    <NetWasmTUnitPackageVersion>0.5.0</NetWasmTUnitPackageVersion>
   </PropertyGroup>
 </Project>
