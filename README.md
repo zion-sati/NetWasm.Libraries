@@ -19,7 +19,7 @@ dotnet publish -c Release
 ```
 
 The repository currently contains LINQ, Async LINQ, Memory, Pipelines,
-Encodings.Web, HTTP/HTTP JSON, primitives, configuration providers and
+Encodings.Web, HTTP/HTTP JSON, CBOR, primitives, configuration providers and
 generated binding, Options, memory caching, logging, and the
 dependency-injection abstractions and container. Their exact supported
 surfaces remain deliberately smaller than desktop .NET where APIs require
@@ -31,6 +31,7 @@ other platform services outside the current NetWasm profile.
 [![NuGet: NetWasm.Microsoft.Extensions.DependencyInjection](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.DependencyInjection-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.DependencyInjection)
 [![NuGet: NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions)
 [![NuGet: NetWasm.System.IO.Hashing](https://img.shields.io/badge/NuGet-NetWasm.System.IO.Hashing-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.IO.Hashing)
+[![NuGet: NetWasm.System.Formats.Cbor](https://img.shields.io/badge/NuGet-NetWasm.System.Formats.Cbor-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Formats.Cbor)
 [![NuGet: NetWasm.System.IO.Pipelines](https://img.shields.io/badge/NuGet-NetWasm.System.IO.Pipelines-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.IO.Pipelines)
 [![NuGet: NetWasm.System.Linq](https://img.shields.io/badge/NuGet-NetWasm.System.Linq-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Linq)
 [![NuGet: NetWasm.System.Linq.AsyncEnumerable](https://img.shields.io/badge/NuGet-NetWasm.System.Linq.AsyncEnumerable-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Linq.AsyncEnumerable)

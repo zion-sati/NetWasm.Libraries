@@ -22,6 +22,7 @@
     <Project Path="src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj" />
     <Project Path="src/NetWasm.System.Xml/NetWasm.System.Xml.csproj" />
     <Project Path="src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj" />
+    <Project Path="src/NetWasm.System.Formats.Cbor/NetWasm.System.Formats.Cbor.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.Logging.Abstractions/NetWasm.Microsoft.Extensions.Logging.Abstractions.csproj" />
@@ -50,6 +51,7 @@
     <Project Path="tests/NetWasm.System.Text.Json.Tests/NetWasm.System.Text.Json.Tests.csproj" />
     <Project Path="tests/NetWasm.System.Xml.Tests/NetWasm.System.Xml.Tests.csproj" />
     <Project Path="tests/NetWasm.System.IO.Hashing.Tests/NetWasm.System.IO.Hashing.Tests.csproj" />
+    <Project Path="tests/NetWasm.System.Formats.Cbor.Tests/NetWasm.System.Formats.Cbor.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Target/NetWasm.Microsoft.Extensions.DependencyInjection.Target.csproj" />

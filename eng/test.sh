@@ -85,6 +85,7 @@ tunit_test_projects=(
   tests/NetWasm.System.Text.Json.Tests/NetWasm.System.Text.Json.Tests.csproj
   tests/NetWasm.System.Xml.Tests/NetWasm.System.Xml.Tests.csproj
   tests/NetWasm.System.IO.Hashing.Tests/NetWasm.System.IO.Hashing.Tests.csproj
+  tests/NetWasm.System.Formats.Cbor.Tests/NetWasm.System.Formats.Cbor.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj
 )
