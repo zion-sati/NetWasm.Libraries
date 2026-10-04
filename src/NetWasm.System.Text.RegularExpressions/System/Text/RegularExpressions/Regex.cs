@@ -198,7 +198,7 @@ namespace System.Text.RegularExpressions
         }
 
         /// <summary>Gets or sets a dictionary that maps numbered capturing groups to their index values.</summary>
-        [DisallowNull]
+        [CLSCompliant(false), DisallowNull]
         protected IDictionary? Caps
         {
             get => caps;
@@ -214,7 +214,7 @@ namespace System.Text.RegularExpressions
         }
 
         /// <summary>Gets or sets a dictionary that maps named capturing groups to their index values.</summary>
-        [DisallowNull]
+        [CLSCompliant(false), DisallowNull]
         protected IDictionary? CapNames
         {
             get => capnames;

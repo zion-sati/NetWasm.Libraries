@@ -148,6 +148,7 @@ dependent_projects=(
   src/NetWasm.System.Linq.AsyncEnumerable/NetWasm.System.Linq.AsyncEnumerable.csproj
   src/NetWasm.System.IO.Pipelines/NetWasm.System.IO.Pipelines.csproj
   src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj
+  src/NetWasm.System.Formats.Cbor/NetWasm.System.Formats.Cbor.csproj
   src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj
   src/NetWasm.System.Net.Http.Json/NetWasm.System.Net.Http.Json.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj
@@ -187,9 +188,9 @@ for project in "${dependent_projects[@]}"; do
 done
 
 package_count="$(find "${OUTPUT_DIR}" -maxdepth 1 -type f -name 'NetWasm.*.nupkg' | wc -l | tr -d ' ')"
-if [[ "${package_count}" -ne 27 ]]; then
-  echo "Expected exactly 27 NetWasm library packages, found ${package_count}." >&2
+if [[ "${package_count}" -ne 28 ]]; then
+  echo "Expected exactly 28 NetWasm library packages, found ${package_count}." >&2
   exit 1
 fi
 
-echo "Built 27 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
+echo "Built 28 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
