@@ -303,6 +303,8 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6
         with:
           global-json-file: source/global.json
+      - name: Initialize .NET CLI
+        run: dotnet nuget locals all --list > /dev/null
       - name: Download preview/stable release train
         if: needs.build.outputs.mode == 'build'
         uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
