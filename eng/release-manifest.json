@@ -22,6 +22,7 @@
     "NetWasm.Microsoft.Extensions.Options",
     "NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions",
     "NetWasm.Microsoft.Extensions.Primitives",
+    "NetWasm.System.Formats.Cbor",
     "NetWasm.System.IO.Hashing",
     "NetWasm.System.IO.Pipelines",
     "NetWasm.System.Linq",
