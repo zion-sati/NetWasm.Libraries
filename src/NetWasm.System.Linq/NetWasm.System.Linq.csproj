@@ -27,6 +27,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- CoreLib provides this helper through its System.Linq friend assembly. -->
+    <Compile Remove="System/Collections/HashHelpers.cs" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

@@ -27,6 +27,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- CoreLib provides this helper through its System.Linq.AsyncEnumerable friend assembly. -->
+    <Compile Remove="Common/System/Collections/HashHelpers.cs" />
     <PackageReference Include="NetWasm.System.Linq"
                       Version="[$(NetWasmSystemLinqPackageVersion)]" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />

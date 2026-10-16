@@ -14,6 +14,41 @@ namespace NetWasm.Microsoft.Extensions.Http.Tests;
 public sealed class HttpClientFactoryTests
 {
     [Test]
+    public async Task StringConvenienceOverloadsResolveRelativeUris()
+    {
+        var observed = new List<string>();
+        using var client = new HttpClient(new HeaderCheckingHandler(
+            request => observed.Add(request.Method.Method + " " + request.RequestUri!.AbsoluteUri)))
+        {
+            BaseAddress = new Uri("https://example.test/root/"),
+        };
+
+        using var get = await client.GetAsync("items");
+        using var getHeaders = await client.GetAsync("items", HttpCompletionOption.ResponseHeadersRead);
+        using var post = await client.PostAsync("items", null);
+#if NETWASM
+        // The explicit POST completion option is a NetWasm extension.
+        using var postHeaders = await client.PostAsync("items", null, HttpCompletionOption.ResponseHeadersRead);
+#endif
+        using var put = await client.PutAsync("items", null);
+
+#if NETWASM
+        await Assert.That(observed.Count).IsEqualTo(5);
+#else
+        await Assert.That(observed.Count).IsEqualTo(4);
+#endif
+        await Assert.That(observed[0]).IsEqualTo("GET https://example.test/root/items");
+        await Assert.That(observed[1]).IsEqualTo("GET https://example.test/root/items");
+        await Assert.That(observed[2]).IsEqualTo("POST https://example.test/root/items");
+#if NETWASM
+        await Assert.That(observed[3]).IsEqualTo("POST https://example.test/root/items");
+        await Assert.That(observed[4]).IsEqualTo("PUT https://example.test/root/items");
+#else
+        await Assert.That(observed[3]).IsEqualTo("PUT https://example.test/root/items");
+#endif
+    }
+
+    [Test]
     public async Task NamedClientAppliesBaseAddressAndHandlerOrder()
     {
         var events = new List<string>();
