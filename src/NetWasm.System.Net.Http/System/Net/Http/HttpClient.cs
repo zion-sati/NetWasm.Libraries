@@ -156,13 +156,13 @@ public class HttpClient : IDisposable
     public Task<HttpResponseMessage> GetAsync(
         string requestUri,
         CancellationToken cancellationToken = default) =>
-        GetAsync(new Uri(requestUri ?? throw new ArgumentNullException()), cancellationToken);
+        GetAsync(new Uri(requestUri ?? throw new ArgumentNullException(), UriKind.RelativeOrAbsolute), cancellationToken);
 
     public Task<HttpResponseMessage> GetAsync(
         string requestUri,
         HttpCompletionOption completionOption,
         CancellationToken cancellationToken = default) =>
-        GetAsync(new Uri(requestUri ?? throw new ArgumentNullException()), completionOption, cancellationToken);
+        GetAsync(new Uri(requestUri ?? throw new ArgumentNullException(), UriKind.RelativeOrAbsolute), completionOption, cancellationToken);
 
     public Task<HttpResponseMessage> PostAsync(
         Uri requestUri,
@@ -193,14 +193,14 @@ public class HttpClient : IDisposable
         string requestUri,
         HttpContent? content,
         CancellationToken cancellationToken = default) =>
-        PostAsync(new Uri(requestUri ?? throw new ArgumentNullException()), content, cancellationToken);
+        PostAsync(new Uri(requestUri ?? throw new ArgumentNullException(), UriKind.RelativeOrAbsolute), content, cancellationToken);
 
     public Task<HttpResponseMessage> PostAsync(
         string requestUri,
         HttpContent? content,
         HttpCompletionOption completionOption,
         CancellationToken cancellationToken = default) =>
-        PostAsync(new Uri(requestUri ?? throw new ArgumentNullException()), content, completionOption, cancellationToken);
+        PostAsync(new Uri(requestUri ?? throw new ArgumentNullException(), UriKind.RelativeOrAbsolute), content, completionOption, cancellationToken);
 
     public Task<HttpResponseMessage> PutAsync(
         Uri requestUri,
@@ -218,7 +218,7 @@ public class HttpClient : IDisposable
         string requestUri,
         HttpContent? content,
         CancellationToken cancellationToken = default) =>
-        PutAsync(new Uri(requestUri ?? throw new ArgumentNullException()), content, cancellationToken);
+        PutAsync(new Uri(requestUri ?? throw new ArgumentNullException(), UriKind.RelativeOrAbsolute), content, cancellationToken);
 
     public void Dispose()
     {
