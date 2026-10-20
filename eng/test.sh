@@ -31,8 +31,16 @@ mkdir -p "${test_logs}"
 xml_escape() {
   printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/"/\&quot;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
 }
-package_dir_xml="$(xml_escape "${PACKAGE_DIR}")"
-ci_package_source_xml="$(xml_escape "${NETWASM_CI_PACKAGE_SOURCE:-}")"
+# dotnet on Windows reads NuGet.Config paths natively, not as Git Bash paths.
+native_path() {
+  if [[ -n "$1" ]] && command -v cygpath >/dev/null 2>&1; then
+    cygpath -w "$1"
+  else
+    printf '%s' "$1"
+  fi
+}
+package_dir_xml="$(xml_escape "$(native_path "${PACKAGE_DIR}")")"
+ci_package_source_xml="$(xml_escape "$(native_path "${NETWASM_CI_PACKAGE_SOURCE:-}")")"
 {
   printf '%s\n' \
     '<?xml version="1.0" encoding="utf-8"?>' \
@@ -89,6 +97,28 @@ tunit_test_projects=(
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj
 )
+
+# NETWASM_LIBRARIES_TEST_SHARD=<index>/<count> runs every count-th project from
+# index (1-based), so CI can split the suite across jobs. The desktop xUnit
+# lanes run in the first shard.
+shard_index=1
+shard_count=1
+if [[ -n "${NETWASM_LIBRARIES_TEST_SHARD:-}" ]]; then
+  if [[ ! "${NETWASM_LIBRARIES_TEST_SHARD}" =~ ^([1-9][0-9]*)/([1-9][0-9]*)$ ]] ||
+     (( BASH_REMATCH[1] > BASH_REMATCH[2] )); then
+    echo "NETWASM_LIBRARIES_TEST_SHARD must be <index>/<count> with 1 <= index <= count." >&2
+    exit 2
+  fi
+  shard_index="${BASH_REMATCH[1]}"
+  shard_count="${BASH_REMATCH[2]}"
+fi
+selected_projects=()
+for position in "${!tunit_test_projects[@]}"; do
+  if (( position % shard_count == shard_index - 1 )); then
+    selected_projects+=("${tunit_test_projects[position]}")
+  fi
+done
+tunit_test_projects=("${selected_projects[@]}")
 
 restore_and_run_desktop() {
   local project="$1"
@@ -178,7 +208,9 @@ desktop_status=0
 for project in "${tunit_test_projects[@]}"; do
   restore_and_run_desktop "${project}" || desktop_status=$?
 done
-restore_and_test_desktop_xunit || desktop_status=$?
+if [[ "${shard_index}" -eq 1 ]]; then
+  restore_and_test_desktop_xunit || desktop_status=$?
+fi
 
 if [[ "${desktop_status}" -ne 0 ]]; then
   print_logs
