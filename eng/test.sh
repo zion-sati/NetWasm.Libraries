@@ -31,8 +31,21 @@ mkdir -p "${test_logs}"
 xml_escape() {
   printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/"/\&quot;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
 }
-package_dir_xml="$(xml_escape "${PACKAGE_DIR}")"
-ci_package_source_xml="$(xml_escape "${NETWASM_CI_PACKAGE_SOURCE:-}")"
+# dotnet on Windows reads NuGet.Config paths natively, not as Git Bash paths.
+native_path() {
+  if [[ -n "$1" ]] && command -v cygpath >/dev/null 2>&1; then
+    cygpath -w "$1"
+  else
+    printf '%s' "$1"
+  fi
+}
+package_dir_xml="$(xml_escape "$(native_path "${PACKAGE_DIR}")")"
+ci_package_source_xml="$(xml_escape "$(native_path "${NETWASM_CI_PACKAGE_SOURCE:-}")")"
+# Windows refuses paths over 260 characters, and the SDK nests the project name
+# and its own intermediate folders below each lane, so name lanes by checksum.
+lane_artifacts_for() {
+  printf '%s/%s' "${TEST_ARTIFACTS_DIR}" "$(printf '%s' "$1" | cksum | cut -d' ' -f1)"
+}
 {
   printf '%s\n' \
     '<?xml version="1.0" encoding="utf-8"?>' \
@@ -90,11 +103,34 @@ tunit_test_projects=(
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj
 )
 
+# NETWASM_LIBRARIES_TEST_SHARD=<index>/<count> runs every count-th project from
+# index (1-based), so CI can split the suite across jobs. The desktop xUnit
+# lanes run in the first shard.
+shard_index=1
+shard_count=1
+if [[ -n "${NETWASM_LIBRARIES_TEST_SHARD:-}" ]]; then
+  if [[ ! "${NETWASM_LIBRARIES_TEST_SHARD}" =~ ^([1-9][0-9]*)/([1-9][0-9]*)$ ]] ||
+     (( BASH_REMATCH[1] > BASH_REMATCH[2] )); then
+    echo "NETWASM_LIBRARIES_TEST_SHARD must be <index>/<count> with 1 <= index <= count." >&2
+    exit 2
+  fi
+  shard_index="${BASH_REMATCH[1]}"
+  shard_count="${BASH_REMATCH[2]}"
+fi
+selected_projects=()
+for position in "${!tunit_test_projects[@]}"; do
+  if (( position % shard_count == shard_index - 1 )); then
+    selected_projects+=("${tunit_test_projects[position]}")
+  fi
+done
+tunit_test_projects=("${selected_projects[@]}")
+
 restore_and_run_desktop() {
   local project="$1"
   local project_name
   project_name="$(basename "${project}" .csproj)"
-  local lane_artifacts="${TEST_ARTIFACTS_DIR}/${project_name}"
+  local lane_artifacts
+  lane_artifacts="$(lane_artifacts_for "${project_name}")"
   local log="${test_logs}/${project_name}.desktop.log"
   (
     cd "${REPOSITORY_ROOT}"
@@ -120,7 +156,8 @@ restore_and_test_netwasm() {
   local project="$1"
   local project_name
   project_name="$(basename "${project}" .csproj)"
-  local lane_artifacts="${TEST_ARTIFACTS_DIR}/${project_name}"
+  local lane_artifacts
+  lane_artifacts="$(lane_artifacts_for "${project_name}")"
   local log="${test_logs}/${project_name}.netwasm.log"
   (
     cd "${REPOSITORY_ROOT}"
@@ -146,7 +183,8 @@ restore_and_test_netwasm() {
 restore_and_test_desktop_xunit() {
   local project="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests.csproj"
   local project_name="NetWasm.Microsoft.Extensions.DependencyInjection.Tests"
-  local lane_artifacts="${TEST_ARTIFACTS_DIR}/${project_name}"
+  local lane_artifacts
+  lane_artifacts="$(lane_artifacts_for "${project_name}")"
   local log="${test_logs}/${project_name}.desktop.log"
   (
     cd "${REPOSITORY_ROOT}"
@@ -178,7 +216,9 @@ desktop_status=0
 for project in "${tunit_test_projects[@]}"; do
   restore_and_run_desktop "${project}" || desktop_status=$?
 done
-restore_and_test_desktop_xunit || desktop_status=$?
+if [[ "${shard_index}" -eq 1 ]]; then
+  restore_and_test_desktop_xunit || desktop_status=$?
+fi
 
 if [[ "${desktop_status}" -ne 0 ]]; then
   print_logs
@@ -187,7 +227,7 @@ if [[ "${desktop_status}" -ne 0 ]]; then
 fi
 
 export REPOSITORY_ROOT TEST_ARTIFACTS_DIR nuget_config test_logs
-export -f restore_and_test_netwasm
+export -f lane_artifacts_for restore_and_test_netwasm
 test_status=0
 printf '%s\0' "${tunit_test_projects[@]}" |
   xargs -0 -n 1 -P "${MAX_PARALLELISM}" bash -c \
