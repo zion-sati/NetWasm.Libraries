@@ -1,5 +1,5 @@
 {
   "schemaVersion": 1,
-  "netwasm": "0.9.0",
-  "tunit": "0.9.0"
+  "netwasm": "0.10.0",
+  "tunit": "0.10.0"
 }
