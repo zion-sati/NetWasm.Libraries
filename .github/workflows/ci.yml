@@ -30,7 +30,7 @@ jobs:
           - host: linux-arm64
             runner: ubuntu-24.04-arm
           - host: macos-arm64
-            runner: macos-14
+            runner: macos-15
           - host: windows-x64
             runner: windows-2025
           - host: windows-arm64
