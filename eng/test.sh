@@ -14,6 +14,21 @@ if [[ ! "${MAX_PARALLELISM}" =~ ^[1-9][0-9]*$ ]]; then
   echo "NETWASM_TEST_MAX_PARALLELISM must be a positive integer." >&2
   exit 2
 fi
+# The NetWasm suites compile unoptimized unless a lane names a preset and,
+# optionally, a collector, as the speed lane runs them at O3 with NetWasmGC.
+TEST_OPTIMIZATION="${NETWASM_LIBRARIES_TEST_OPTIMIZATION:-None}"
+if [[ ! "${TEST_OPTIMIZATION}" =~ ^(None|O0|O1|O2|O3|Os|Oz)$ ]]; then
+  echo "NETWASM_LIBRARIES_TEST_OPTIMIZATION must be None, O0, O1, O2, O3, Os or Oz." >&2
+  exit 2
+fi
+NETWASM_PROPERTIES=("-p:NetWasmOptimization=${TEST_OPTIMIZATION}")
+if [[ -n "${NETWASM_LIBRARIES_TEST_COLLECTOR:-}" ]]; then
+  if [[ ! "${NETWASM_LIBRARIES_TEST_COLLECTOR}" =~ ^(Compact|NetWasm)$ ]]; then
+    echo "NETWASM_LIBRARIES_TEST_COLLECTOR must be Compact or NetWasm." >&2
+    exit 2
+  fi
+  NETWASM_PROPERTIES+=("-p:NetWasmGarbageCollector=${NETWASM_LIBRARIES_TEST_COLLECTOR}")
+fi
 "${REPOSITORY_ROOT}/eng/build-packages.sh" \
   --version "${TEST_VERSION}" \
   --output "${PACKAGE_DIR}"
@@ -165,7 +180,7 @@ restore_and_test_netwasm() {
       --configfile "${nuget_config}" \
       --disable-build-servers \
       --nologo \
-      -p:NetWasmOptimization=None \
+      "${NETWASM_PROPERTIES[@]}" \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
     dotnet test "${project}" \
@@ -174,7 +189,7 @@ restore_and_test_netwasm() {
       --no-restore \
       --disable-build-servers \
       --nologo \
-      -p:NetWasmOptimization=None \
+      "${NETWASM_PROPERTIES[@]}" \
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
   ) > "${log}" 2>&1

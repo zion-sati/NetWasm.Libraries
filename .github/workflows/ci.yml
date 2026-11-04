@@ -15,15 +15,20 @@ concurrency:
 jobs:
   # The libraries' WebAssembly is the same whichever host builds it, and
   # TUnit-NetWasm's CI runs the compiler and test runner on every supported
-  # host, so one host builds the packages and runs the suites in three shards.
+  # host, so one host builds the packages and runs the suites in three shards:
+  # unoptimized, and at O3 with NetWasmGC, so every optimization meets them.
   test:
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
-    name: test / shard ${{ matrix.shard }} of 3
+    timeout-minutes: 90
+    name: test / ${{ matrix.optimization }} / shard ${{ matrix.shard }} of 3
     strategy:
       fail-fast: false
       matrix:
         shard: [1, 2, 3]
+        optimization: [None, O3]
+        include:
+          - optimization: O3
+            collector: NetWasm
     steps:
       - name: Check out source
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
@@ -38,8 +43,10 @@ jobs:
         env:
           NETWASM_TEST_MAX_PARALLELISM: 3
           NETWASM_LIBRARIES_TEST_SHARD: ${{ matrix.shard }}/3
+          NETWASM_LIBRARIES_TEST_OPTIMIZATION: ${{ matrix.optimization }}
+          NETWASM_LIBRARIES_TEST_COLLECTOR: ${{ matrix.collector }}
         run: |
-          if [[ "${{ matrix.shard }}" == 1 ]]; then
+          if [[ "${{ matrix.shard }}" == 1 && "${{ matrix.optimization }}" == None ]]; then
             PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s eng/tests -p 'test_*.py'
           fi
           bash eng/test.sh
