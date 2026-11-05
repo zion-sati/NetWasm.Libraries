@@ -61,7 +61,7 @@
     <Compile Include="System/IO/Pipelines/StreamPipeWriterOptions.cs" />
     <Compile Include="System/IO/Pipelines/ThrowHelper.cs" />
     <PackageReference Include="NetWasm.System.Memory"
-                      Version="[$(NetWasmSystemMemoryPackageVersion)]" />
+                      Version="$(NetWasmSystemMemoryPackageVersion)" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

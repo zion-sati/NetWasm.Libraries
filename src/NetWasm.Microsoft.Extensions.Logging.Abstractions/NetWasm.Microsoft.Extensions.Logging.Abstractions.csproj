@@ -40,7 +40,7 @@
                       SkipGetTargetFrameworkProperties="true"
                       AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
-                      Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
+                      Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 

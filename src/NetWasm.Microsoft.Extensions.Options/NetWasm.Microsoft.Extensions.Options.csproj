@@ -28,11 +28,11 @@
     <Compile Include="Microsoft/Extensions/Options/*.cs" />
     <Compile Include="Microsoft/Extensions/Options/DependencyInjection/*.cs" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="[$(NetWasmDependencyInjectionPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="$(NetWasmDependencyInjectionPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="[$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../../tools/NetWasm.Microsoft.Extensions.DependencyInjection.Generator/NetWasm.Microsoft.Extensions.DependencyInjection.Generator.csproj"
                       ReferenceOutputAssembly="false"
                       OutputItemType="Analyzer"

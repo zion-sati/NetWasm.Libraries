@@ -28,15 +28,15 @@
     <Compile Include="Microsoft/Extensions/Options/*.cs" />
     <Compile Include="Microsoft/Extensions/DependencyInjection/*.cs" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="[$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration.Binder/NetWasm.Microsoft.Extensions.Configuration.Binder.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Binder" Version="[$(NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Binder" Version="$(NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Options" Version="[$(NetWasmOptionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Options" Version="$(NetWasmOptionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="[$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

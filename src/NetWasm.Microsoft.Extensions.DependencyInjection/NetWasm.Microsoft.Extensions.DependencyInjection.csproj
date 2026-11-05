@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
-                      Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
+                      Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" />
     <ProjectReference Include="$(NetWasmDependencyInjectionGeneratorProject)"
                       ReferenceOutputAssembly="false"
                       PrivateAssets="all"

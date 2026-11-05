@@ -1,7 +1,9 @@
 <Project>
   <PropertyGroup>
     <!-- Production package graph. These versions are replaced exactly once
-         when the immutable release candidate is allocated. -->
+         when the immutable release candidate is allocated. Packages declare
+         them as minimum versions of each other, not exact pins, so an
+         application can take a later release of any one package. -->
     <NetWasmSystemLinqPackageVersion>0.4.2</NetWasmSystemLinqPackageVersion>
     <NetWasmSystemLinqAsyncEnumerablePackageVersion>0.4.2</NetWasmSystemLinqAsyncEnumerablePackageVersion>
     <NetWasmSystemMemoryPackageVersion>0.4.2</NetWasmSystemMemoryPackageVersion>

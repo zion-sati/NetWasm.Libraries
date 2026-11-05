@@ -57,7 +57,7 @@
     <Compile Include="System/Formats/Cbor/Writer/CborWriterOptions.cs" />
     <Compile Include="System/Memory/PointerMemoryManager.cs" />
     <Compile Include="System/Formats/Cbor/SR.cs" />
-    <PackageReference Include="NetWasm.System.Memory" Version="[$(NetWasmSystemMemoryPackageVersion)]" />
+    <PackageReference Include="NetWasm.System.Memory" Version="$(NetWasmSystemMemoryPackageVersion)" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
     <None Update="UPSTREAM_SOURCES.md" Pack="true" PackagePath="UPSTREAM_SOURCES.md" />
   </ItemGroup>

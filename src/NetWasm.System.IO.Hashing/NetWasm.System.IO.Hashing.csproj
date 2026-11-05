@@ -48,7 +48,7 @@
     <Compile Include="System/ThrowHelper.cs" />
     <Compile Include="System/IO/Hashing/SR.cs" />
     <PackageReference Include="NetWasm.System.Memory"
-                      Version="[$(NetWasmSystemMemoryPackageVersion)]" />
+                      Version="$(NetWasmSystemMemoryPackageVersion)" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

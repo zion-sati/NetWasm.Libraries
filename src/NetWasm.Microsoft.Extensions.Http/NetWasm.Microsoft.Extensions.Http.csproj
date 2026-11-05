@@ -32,11 +32,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.System.Net.Http" Version="[$(NetWasmSystemNetHttpPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.System.Net.Http" Version="$(NetWasmSystemNetHttpPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="[$(NetWasmDependencyInjectionPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection" Version="$(NetWasmDependencyInjectionPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
   </ItemGroup>
   <Target Name="NetWasmSuppressDependencyInjectionAnalyzerForPackageBuild"
           BeforeTargets="CoreCompile"
