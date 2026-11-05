@@ -28,7 +28,7 @@
     <Compile Include="Microsoft/Extensions/Caching/**/*.cs" />
     <Compile Include="Microsoft/Extensions/Internal/*.cs" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="[$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

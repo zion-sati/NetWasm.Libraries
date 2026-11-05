@@ -29,9 +29,9 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="System/Net/Http/Json/*.cs" />
     <ProjectReference Include="../NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.System.Net.Http" Version="[$(NetWasmSystemNetHttpPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.System.Net.Http" Version="$(NetWasmSystemNetHttpPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.System.Text.Json" Version="[$(NetWasmSystemTextJsonPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.System.Text.Json" Version="$(NetWasmSystemTextJsonPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

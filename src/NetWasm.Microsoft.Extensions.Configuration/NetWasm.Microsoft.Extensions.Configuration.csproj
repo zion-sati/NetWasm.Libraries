@@ -28,9 +28,9 @@
     <Compile Include="Microsoft/Extensions/Configuration/*.cs" />
     <Compile Include="Microsoft/Extensions/Configuration/Memory/*.cs" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="[$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="[$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Primitives" Version="$(NetWasmMicrosoftExtensionsPrimitivesPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

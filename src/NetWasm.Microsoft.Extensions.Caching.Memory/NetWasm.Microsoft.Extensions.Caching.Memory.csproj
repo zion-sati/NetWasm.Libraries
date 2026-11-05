@@ -29,11 +29,11 @@
     <Compile Include="Microsoft/Extensions/DependencyInjection/*.cs" />
     <Compile Include="Microsoft/Extensions/Caching/Distributed/*.cs" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Caching.Abstractions/NetWasm.Microsoft.Extensions.Caching.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Caching.Abstractions" Version="[$(NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Caching.Abstractions" Version="$(NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Options" Version="[$(NetWasmOptionsPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Options" Version="$(NetWasmOptionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

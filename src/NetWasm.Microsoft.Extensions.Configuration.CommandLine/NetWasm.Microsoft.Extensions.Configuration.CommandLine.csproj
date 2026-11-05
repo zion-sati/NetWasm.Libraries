@@ -27,7 +27,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Microsoft/Extensions/Configuration/CommandLine/*.cs" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration/NetWasm.Microsoft.Extensions.Configuration.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration" Version="[$(NetWasmMicrosoftExtensionsConfigurationPackageVersion)]" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration" Version="$(NetWasmMicrosoftExtensionsConfigurationPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

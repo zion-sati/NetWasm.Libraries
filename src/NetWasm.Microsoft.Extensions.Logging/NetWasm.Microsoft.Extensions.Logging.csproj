@@ -31,13 +31,13 @@
     <Compile Include="ProviderAliasUtilities.cs" />
     <Compile Include="TypeNameHelper.cs" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.Logging.Abstractions"
-                      Version="[$(NetWasmLoggingAbstractionsPackageVersion)]" />
+                      Version="$(NetWasmLoggingAbstractionsPackageVersion)" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.Options"
-                      Version="[$(NetWasmOptionsPackageVersion)]" />
+                      Version="$(NetWasmOptionsPackageVersion)" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions"
-                      Version="[$(NetWasmDependencyInjectionAbstractionsPackageVersion)]" />
+                      Version="$(NetWasmDependencyInjectionAbstractionsPackageVersion)" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection"
-                      Version="[$(NetWasmDependencyInjectionPackageVersion)]" />
+                      Version="$(NetWasmDependencyInjectionPackageVersion)" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

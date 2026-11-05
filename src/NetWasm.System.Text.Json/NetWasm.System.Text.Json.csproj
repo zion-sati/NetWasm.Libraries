@@ -78,11 +78,11 @@
     <Compile Include="System/Text/Json/ThrowHelper.Serialization.cs" />
     <Compile Include="System/Text/Json/ThrowHelper.Node.cs" />
     <PackageReference Include="NetWasm.System.Memory"
-                      Version="[$(NetWasmSystemMemoryPackageVersion)]" />
+                      Version="$(NetWasmSystemMemoryPackageVersion)" />
     <PackageReference Include="NetWasm.System.Text.Encodings.Web"
-                      Version="[$(NetWasmSystemTextEncodingsWebPackageVersion)]" />
+                      Version="$(NetWasmSystemTextEncodingsWebPackageVersion)" />
     <PackageReference Include="NetWasm.System.IO.Pipelines"
-                      Version="[$(NetWasmSystemIOPipelinesPackageVersion)]" />
+                      Version="$(NetWasmSystemIOPipelinesPackageVersion)" />
     <None Include="$(NetWasmJsonSourceGenerator)"
           Pack="true"
           PackagePath="analyzers/dotnet/cs/System.Text.Json.SourceGeneration.dll" />

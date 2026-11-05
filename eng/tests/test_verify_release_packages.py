@@ -39,7 +39,7 @@ class VerifyReleasePackagesTests(unittest.TestCase):
         *,
         package_id: str = "NetWasm.Example",
         version: str = "0.1.0-rc.1",
-        dependency_version: str = "[0.1.0-rc.1]",
+        dependency_version: str = "0.1.0-rc.1",
         repository_commit: str | None = None,
     ) -> Path:
         repository_commit = repository_commit or "a" * 40
@@ -78,11 +78,19 @@ class VerifyReleasePackagesTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "allowlist mismatch"):
             MODULE.validate_packages(self.root, self.manifest)
 
-    def test_rejects_unpinned_netwasm_dependency(self) -> None:
-        self.create_package(dependency_version="0.1.0-rc.1")
+    def test_rejects_exact_netwasm_dependency_pin(self) -> None:
+        self.create_package(dependency_version="[0.1.0-rc.1]")
 
-        with self.assertRaisesRegex(ValueError, "not pinned"):
+        with self.assertRaisesRegex(ValueError, "minimum version 0.1.0-rc.1"):
             MODULE.validate_packages(self.root, self.manifest)
+
+    def test_rejects_netwasm_dependency_on_another_release(self) -> None:
+        for dependency_version in ("0.0.9", "[0.1.0-rc.1, 0.2.0)"):
+            with self.subTest(dependency_version=dependency_version):
+                self.create_package(dependency_version=dependency_version)
+
+                with self.assertRaisesRegex(ValueError, "minimum version 0.1.0-rc.1"):
+                    MODULE.validate_packages(self.root, self.manifest)
 
     def test_rejects_wrong_repository_commit(self) -> None:
         self.create_package(repository_commit="b" * 40)
