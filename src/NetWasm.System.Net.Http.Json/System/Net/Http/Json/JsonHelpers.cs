@@ -3,12 +3,13 @@
 
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace System.Net.Http.Json;
 
 internal static class JsonHelpers
 {
-    internal const string DefaultMediaType = "application/json; charset=utf-8";
+    internal static MediaTypeHeaderValue GetDefaultMediaType() => new("application/json") { CharSet = "utf-8" };
 
     internal static void EnsureSupportedEncoding(HttpContent content)
     {

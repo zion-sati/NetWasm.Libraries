@@ -1,46 +1,35 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace System.Net.Http;
-
-public abstract class HttpMessageHandler : IDisposable
+namespace System.Net.Http
 {
-    private bool _disposed;
-
-    protected abstract Task<HttpResponseMessage> SendAsync(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken);
-
-    internal Task<HttpResponseMessage> SendAsyncCore(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken)
+    public abstract class HttpMessageHandler : IDisposable
     {
-        ThrowIfDisposed();
-        return SendAsync(request, cancellationToken);
-    }
-
-    public void Dispose()
-    {
-        if (!_disposed)
+        protected HttpMessageHandler()
         {
-            _disposed = true;
+            if (NetEventSource.Log.IsEnabled()) NetEventSource.Info(this);
+        }
+
+        protected internal abstract Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken);
+
+        #region IDisposable Members
+
+        protected virtual void Dispose(bool disposing)
+        {
+            // Nothing to do in base class.
+        }
+
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-    }
-
-    protected void ThrowIfDisposed()
-    {
-        if (_disposed)
-        {
-            throw new ObjectDisposedException(null);
-        }
+        #endregion
     }
 }

@@ -1,71 +1,115 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Net.Http.Headers;
+using System.Collections.Generic;
 
-public sealed class HttpContentHeaders : HttpHeaders
+namespace System.Net.Http.Headers
 {
-    private MediaTypeHeaderValue? _contentType;
-
-    public MediaTypeHeaderValue? ContentType
+    public sealed class HttpContentHeaders : HttpHeaders
     {
-        get
+        internal HttpContent _parent;
+        private bool _contentLengthSet;
+
+        private HttpHeaderValueCollection<string>? _allow;
+        private HttpHeaderValueCollection<string>? _contentEncoding;
+        private HttpHeaderValueCollection<string>? _contentLanguage;
+
+        public ICollection<string> Allow =>
+            _allow ??= new HttpHeaderValueCollection<string>(KnownHeaders.Allow.Descriptor, this);
+
+        public ContentDispositionHeaderValue? ContentDisposition
         {
-            if (_contentType is null && TryGetValues("Content-Type", out var values))
+            get { return (ContentDispositionHeaderValue?)GetSingleParsedValue(KnownHeaders.ContentDisposition.Descriptor); }
+            set { SetOrRemoveParsedValue(KnownHeaders.ContentDisposition.Descriptor, value); }
+        }
+
+        // Must be a collection (and not provide properties like "GZip", "Deflate", etc.) since the
+        // order matters!
+        public ICollection<string> ContentEncoding =>
+            _contentEncoding ??= new HttpHeaderValueCollection<string>(KnownHeaders.ContentEncoding.Descriptor, this);
+
+        public ICollection<string> ContentLanguage =>
+            _contentLanguage ??= new HttpHeaderValueCollection<string>(KnownHeaders.ContentLanguage.Descriptor, this);
+
+        public long? ContentLength
+        {
+            get
             {
-                using var enumerator = values!.GetEnumerator();
-                if (enumerator.MoveNext())
+                // 'Content-Length' can only hold one value. So either we get 'null' back or a boxed long value.
+                object? storedValue = GetSingleParsedValue(KnownHeaders.ContentLength.Descriptor);
+
+                // Only try to calculate the length if the user didn't set the value explicitly using the setter.
+                if (!_contentLengthSet && (storedValue == null))
                 {
-                    _contentType = new MediaTypeHeaderValue(enumerator.Current);
+                    // If we don't have a value for Content-Length in the store, try to let the content calculate
+                    // it's length. If the content object is able to calculate the length, we'll store it in the
+                    // store.
+                    long? calculatedLength = _parent.GetComputedOrBufferLength();
+
+                    if (calculatedLength != null)
+                    {
+                        SetParsedValue(KnownHeaders.ContentLength.Descriptor, (object)calculatedLength.Value);
+                    }
+
+                    return calculatedLength;
+                }
+
+                if (storedValue == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return (long)storedValue;
                 }
             }
-
-            return _contentType;
+            set
+            {
+                SetOrRemoveParsedValue(KnownHeaders.ContentLength.Descriptor, value); // box long value
+                _contentLengthSet = true;
+            }
         }
-        set
-        {
-            _contentType = value;
-            if (value is null)
-            {
-                Remove("Content-Type");
-                return;
-            }
 
-            SetSingle("Content-Type", value.ToString());
+        public Uri? ContentLocation
+        {
+            get { return (Uri?)GetSingleParsedValue(KnownHeaders.ContentLocation.Descriptor); }
+            set { SetOrRemoveParsedValue(KnownHeaders.ContentLocation.Descriptor, value); }
         }
-    }
 
-    public long? ContentLength
-    {
-        get
+        public byte[]? ContentMD5
         {
-            if (!TryGetValues("Content-Length", out var values))
-            {
-                return null;
-            }
-
-            using var enumerator = values!.GetEnumerator();
-            if (!enumerator.MoveNext() || !long.TryParse(enumerator.Current, out var length) || length < 0)
-            {
-                throw new FormatException();
-            }
-
-            return length;
+            get { return (byte[]?)GetSingleParsedValue(KnownHeaders.ContentMD5.Descriptor); }
+            set { SetOrRemoveParsedValue(KnownHeaders.ContentMD5.Descriptor, value); }
         }
-        set
+
+        public ContentRangeHeaderValue? ContentRange
         {
-            if (value is null)
-            {
-                Remove("Content-Length");
-                return;
-            }
+            get { return (ContentRangeHeaderValue?)GetSingleParsedValue(KnownHeaders.ContentRange.Descriptor); }
+            set { SetOrRemoveParsedValue(KnownHeaders.ContentRange.Descriptor, value); }
+        }
 
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+        public MediaTypeHeaderValue? ContentType
+        {
+            get { return (MediaTypeHeaderValue?)GetSingleParsedValue(KnownHeaders.ContentType.Descriptor); }
+            set { SetOrRemoveParsedValue(KnownHeaders.ContentType.Descriptor, value); }
+        }
 
-            SetSingle("Content-Length", value.Value.ToString());
+        public DateTimeOffset? Expires
+        {
+            get { return HeaderUtilities.GetDateTimeOffsetValue(KnownHeaders.Expires.Descriptor, this, DateTimeOffset.MinValue); }
+            set { SetOrRemoveParsedValue(KnownHeaders.Expires.Descriptor, value); }
+        }
+
+        public DateTimeOffset? LastModified
+        {
+            get { return HeaderUtilities.GetDateTimeOffsetValue(KnownHeaders.LastModified.Descriptor, this); }
+            set { SetOrRemoveParsedValue(KnownHeaders.LastModified.Descriptor, value); }
+        }
+
+        internal HttpContentHeaders(HttpContent parent)
+            : base(HttpHeaderType.Content | HttpHeaderType.Custom, HttpHeaderType.None)
+        {
+            _parent = parent;
         }
     }
 }

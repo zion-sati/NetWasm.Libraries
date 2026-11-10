@@ -21,7 +21,7 @@ public sealed class JsonContent : HttpContent
         Value = value;
         _typeInfo = typeInfo;
 
-        Headers.ContentType = mediaType ?? new MediaTypeHeaderValue(JsonHelpers.DefaultMediaType);
+        Headers.ContentType = mediaType ?? JsonHelpers.GetDefaultMediaType();
         JsonHelpers.EnsureSupportedEncoding(this);
     }
 
@@ -48,20 +48,12 @@ public sealed class JsonContent : HttpContent
         return new JsonContent(inputValue, jsonTypeInfo, mediaType);
     }
 
-    protected override Task SerializeToStreamAsync(
-        Stream stream,
-        CancellationToken cancellationToken)
+    // System.Net.Http has netstandard 2.1's HttpContent, whose one serialization override takes
+    // the transport context, as upstream's netstandard build of this type overrides it.
+    protected override Task SerializeToStreamAsync(Stream stream, TransportContext? context)
     {
         JsonHelpers.EnsureSupportedEncoding(this);
-        return JsonSerializer.SerializeAsync(stream, Value, _typeInfo, cancellationToken);
-    }
-
-    protected override void SerializeToStream(
-        Stream stream,
-        CancellationToken cancellationToken)
-    {
-        JsonHelpers.EnsureSupportedEncoding(this);
-        JsonSerializer.Serialize(stream, Value, _typeInfo);
+        return JsonSerializer.SerializeAsync(stream, Value, _typeInfo);
     }
 
     protected override bool TryComputeLength(out long length)
