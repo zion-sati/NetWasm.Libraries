@@ -14,13 +14,3 @@ public interface IHttpTransport
         HttpRequestMessage request,
         CancellationToken cancellationToken);
 }
-
-public sealed class WasiHttpMessageHandler(IHttpTransport transport) : HttpMessageHandler
-{
-    private readonly IHttpTransport _transport = transport ?? throw new ArgumentNullException();
-
-    protected override Task<HttpResponseMessage> SendAsync(
-        HttpRequestMessage request,
-        CancellationToken cancellationToken) =>
-        _transport.SendAsync(request, cancellationToken);
-}

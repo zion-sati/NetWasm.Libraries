@@ -108,7 +108,8 @@ public static partial class HttpClientJsonExtensions
             using var response = await getMethod(client, requestUri, operationToken).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
-            var content = response.Content ?? new EmptyContent();
+            // A response's content is never null: without a body it is empty content.
+            var content = response.Content;
             var contentLength = content.Headers.ContentLength;
             if (contentLength is long length && length > client.MaxResponseContentBufferSize)
             {

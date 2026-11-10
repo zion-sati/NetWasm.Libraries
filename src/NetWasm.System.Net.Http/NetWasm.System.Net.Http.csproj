@@ -5,12 +5,13 @@
     <AssemblyName>System.Net.Http</AssemblyName>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <IsPackable>true</IsPackable>
-    <DefineConstants>$(DefineConstants);NET;NETWASM</DefineConstants>
+    <DefineConstants>$(DefineConstants);NET;NETWASM;TARGET_WASI</DefineConstants>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <PackageId>NetWasm.System.Net.Http</PackageId>
     <Version>$(NetWasmSystemNetHttpPackageVersion)</Version>
@@ -26,32 +27,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="System/Net/Http/HttpTransport.cs" />
+    <Compile Include="System/SR.cs" />
     <Compile Include="System/Net/HttpStatusCode.cs" />
-    <Compile Include="System/Net/Http/HttpMessageHandler.cs" />
-    <Compile Include="System/Net/Http/HttpClientHandler.cs" />
-    <Compile Include="System/Net/Http/HttpMessageInvoker.cs" />
-    <Compile Include="System/Net/Http/HttpClient.cs" />
-    <Compile Include="System/Net/Http/HttpRequestMessage.cs" />
-    <Compile Include="System/Net/Http/HttpResponseMessage.cs" />
-    <Compile Include="System/Net/Http/HttpContent.cs" />
-    <Compile Include="System/Net/Http/ByteArrayContent.cs" />
-    <Compile Include="System/Net/Http/StringContent.cs" />
-    <Compile Include="System/Net/Http/FormUrlEncodedContent.cs" />
-    <Compile Include="System/Net/Http/ReadOnlyMemoryContent.cs" />
-    <Compile Include="System/Net/Http/EmptyContent.cs" />
-    <Compile Include="System/Net/Http/HttpMethod.cs" />
-    <Compile Include="System/Net/Http/HttpCompletionOption.cs" />
-    <Compile Include="System/Net/Http/HttpRequestException.cs" />
-    <Compile Include="System/Net/Http/HttpRequestError.cs" />
-    <Compile Include="System/Net/Http/StreamContent.cs" />
-    <Compile Include="System/Net/Http/DelegatingHandler.cs" />
-    <Compile Include="System/Net/Http/Headers/HttpHeaders.cs" />
-    <Compile Include="System/Net/Http/Headers/HttpRequestHeaders.cs" />
-    <Compile Include="System/Net/Http/Headers/HttpResponseHeaders.cs" />
-    <Compile Include="System/Net/Http/Headers/HttpContentHeaders.cs" />
-    <Compile Include="System/Net/Http/Headers/MediaTypeHeaderValue.cs" />
-    <Compile Include="System/Net/Http/Wasi02/*.cs" />
+    <!-- System.Net.Http at dotnet/runtime 811225a4 (its WASI compile list), copied verbatim and adapted where marked
+         "NetWasm:"; members newer than netstandard 2.1 are left out or internal, and WasiHttpHandler sends through
+         IHttpTransport, whose default sends through wasi:http 0.3. -->
+    <Compile Include="Common/System/**/*.cs" />
+    <Compile Include="System/Net/Http/**/*.cs" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
+    <None Include="buildTransitive/NetWasm.System.Net.Http.targets;buildTransitive/HttpServiceExports.cs.template"
+          Pack="true"
+          PackagePath="buildTransitive/" />
   </ItemGroup>
 </Project>

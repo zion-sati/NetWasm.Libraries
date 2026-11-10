@@ -1,10 +1,15 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Net.Http;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-public enum HttpCompletionOption
+namespace System.Net.Http
 {
-    ResponseContentRead = 0,
-    ResponseHeadersRead = 1,
+    public enum HttpCompletionOption
+    {
+        ResponseContentRead = 0,
+        ResponseHeadersRead,
+    }
 }
