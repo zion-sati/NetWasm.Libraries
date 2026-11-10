@@ -65,16 +65,13 @@ internal sealed class WasiHttpTransport : IHttpTransport
             var received = incoming.Headers;
             incoming = null;
 
-            // As upstream's WASI interop converts response headers: content headers go to the content.
+            // As .NET's handlers take a received header: as sent, without validating its value (an
+            // unquoted ETag stays readable), and on the content when it is a content header.
             foreach (var header in received)
             {
-                if (IsContentHeader(header.Key))
+                if (!response.Headers.TryAddWithoutValidation(header.Key, header.Value))
                 {
-                    response.Content.Headers.Add(header.Key, header.Value);
-                }
-                else
-                {
-                    response.Headers.Add(header.Key, header.Value);
+                    response.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
                 }
             }
 
@@ -106,8 +103,4 @@ internal sealed class WasiHttpTransport : IHttpTransport
             }
         }
     }
-
-    private static bool IsContentHeader(string headerName) =>
-        HeaderDescriptor.TryGet(headerName, out HeaderDescriptor descriptor) &&
-        (descriptor.HeaderType & HttpHeaderType.Content) != 0;
 }
