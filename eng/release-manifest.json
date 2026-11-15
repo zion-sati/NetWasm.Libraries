@@ -23,16 +23,6 @@
     "NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions",
     "NetWasm.Microsoft.Extensions.Primitives",
     "NetWasm.System.Formats.Cbor",
-    "NetWasm.System.IO.Hashing",
-    "NetWasm.System.IO.Pipelines",
-    "NetWasm.System.Linq",
-    "NetWasm.System.Linq.AsyncEnumerable",
-    "NetWasm.System.Memory",
-    "NetWasm.System.Net.Http",
-    "NetWasm.System.Net.Http.Json",
-    "NetWasm.System.Text.Encodings.Web",
-    "NetWasm.System.Text.Json",
-    "NetWasm.System.Text.RegularExpressions",
-    "NetWasm.System.Xml"
+    "NetWasm.System.IO.Hashing"
   ]
 }
