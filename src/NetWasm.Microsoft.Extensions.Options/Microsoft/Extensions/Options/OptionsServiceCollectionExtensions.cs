@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddOptions(this IServiceCollection services)
         {
             ArgumentNullException.ThrowIfNull(services);
-            services.TryAddSingleton(typeof(Microsoft.Extensions.Options.IOptions<>), typeof(Microsoft.Extensions.Options.OptionsManager<>));
+            services.TryAddSingleton(typeof(Microsoft.Extensions.Options.IOptions<>), typeof(Microsoft.Extensions.Options.UnnamedOptionsManager<>));
             services.TryAddScoped(typeof(Microsoft.Extensions.Options.IOptionsSnapshot<>), typeof(Microsoft.Extensions.Options.OptionsManager<>));
             services.TryAddSingleton(typeof(Microsoft.Extensions.Options.IOptionsMonitor<>), typeof(Microsoft.Extensions.Options.OptionsMonitor<>));
             services.TryAddTransient(typeof(Microsoft.Extensions.Options.IOptionsFactory<>), typeof(Microsoft.Extensions.Options.OptionsFactory<>));

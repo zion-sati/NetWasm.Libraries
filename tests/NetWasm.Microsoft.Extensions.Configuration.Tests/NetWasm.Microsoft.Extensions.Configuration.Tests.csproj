@@ -44,7 +44,6 @@
                       SkipGetTargetFrameworkProperties="true"
                       AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false"
                       Condition="'$(TargetFramework)' == 'netwasm0.1'" />
-    <ProjectReference Include="../../src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0" Condition="'$(TargetFramework)' == 'net10.0'" />

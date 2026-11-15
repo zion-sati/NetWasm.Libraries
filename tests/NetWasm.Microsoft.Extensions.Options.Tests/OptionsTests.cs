@@ -1,3 +1,6 @@
+// Copyright (c) 2026 Zion Sati and NetWasm contributors (https://github.com/zion-sati/NetWasm).
+// SPDX-License-Identifier: MIT
+
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +27,30 @@ public sealed class OptionsTests
         CounterOptions value = provider.GetRequiredService<IOptions<CounterOptions>>().Value;
 
         await Assert.That(value.Value).IsEqualTo(8);
+    }
+
+    [Test]
+    public async Task UnnamedOptionsResolveToUpstreamsInternalSingleton()
+    {
+        // IOptions<T> is upstream's internal UnnamedOptionsManager<T>, activated by the library's own generated
+        // factory: one instance per provider, creating its value once.
+        var creations = 0;
+        var services = new ServiceCollection();
+        services.Configure<CounterOptions>(options =>
+        {
+            creations++;
+            options.Value = 7;
+        });
+
+        using var provider = services.BuildServiceProvider();
+        IOptions<CounterOptions> first = provider.GetRequiredService<IOptions<CounterOptions>>();
+        IOptions<CounterOptions> second = provider.GetRequiredService<IOptions<CounterOptions>>();
+
+        await Assert.That(first is OptionsManager<CounterOptions>).IsFalse();
+        await Assert.That(ReferenceEquals(first, second)).IsTrue();
+        await Assert.That(first.Value.Value).IsEqualTo(7);
+        await Assert.That(ReferenceEquals(first.Value, second.Value)).IsTrue();
+        await Assert.That(creations).IsEqualTo(1);
     }
 
     [Test]

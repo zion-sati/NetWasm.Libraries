@@ -22,7 +22,6 @@
     <NetWasmClockGrant Include="wall" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <Compile Include="HttpClientFactoryTests.cs" />
     <PackageReference Include="NetWasm.TUnit" Version="[$(NetWasmTUnitPackageVersion)]" />
-    <ProjectReference Include="../../src/NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <ProjectReference Include="../../src/NetWasm.Microsoft.Extensions.Http/NetWasm.Microsoft.Extensions.Http.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <ProjectReference Include="../../src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
     <ProjectReference Include="../../src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj" Condition="'$(TargetFramework)' == 'netwasm0.1'" />

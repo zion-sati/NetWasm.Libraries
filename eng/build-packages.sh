@@ -142,23 +142,13 @@ NUGET_PACKAGES="${package_cache}" dotnet restore "${seed_project}" \
   --nologo
 
 root_projects=(
-  src/NetWasm.System.Linq/NetWasm.System.Linq.csproj
-  src/NetWasm.System.Memory/NetWasm.System.Memory.csproj
-  src/NetWasm.System.Text.Encodings.Web/NetWasm.System.Text.Encodings.Web.csproj
-  src/NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj
-  src/NetWasm.System.Text.RegularExpressions/NetWasm.System.Text.RegularExpressions.csproj
-  src/NetWasm.System.Xml/NetWasm.System.Xml.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj
   src/NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj
 )
 
 dependent_projects=(
-  src/NetWasm.System.Linq.AsyncEnumerable/NetWasm.System.Linq.AsyncEnumerable.csproj
-  src/NetWasm.System.IO.Pipelines/NetWasm.System.IO.Pipelines.csproj
   src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj
   src/NetWasm.System.Formats.Cbor/NetWasm.System.Formats.Cbor.csproj
-  src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj
-  src/NetWasm.System.Net.Http.Json/NetWasm.System.Net.Http.Json.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj
   src/NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj
   src/NetWasm.Microsoft.Extensions.Configuration/NetWasm.Microsoft.Extensions.Configuration.csproj
@@ -196,9 +186,9 @@ for project in "${dependent_projects[@]}"; do
 done
 
 package_count="$(find "${OUTPUT_DIR}" -maxdepth 1 -type f -name 'NetWasm.*.nupkg' | wc -l | tr -d ' ')"
-if [[ "${package_count}" -ne 28 ]]; then
-  echo "Expected exactly 28 NetWasm library packages, found ${package_count}." >&2
+if [[ "${package_count}" -ne 18 ]]; then
+  echo "Expected exactly 18 NetWasm library packages, found ${package_count}." >&2
   exit 1
 fi
 
-echo "Built 28 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
+echo "Built 18 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
