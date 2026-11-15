@@ -8,19 +8,26 @@ the MIT-licensed .NET libraries. Each package targets `netwasm0.1`; applications
 reference only the packages they use, preserving NetWasm's closed-world,
 pay-for-what-you-use deployment model.
 
-Try LINQ in a NetWasm application:
+The libraries that ship with .NET itself (LINQ, Async LINQ, Memory, Pipelines,
+Encodings.Web, HTTP and HTTP JSON, regular expressions, JSON, XML, Data.Common,
+DataContract serialization and Net.Requests) come with `NetWasm.Sdk` from 0.14
+as part of `NetWasm.App`, so applications use them without a package
+reference. Their earlier `NetWasm.System.*` packages remain on NuGet for
+applications on NetWasm 0.13 and earlier.
+
+Try dependency injection in a NetWasm application:
 
 ```sh
 dotnet new install NetWasm.Templates
 dotnet new netwasm-app -n HelloNetWasm -o HelloNetWasm
 cd HelloNetWasm
-dotnet add package NetWasm.System.Linq
+dotnet add package NetWasm.Microsoft.Extensions.DependencyInjection
 dotnet publish -c Release
 ```
 
-The repository currently contains LINQ, Async LINQ, Memory, Pipelines,
-Encodings.Web, HTTP/HTTP JSON, CBOR, primitives, configuration providers and
-generated binding, Options, memory caching, logging, and the
+The repository contains the out-of-band libraries: CBOR, hashing, primitives,
+configuration providers and generated binding, Options, memory caching, HTTP
+client factory, logging with `LoggerMessage` source generation, and the
 dependency-injection abstractions and container. Their exact supported
 surfaces remain deliberately smaller than desktop .NET where APIs require
 reflection, dynamic code generation, managed threads, file I/O, sockets, or
@@ -32,12 +39,6 @@ other platform services outside the current NetWasm profile.
 [![NuGet: NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions)
 [![NuGet: NetWasm.System.IO.Hashing](https://img.shields.io/badge/NuGet-NetWasm.System.IO.Hashing-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.IO.Hashing)
 [![NuGet: NetWasm.System.Formats.Cbor](https://img.shields.io/badge/NuGet-NetWasm.System.Formats.Cbor-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Formats.Cbor)
-[![NuGet: NetWasm.System.IO.Pipelines](https://img.shields.io/badge/NuGet-NetWasm.System.IO.Pipelines-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.IO.Pipelines)
-[![NuGet: NetWasm.System.Linq](https://img.shields.io/badge/NuGet-NetWasm.System.Linq-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Linq)
-[![NuGet: NetWasm.System.Linq.AsyncEnumerable](https://img.shields.io/badge/NuGet-NetWasm.System.Linq.AsyncEnumerable-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Linq.AsyncEnumerable)
-[![NuGet: NetWasm.System.Memory](https://img.shields.io/badge/NuGet-NetWasm.System.Memory-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Memory)
-[![NuGet: NetWasm.System.Net.Http](https://img.shields.io/badge/NuGet-NetWasm.System.Net.Http-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Net.Http)
-[![NuGet: NetWasm.System.Net.Http.Json](https://img.shields.io/badge/NuGet-NetWasm.System.Net.Http.Json-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Net.Http.Json)
 [![NuGet: NetWasm.Microsoft.Extensions.Primitives](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Primitives-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Primitives)
 [![NuGet: NetWasm.Microsoft.Extensions.Configuration](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Configuration-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Configuration)
 [![NuGet: NetWasm.Microsoft.Extensions.Configuration.Abstractions](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Configuration.Abstractions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Configuration.Abstractions)
@@ -49,10 +50,6 @@ other platform services outside the current NetWasm profile.
 [![NuGet: NetWasm.Microsoft.Extensions.Caching.Abstractions](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Caching.Abstractions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Caching.Abstractions)
 [![NuGet: NetWasm.Microsoft.Extensions.Caching.Memory](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Caching.Memory-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Caching.Memory)
 [![NuGet: NetWasm.Microsoft.Extensions.Http](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.Http-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.Http)
-[![NuGet: NetWasm.System.Text.Encodings.Web](https://img.shields.io/badge/NuGet-NetWasm.System.Text.Encodings.Web-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Text.Encodings.Web)
-[![NuGet: NetWasm.System.Text.Json](https://img.shields.io/badge/NuGet-NetWasm.System.Text.Json-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Text.Json)
-[![NuGet: NetWasm.System.Text.RegularExpressions](https://img.shields.io/badge/NuGet-NetWasm.System.Text.RegularExpressions-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Text.RegularExpressions)
-[![NuGet: NetWasm.System.Xml](https://img.shields.io/badge/NuGet-NetWasm.System.Xml-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.System.Xml)
 
 See [building and testing](docs/building-and-testing.md),
 [upstream provenance](UPSTREAM_PROVENANCE.md), and the

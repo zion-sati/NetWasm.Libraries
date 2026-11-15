@@ -1,12 +1,5 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/NetWasm.System.Linq/NetWasm.System.Linq.csproj" />
-    <Project Path="src/NetWasm.System.Linq.AsyncEnumerable/NetWasm.System.Linq.AsyncEnumerable.csproj" />
-    <Project Path="src/NetWasm.System.Memory/NetWasm.System.Memory.csproj" />
-    <Project Path="src/NetWasm.System.Text.Encodings.Web/NetWasm.System.Text.Encodings.Web.csproj" />
-    <Project Path="src/NetWasm.System.IO.Pipelines/NetWasm.System.IO.Pipelines.csproj" />
-    <Project Path="src/NetWasm.System.Net.Http/NetWasm.System.Net.Http.csproj" />
-    <Project Path="src/NetWasm.System.Net.Http.Json/NetWasm.System.Net.Http.Json.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.Configuration/NetWasm.Microsoft.Extensions.Configuration.csproj" />
@@ -18,9 +11,6 @@
     <Project Path="src/NetWasm.Microsoft.Extensions.Caching.Abstractions/NetWasm.Microsoft.Extensions.Caching.Abstractions.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.Caching.Memory/NetWasm.Microsoft.Extensions.Caching.Memory.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.Http/NetWasm.Microsoft.Extensions.Http.csproj" />
-    <Project Path="src/NetWasm.System.Text.RegularExpressions/NetWasm.System.Text.RegularExpressions.csproj" />
-    <Project Path="src/NetWasm.System.Text.Json/NetWasm.System.Text.Json.csproj" />
-    <Project Path="src/NetWasm.System.Xml/NetWasm.System.Xml.csproj" />
     <Project Path="src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj" />
     <Project Path="src/NetWasm.System.Formats.Cbor/NetWasm.System.Formats.Cbor.csproj" />
     <Project Path="src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" />
@@ -35,21 +25,12 @@
     <Project Path="tools/NetWasm.Microsoft.Extensions.Logging.Generator/NetWasm.Microsoft.Extensions.Logging.Generator.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/NetWasm.System.Linq.Tests/NetWasm.System.Linq.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Linq.AsyncEnumerable.Tests/NetWasm.System.Linq.AsyncEnumerable.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Text.Encodings.Web.Tests/NetWasm.System.Text.Encodings.Web.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.IO.Pipelines.Tests/NetWasm.System.IO.Pipelines.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Net.Http.Tests/NetWasm.System.Net.Http.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Net.Http.Json.Tests/NetWasm.System.Net.Http.Json.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.Primitives.Tests/NetWasm.Microsoft.Extensions.Primitives.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.Configuration.Tests/NetWasm.Microsoft.Extensions.Configuration.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.Caching.Memory.Tests/NetWasm.Microsoft.Extensions.Caching.Memory.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.Http.Tests/NetWasm.Microsoft.Extensions.Http.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.Options.Tests/NetWasm.Microsoft.Extensions.Options.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.Logging.Tests/NetWasm.Microsoft.Extensions.Logging.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Text.RegularExpressions.Tests/NetWasm.System.Text.RegularExpressions.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Text.Json.Tests/NetWasm.System.Text.Json.Tests.csproj" />
-    <Project Path="tests/NetWasm.System.Xml.Tests/NetWasm.System.Xml.Tests.csproj" />
     <Project Path="tests/NetWasm.System.IO.Hashing.Tests/NetWasm.System.IO.Hashing.Tests.csproj" />
     <Project Path="tests/NetWasm.System.Formats.Cbor.Tests/NetWasm.System.Formats.Cbor.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj" />
