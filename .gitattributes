@@ -12,6 +12,7 @@
 *.gz -text
 *.br -text
 *.bin -text
+*.snk -text
 *.png -text
 *.jpg -text
 *.jpeg -text

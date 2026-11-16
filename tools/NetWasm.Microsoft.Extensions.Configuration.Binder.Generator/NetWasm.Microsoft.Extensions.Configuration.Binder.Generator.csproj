@@ -9,6 +9,8 @@
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <IsPackable>false</IsPackable>
+    <!-- The package that ships this generator gives it its release version. -->
+    <Version>$(NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion)</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />

@@ -7,8 +7,6 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <IsPackable>true</IsPackable>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <DefineConstants>$(DefineConstants);NET</DefineConstants>
@@ -51,7 +49,6 @@
     <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceCollectionServiceExtensions.cs" />
     <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceProviderServiceExtensions.cs" />
     <Compile Include="Microsoft/Extensions/DependencyInjection/ServiceProviderKeyedServiceExtensions.cs" />
-    <Compile Include="Properties/AssemblyInfo.cs" />
     <None Update="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
 </Project>

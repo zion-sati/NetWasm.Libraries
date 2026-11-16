@@ -12,4 +12,28 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
+  <!-- Each library carries the identity of the assembly it ports: its name, upstream's public key (public-signed,
+       as builds of upstream's source outside Microsoft are) and an assembly version one step above upstream's.
+       A package compiled against Microsoft's assembly then binds to the port, and the port wins when Microsoft's
+       package is restored beside it: the SDK keeps the higher assembly version, and Microsoft keeps 11.0.0.0 for
+       every 11.x release. The file and informational versions carry the release version. The key is chosen in
+       Directory.Build.targets, after the project names its assembly. -->
+  <PropertyGroup>
+    <AssemblyVersion>11.0.1.0</AssemblyVersion>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign>true</PublicSign>
+    <!-- NetWasm's CoreLib, which every library references, has no strong name. -->
+    <NoWarn>$(NoWarn);CS8002</NoWarn>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
+    <GenerateRepositoryUrlAttribute>false</GenerateRepositoryUrlAttribute>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <GenerateAssemblyMetadataAttributes>false</GenerateAssemblyMetadataAttributes>
+  </PropertyGroup>
 </Project>

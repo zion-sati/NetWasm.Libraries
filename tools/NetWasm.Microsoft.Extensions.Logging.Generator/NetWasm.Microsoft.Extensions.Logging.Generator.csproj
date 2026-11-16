@@ -12,6 +12,8 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <IsPackable>false</IsPackable>
+    <!-- The package that ships this generator gives it its release version. -->
+    <Version>$(NetWasmLoggingAbstractionsPackageVersion)</Version>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <AssemblyName>NetWasm.Microsoft.Extensions.Logging.Generators</AssemblyName>
     <RootNamespace>Microsoft.Extensions.Logging.Generators</RootNamespace>

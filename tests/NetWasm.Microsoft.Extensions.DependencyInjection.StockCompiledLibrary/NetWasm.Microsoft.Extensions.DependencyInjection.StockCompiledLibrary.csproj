@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- A library compiled against Microsoft's abstractions package, as third-party packages are. It brings that
+       package into every application that uses it. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IsTestProject>false</IsTestProject>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Remove="Xunit" />
+    <Compile Include="StockGreetingServiceCollectionExtensions.cs" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="11.0.0" />
+  </ItemGroup>
+</Project>

@@ -2,8 +2,5 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
-using System.Runtime.CompilerServices;
 
 [assembly: CLSCompliant(false)]
-[assembly: InternalsVisibleTo("Microsoft.Extensions.Configuration")]
-[assembly: InternalsVisibleTo("Microsoft.Extensions.Configuration.Binder")]

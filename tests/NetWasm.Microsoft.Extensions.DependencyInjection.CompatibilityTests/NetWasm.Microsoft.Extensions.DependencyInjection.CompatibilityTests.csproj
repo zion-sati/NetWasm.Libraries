@@ -10,7 +10,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
     <TUnitSourceGenerationMode>ClosedWorldCatalog</TUnitSourceGenerationMode>
-    <NoWarn>$(NoWarn);TUnit0034;TUnit0038</NoWarn>
+    <!-- Microsoft's abstractions package, which the stock-compiled library brings in, has only .NET Standard
+         assets. NuGet reads restore warnings once for a multi-targeting project, outside the netwasm0.1 build
+         where the SDK accepts that fallback, so its fallback warning is accepted here. -->
+    <NoWarn>$(NoWarn);TUnit0034;TUnit0038;NU1701</NoWarn>
     <DisableImplicitFrameworkReferences Condition="'$(TargetFramework)' == 'net10.0'">false</DisableImplicitFrameworkReferences>
     <NoStdLib Condition="'$(TargetFramework)' == 'net10.0'">false</NoStdLib>
     <NoStandardLibraries Condition="'$(TargetFramework)' == 'net10.0'">false</NoStandardLibraries>
@@ -29,5 +32,20 @@
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection"
                       Version="[$(NetWasmDependencyInjectionPackageVersion)]"
                       Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary/NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary.csproj"
+                      Condition="'$(TargetFramework)' == 'netwasm0.1'" />
   </ItemGroup>
+
+  <!-- The stock-compiled library brings Microsoft's abstractions package into this application. The port's
+       assembly must win, or Microsoft's container contracts silently replace the port's. -->
+  <Target Name="RequirePortedDependencyInjectionAbstractions"
+          AfterTargets="ResolveAssemblyReferences"
+          Condition="'$(TargetFramework)' == 'netwasm0.1'">
+    <ItemGroup>
+      <_StockDependencyInjectionAbstractions Include="@(ReferencePath)"
+                                            Condition="'%(Filename)' == 'Microsoft.Extensions.DependencyInjection.Abstractions' and '%(ReferencePath.NuGetPackageId)' != 'NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions'" />
+    </ItemGroup>
+    <Error Condition="'@(_StockDependencyInjectionAbstractions)' != ''"
+           Text="Microsoft.Extensions.DependencyInjection.Abstractions resolved to package '@(_StockDependencyInjectionAbstractions->'%(NuGetPackageId)')' instead of the NetWasm port." />
+  </Target>
 </Project>
