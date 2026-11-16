@@ -33,6 +33,12 @@ surfaces remain deliberately smaller than desktop .NET where APIs require
 reflection, dynamic code generation, managed threads, file I/O, sockets, or
 other platform services outside the current NetWasm profile.
 
+Each library carries the identity of the assembly it ports: its name,
+upstream's public key and an assembly version above Microsoft's. NuGet
+packages compiled against Microsoft's assemblies, such as container extensions
+built on `Microsoft.Extensions.DependencyInjection.Abstractions`, therefore use
+the ports, even when they bring Microsoft's package into the application.
+
 ## Packages
 
 [![NuGet: NetWasm.Microsoft.Extensions.DependencyInjection](https://img.shields.io/badge/NuGet-NetWasm.Microsoft.Extensions.DependencyInjection-004880?logo=nuget)](https://www.nuget.org/packages/NetWasm.Microsoft.Extensions.DependencyInjection)
