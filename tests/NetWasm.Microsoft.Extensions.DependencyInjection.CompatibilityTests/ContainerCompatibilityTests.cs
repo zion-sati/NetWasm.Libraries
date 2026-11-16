@@ -4,6 +4,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Generated;
 using static Microsoft.Extensions.DependencyInjection.Generated.GeneratedActivationRegistrationExtensions;
+using NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary;
 
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,18 @@ public sealed class ContainerCompatibilityTests
         await Assert.That(consumer.Clock.Name).IsEqualTo("UTC");
         await Assert.That(consumer.Zone).IsEqualTo("local");
         await Assert.That(provider.IsService(typeof(IClockConsumer))).IsTrue();
+    }
+
+    [Test]
+    public async Task LibrariesCompiledAgainstMicrosoftsAbstractionsRegisterIntoThisContainer()
+    {
+        var services = new ServiceCollection();
+        services.AddStockGreeting("hello");
+
+        using var provider = services.BuildServiceProvider();
+
+        await Assert.That(provider.GetRequiredService<IStockGreeting>().Text).IsEqualTo("hello");
+        await Assert.That(provider.IsService(typeof(IStockGreeting))).IsTrue();
     }
 
     [Test]

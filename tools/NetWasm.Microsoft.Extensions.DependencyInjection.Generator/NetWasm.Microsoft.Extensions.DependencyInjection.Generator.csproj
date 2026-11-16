@@ -12,6 +12,8 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <IsPackable>false</IsPackable>
+    <!-- The package that ships this generator gives it its release version. -->
+    <Version>$(NetWasmDependencyInjectionPackageVersion)</Version>
   </PropertyGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="NetWasm.Microsoft.Extensions.DependencyInjection.Tests" />

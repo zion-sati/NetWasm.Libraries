@@ -35,6 +35,7 @@
     <Project Path="tests/NetWasm.System.Formats.Cbor.Tests/NetWasm.System.Formats.Cbor.Tests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj" />
+    <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary/NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Target/NetWasm.Microsoft.Extensions.DependencyInjection.Target.csproj" />
     <Project Path="tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests/NetWasm.Microsoft.Extensions.DependencyInjection.Tests.csproj" />
   </Folder>
