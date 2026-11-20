@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Microsoft.Extensions.Configuration;
 
-public static class ConfigurationBinder
+public static partial class ConfigurationBinder
 {
     public static T? Get<T>(this IConfiguration configuration)
     {
@@ -55,12 +54,10 @@ public static class ConfigurationBinder
     public static T GetValue<T>(this IConfiguration configuration, string key, T defaultValue)
     {
         ArgumentNullException.ThrowIfNull(configuration);
-        string? value = key.Length == 0 && configuration is IConfigurationSection section
-            ? section.Value
-            : configuration[key];
+        IConfiguration source = key.Length == 0 ? configuration : configuration.GetSection(key);
+        string? value = source is IConfigurationSection section ? section.Value : configuration[key];
         if (value is null) return defaultValue;
-        object? converted = ConvertValue(typeof(T), value);
-        return (T)converted!;
+        return ConvertValue<T>(value, (source as IConfigurationSection)?.Path ?? key)!;
     }
 
     public static void Register<T>(Func<IConfiguration, BinderOptions, T?> factory)
@@ -88,32 +85,10 @@ public static class ConfigurationBinder
     public static bool ValueIsPresent(IConfigurationSection section)
     {
         ArgumentNullException.ThrowIfNull(section);
-        return section is IConfigurationSectionValueAccessor accessor
-            ? accessor.TryGetValue(out _)
+        // As upstream's binder: a ConfigurationSection tells a key explicitly set to null from an absent one.
+        return section is ConfigurationSection configurationSection
+            ? configurationSection.TryGetValue(key: null, out _)
             : section.Value is not null;
-    }
-
-    private static object? ConvertValue(Type type, string value)
-    {
-        Type? nullable = Nullable.GetUnderlyingType(type);
-        if (nullable is not null)
-        {
-            if (value.Length == 0) return null;
-            object? nested = ConvertValue(nullable, value);
-            return nested;
-        }
-
-        if (type == typeof(string)) return value;
-        if (type == typeof(bool)) return bool.Parse(value);
-        if (type == typeof(byte)) return byte.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(short)) return short.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(int)) return int.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(long)) return long.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(float)) return float.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(double)) return double.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(decimal)) return decimal.Parse(value, CultureInfo.InvariantCulture);
-        if (type == typeof(Guid)) return Guid.Parse(value);
-        throw new FormatException($"The configuration value '{value}' cannot be converted to {type}.");
     }
 
     private static void ValidateOptions(BinderOptions options)

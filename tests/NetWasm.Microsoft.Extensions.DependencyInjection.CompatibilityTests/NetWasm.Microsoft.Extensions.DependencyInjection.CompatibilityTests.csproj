@@ -1,7 +1,7 @@
 <Project Sdk="NetWasm.Sdk">
   <PropertyGroup>
     <TargetFramework></TargetFramework>
-    <TargetFrameworks>net10.0;netwasm0.1</TargetFrameworks>
+    <TargetFrameworks>net10.0;net10.0-netwasm</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
@@ -11,7 +11,7 @@
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
     <TUnitSourceGenerationMode>ClosedWorldCatalog</TUnitSourceGenerationMode>
     <!-- Microsoft's abstractions package, which the stock-compiled library brings in, has only .NET Standard
-         assets. NuGet reads restore warnings once for a multi-targeting project, outside the netwasm0.1 build
+         assets. NuGet reads restore warnings once for a multi-targeting project, outside the net10.0-netwasm build
          where the SDK accepts that fallback, so its fallback warning is accepted here. -->
     <NoWarn>$(NoWarn);TUnit0034;TUnit0038;NU1701</NoWarn>
     <DisableImplicitFrameworkReferences Condition="'$(TargetFramework)' == 'net10.0'">false</DisableImplicitFrameworkReferences>
@@ -19,11 +19,11 @@
     <NoStandardLibraries Condition="'$(TargetFramework)' == 'net10.0'">false</NoStandardLibraries>
     <NoCompilerStandardLib Condition="'$(TargetFramework)' == 'net10.0'">false</NoCompilerStandardLib>
     <DisableStandardFrameworkResolution Condition="'$(TargetFramework)' == 'net10.0'">true</DisableStandardFrameworkResolution>
-    <GenerateAssemblyInfo Condition="'$(TargetFramework)' == 'netwasm0.1'">false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo Condition="'$(TargetFramework)' == 'net10.0-netwasm'">false</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
     <Using Remove="Xunit" />
-    <Compile Include="ContainerCompatibilityTests.cs" Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+    <Compile Include="ContainerCompatibilityTests.cs" Condition="'$(TargetFramework)' == 'net10.0-netwasm'" />
     <Compile Include="DesktopCompatibilityTests.cs" Condition="'$(TargetFramework)' == 'net10.0'" />
     <PackageReference Include="NetWasm.TUnit" Version="[$(NetWasmTUnitPackageVersion)]" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection"
@@ -31,16 +31,16 @@
                       Condition="'$(TargetFramework)' == 'net10.0'" />
     <PackageReference Include="NetWasm.Microsoft.Extensions.DependencyInjection"
                       Version="[$(NetWasmDependencyInjectionPackageVersion)]"
-                      Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+                      Condition="'$(TargetFramework)' == 'net10.0-netwasm'" />
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary/NetWasm.Microsoft.Extensions.DependencyInjection.StockCompiledLibrary.csproj"
-                      Condition="'$(TargetFramework)' == 'netwasm0.1'" />
+                      Condition="'$(TargetFramework)' == 'net10.0-netwasm'" />
   </ItemGroup>
 
   <!-- The stock-compiled library brings Microsoft's abstractions package into this application. The port's
        assembly must win, or Microsoft's container contracts silently replace the port's. -->
   <Target Name="RequirePortedDependencyInjectionAbstractions"
           AfterTargets="ResolveAssemblyReferences"
-          Condition="'$(TargetFramework)' == 'netwasm0.1'">
+          Condition="'$(TargetFramework)' == 'net10.0-netwasm'">
     <ItemGroup>
       <_StockDependencyInjectionAbstractions Include="@(ReferencePath)"
                                             Condition="'%(Filename)' == 'Microsoft.Extensions.DependencyInjection.Abstractions' and '%(ReferencePath.NuGetPackageId)' != 'NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions'" />

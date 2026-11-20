@@ -97,14 +97,11 @@ NUGET_PACKAGES="${package_cache}" dotnet restore "${seed_project}" \
 export NUGET_PACKAGES="${package_cache}"
 
 tunit_test_projects=(
-  tests/NetWasm.Microsoft.Extensions.Primitives.Tests/NetWasm.Microsoft.Extensions.Primitives.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.Configuration.Tests/NetWasm.Microsoft.Extensions.Configuration.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.Caching.Memory.Tests/NetWasm.Microsoft.Extensions.Caching.Memory.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.Http.Tests/NetWasm.Microsoft.Extensions.Http.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.Options.Tests/NetWasm.Microsoft.Extensions.Options.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.Logging.Tests/NetWasm.Microsoft.Extensions.Logging.Tests.csproj
-  tests/NetWasm.System.IO.Hashing.Tests/NetWasm.System.IO.Hashing.Tests.csproj
-  tests/NetWasm.System.Formats.Cbor.Tests/NetWasm.System.Formats.Cbor.Tests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.CompatibilityTests.csproj
   tests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests/NetWasm.Microsoft.Extensions.DependencyInjection.CompatibilityTests.csproj
 )
@@ -175,7 +172,7 @@ restore_and_test_netwasm() {
       -p:UseArtifactsOutput=true \
       -p:ArtifactsPath="${lane_artifacts}"
     dotnet test "${project}" \
-      --framework netwasm0.1 \
+      --framework net10.0-netwasm \
       --configuration Release \
       --no-restore \
       --disable-build-servers \

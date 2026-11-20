@@ -194,6 +194,115 @@ public sealed class ConfigurationTests
         await Assert.That(missingWithDefault).IsEqualTo(5);
     }
 
+    // Each value converts as upstream's TypeConverter for its type converts it from an invariant string.
+    [Test]
+    public async Task BindingConvertsValuesAsTheirTypeConvertersDo()
+    {
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string?>("Mode", "fast"),
+                new KeyValuePair<string, string?>("Access", "Read, Write"),
+                new KeyValuePair<string, string?>("ModeNumber", "2"),
+                new KeyValuePair<string, string?>("MaybeMode", string.Empty),
+                new KeyValuePair<string, string?>("Started", "2026-11-14T10:20:30+02:00"),
+                new KeyValuePair<string, string?>("When", "2026-11-14 10:20:30"),
+                new KeyValuePair<string, string?>("Day", "2026-11-14"),
+                new KeyValuePair<string, string?>("Time", "10:20:30"),
+                new KeyValuePair<string, string?>("Span", "1.02:03:04"),
+                new KeyValuePair<string, string?>("Id", " 6f9619ff-8b86-d011-b42d-00c04fc964ff "),
+                new KeyValuePair<string, string?>("Link", "/relative/path"),
+                new KeyValuePair<string, string?>("Version", "1.2.3.4"),
+                new KeyValuePair<string, string?>("Letter", "x"),
+                new KeyValuePair<string, string?>("Hex", "0x1F"),
+                new KeyValuePair<string, string?>("Small", " -5 "),
+                new KeyValuePair<string, string?>("Big", "18446744073709551615"),
+                new KeyValuePair<string, string?>("Ratio", "1.5e3"),
+                new KeyValuePair<string, string?>("Money", "12.75"),
+                new KeyValuePair<string, string?>("Bytes", "AQID"),
+                new KeyValuePair<string, string?>("Flag", " True "),
+            })
+            .Build();
+
+        ValueSettings settings = configuration.Get<ValueSettings>()!;
+
+        await Assert.That(settings.Mode).IsEqualTo(Mode.Fast);
+        await Assert.That(settings.Access).IsEqualTo(Access.Read | Access.Write);
+        await Assert.That(settings.ModeNumber).IsEqualTo(Mode.Fast);
+        await Assert.That(settings.MaybeMode).IsNull();
+        await Assert.That(settings.Started).IsEqualTo(new DateTimeOffset(2026, 11, 14, 10, 20, 30, TimeSpan.FromHours(2)));
+        await Assert.That(settings.When).IsEqualTo(new DateTime(2026, 11, 14, 10, 20, 30));
+        await Assert.That(settings.Day).IsEqualTo(new DateOnly(2026, 11, 14));
+        await Assert.That(settings.Time).IsEqualTo(new TimeOnly(10, 20, 30));
+        await Assert.That(settings.Span).IsEqualTo(new TimeSpan(1, 2, 3, 4));
+        await Assert.That(settings.Id).IsEqualTo(new Guid("6f9619ff-8b86-d011-b42d-00c04fc964ff"));
+        await Assert.That(settings.Link!.IsAbsoluteUri).IsFalse();
+        await Assert.That(settings.Link.OriginalString).IsEqualTo("/relative/path");
+        await Assert.That(settings.Version).IsEqualTo(new Version(1, 2, 3, 4));
+        await Assert.That(settings.Letter).IsEqualTo('x');
+        await Assert.That(settings.Hex).IsEqualTo(31);
+        await Assert.That(settings.Small).IsEqualTo((sbyte)-5);
+        await Assert.That(settings.Big).IsEqualTo(ulong.MaxValue);
+        await Assert.That(settings.Ratio).IsEqualTo(1500f);
+        await Assert.That(settings.Money).IsEqualTo(12.75m);
+        await Assert.That(settings.Bytes.Length).IsEqualTo(3);
+        await Assert.That(settings.Bytes[2]).IsEqualTo((byte)3);
+        await Assert.That(settings.Flag).IsTrue();
+    }
+
+    // A dictionary binds each child by its key, converted to the key type, into the dictionary the property holds.
+    [Test]
+    public async Task BindingFillsDictionariesByKey()
+    {
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string?>("Limits:x", "1"),
+                new KeyValuePair<string, string?>("Limits:y", "2"),
+                new KeyValuePair<string, string?>("Children:first:Enabled", "true"),
+                new KeyValuePair<string, string?>("Names:7", "seven"),
+                new KeyValuePair<string, string?>("ByMode:Slow", "careful"),
+            })
+            .Build();
+        var existing = new DictionarySettings();
+        existing.Limits["kept"] = 9;
+
+        configuration.Bind(existing);
+        DictionarySettings created = configuration.Get<DictionarySettings>()!;
+
+        await Assert.That(existing.Limits.Count).IsEqualTo(3);
+        await Assert.That(existing.Limits["kept"]).IsEqualTo(9);
+        await Assert.That(existing.Limits["y"]).IsEqualTo(2);
+        await Assert.That(created.Limits.Count).IsEqualTo(2);
+        await Assert.That(created.Children["first"].Enabled).IsTrue();
+        await Assert.That(created.Names![7]).IsEqualTo("seven");
+        await Assert.That(created.ByMode[Mode.Slow]).IsEqualTo("careful");
+    }
+
+    // GetValue converts as binding does, and fails as upstream's binder does, naming the value, its path and the type.
+    [Test]
+    public async Task GetValueConvertsAndReportsAValueItCannotConvert()
+    {
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new[]
+            {
+                new KeyValuePair<string, string?>("App:Mode", "SLOW"),
+                new KeyValuePair<string, string?>("App:MaybeMode", string.Empty),
+                new KeyValuePair<string, string?>("App:Timeout", "00:00:05"),
+                new KeyValuePair<string, string?>("App:Retries", "many"),
+            })
+            .Build();
+        IConfigurationSection app = configuration.GetSection("App");
+
+        await Assert.That(app.GetValue<Mode>("Mode")).IsEqualTo(Mode.Slow);
+        await Assert.That(app.GetValue<Mode?>("MaybeMode")).IsNull();
+        await Assert.That(app.GetValue<TimeSpan>("Timeout")).IsEqualTo(TimeSpan.FromSeconds(5));
+        string? message = null;
+        try { _ = app.GetValue<int>("Retries"); }
+        catch (InvalidOperationException error) { message = error.Message; }
+        await Assert.That(message).IsEqualTo("Failed to convert configuration value 'many' at 'App:Retries' to type 'System.Int32'.");
+    }
+
     [Test]
     public async Task GeneratedBindingSupportsInheritedAndObjectCollectionProperties()
     {
@@ -346,6 +455,43 @@ public sealed class ConfigurationTests
         public int RetryCount { get; set; } = 5;
         public SettingsChild Child { get; set; } = new() { Enabled = true };
         public string[] Tags { get; set; } = new[] { "default" };
+    }
+
+    public enum Mode { None, Slow, Fast }
+
+    [Flags]
+    public enum Access { None = 0, Read = 1, Write = 2 }
+
+    public sealed class ValueSettings
+    {
+        public Mode Mode { get; set; }
+        public Access Access { get; set; }
+        public Mode ModeNumber { get; set; }
+        public Mode? MaybeMode { get; set; } = Mode.Slow;
+        public DateTimeOffset Started { get; set; }
+        public DateTime When { get; set; }
+        public DateOnly Day { get; set; }
+        public TimeOnly Time { get; set; }
+        public TimeSpan Span { get; set; }
+        public Guid Id { get; set; }
+        public Uri? Link { get; set; }
+        public Version? Version { get; set; }
+        public char Letter { get; set; }
+        public int Hex { get; set; }
+        public sbyte Small { get; set; }
+        public ulong Big { get; set; }
+        public float Ratio { get; set; }
+        public decimal Money { get; set; }
+        public byte[] Bytes { get; set; } = Array.Empty<byte>();
+        public bool Flag { get; set; }
+    }
+
+    public sealed class DictionarySettings
+    {
+        public Dictionary<string, int> Limits { get; set; } = new();
+        public IDictionary<string, SettingsChild> Children { get; set; } = new Dictionary<string, SettingsChild>();
+        public IReadOnlyDictionary<int, string>? Names { get; set; }
+        public Dictionary<Mode, string> ByMode { get; set; } = new();
     }
 
     public sealed class NullableDefaultSettings

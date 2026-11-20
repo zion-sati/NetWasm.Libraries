@@ -209,6 +209,30 @@ public sealed class ContainerCompatibilityTests
         await Assert.That(services[1].Lifetime).IsEqualTo(ServiceLifetime.Transient);
     }
 
+    // As upstream, the last registration takes slot 0, so resolving every registration first still leaves the last
+    // one as the single service, and the same instance where the lifetime caches it.
+    [Test]
+    public async Task ASequenceResolvedFirstLeavesTheLastRegistrationAsTheSingleService()
+    {
+        foreach (var lifetime in new[] { ServiceLifetime.Singleton, ServiceLifetime.Scoped, ServiceLifetime.Transient })
+        {
+            IServiceCollection services = new ServiceCollection();
+            services.Add(new ServiceDescriptor(typeof(IRanked), _ => new Ranked("first"), lifetime));
+            services.Add(new ServiceDescriptor(typeof(IRanked), _ => new Ranked("last"), lifetime));
+
+            using var provider = services.BuildServiceProvider();
+            using var scope = provider.CreateScope();
+            var all = new List<IRanked>(scope.ServiceProvider.GetServices<IRanked>());
+            var single = scope.ServiceProvider.GetRequiredService<IRanked>();
+
+            await Assert.That(all.Count).IsEqualTo(2);
+            await Assert.That(all[0].Name).IsEqualTo("first");
+            await Assert.That(all[1].Name).IsEqualTo("last");
+            await Assert.That(single.Name).IsEqualTo("last");
+            await Assert.That(ReferenceEquals(single, all[1])).IsEqualTo(lifetime != ServiceLifetime.Transient);
+        }
+    }
+
     [Test]
     public async Task FactoryInstanceAndKeyedRegistrationsPreservePublicBehavior()
     {
@@ -500,4 +524,14 @@ public sealed class ContainerCompatibilityTests
     {
         public string Name => "value";
     }
+}
+
+internal interface IRanked
+{
+    string Name { get; }
+}
+
+internal sealed class Ranked(string name) : IRanked
+{
+    public string Name { get; } = name;
 }

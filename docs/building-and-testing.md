@@ -19,7 +19,7 @@ eng/test.sh
 ```
 
 The tests compare desktop behavior where applicable and execute the same suites
-through the `netwasm0.1` target.
+through the `net10.0-netwasm` target.
 
 Set `NETWASM_LIBRARIES_TEST_SHARD=<index>/<count>` to run one part of the suite:
 `2/3` runs every third test project starting with the second. CI runs the three

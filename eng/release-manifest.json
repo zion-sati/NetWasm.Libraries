@@ -8,21 +8,12 @@
   "packages": [
     "NetWasm.Microsoft.Extensions.DependencyInjection",
     "NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions",
-    "NetWasm.Microsoft.Extensions.Caching.Abstractions",
     "NetWasm.Microsoft.Extensions.Caching.Memory",
-    "NetWasm.Microsoft.Extensions.Configuration",
-    "NetWasm.Microsoft.Extensions.Configuration.Abstractions",
     "NetWasm.Microsoft.Extensions.Configuration.Binder",
-    "NetWasm.Microsoft.Extensions.Configuration.CommandLine",
-    "NetWasm.Microsoft.Extensions.Configuration.EnvironmentVariables",
-    "NetWasm.Microsoft.Extensions.Configuration.Json",
     "NetWasm.Microsoft.Extensions.Http",
     "NetWasm.Microsoft.Extensions.Logging",
     "NetWasm.Microsoft.Extensions.Logging.Abstractions",
     "NetWasm.Microsoft.Extensions.Options",
-    "NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions",
-    "NetWasm.Microsoft.Extensions.Primitives",
-    "NetWasm.System.Formats.Cbor",
-    "NetWasm.System.IO.Hashing"
+    "NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions"
   ]
 }

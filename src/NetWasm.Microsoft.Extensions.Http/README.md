@@ -1,7 +1,7 @@
 # NetWasm.Microsoft.Extensions.Http
 
 This package provides the useful `IHttpClientFactory` surface for
-`netwasm0.1`: named clients, typed clients, `DelegatingHandler` pipelines, and
+NetWasm (`net10.0-netwasm`): named clients, typed clients, `DelegatingHandler` pipelines, and
 host-owned HTTP transport composition.
 
 Handler lifetime expiry is checked when a client or handler is requested. The

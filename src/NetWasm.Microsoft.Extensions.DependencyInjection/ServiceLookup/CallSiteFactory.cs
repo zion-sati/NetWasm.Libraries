@@ -595,11 +595,14 @@ internal sealed class CallSiteFactory : IServiceProviderIsService
         internal ServiceDescriptorCacheItem Add(ServiceDescriptor descriptor)
         {
             Last = descriptor;
-            _slotLookup[descriptor] = _slotLookup.Count;
+            _slotLookup.TryAdd(descriptor, _descriptors.Count);
             _descriptors.Add(descriptor);
             return this;
         }
 
-        internal int GetSlot(ServiceDescriptor descriptor) => _slotLookup.TryGetValue(descriptor, out var slot) ? slot : 0;
+        // As upstream, the last registration takes slot 0, so a single service and the same registration inside a
+        // sequence share one cached instance; earlier registrations take the slots above it.
+        internal int GetSlot(ServiceDescriptor descriptor) =>
+            _slotLookup.TryGetValue(descriptor, out var index) ? _descriptors.Count - (index + 1) : 0;
     }
 }

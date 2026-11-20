@@ -31,7 +31,7 @@ class ProjectReleaseVersionTests(unittest.TestCase):
         (self.root / "eng/NetWasm.ReleaseVersion.txt").write_text("0.1.0\n")
         (self.root / "eng/NetWasm.PublicPackageVersions.props").write_text(
             "<Project><PropertyGroup>"
-            "<NetWasmSystemIOHashingPackageVersion>0.1.0</NetWasmSystemIOHashingPackageVersion>"
+            "<NetWasmMicrosoftExtensionsHttpPackageVersion>0.1.0</NetWasmMicrosoftExtensionsHttpPackageVersion>"
             "<NetWasmLoggingPackageVersion>0.1.0</NetWasmLoggingPackageVersion>"
             "<NetWasmTUnitPackageVersion>0.1.0</NetWasmTUnitPackageVersion>"
             "</PropertyGroup></Project>\n"
@@ -50,7 +50,7 @@ class ProjectReleaseVersionTests(unittest.TestCase):
 
         self.assertEqual("0.2.0-preview.1\n", (self.root / "eng/NetWasm.ReleaseVersion.txt").read_text())
         props = (self.root / "eng/NetWasm.PublicPackageVersions.props").read_text()
-        self.assertIn("<NetWasmSystemIOHashingPackageVersion>0.2.0-preview.1<", props)
+        self.assertIn("<NetWasmMicrosoftExtensionsHttpPackageVersion>0.2.0-preview.1<", props)
         self.assertIn("<NetWasmLoggingPackageVersion>0.2.0-preview.1<", props)
         self.assertIn("<NetWasmTUnitPackageVersion>0.1.0<", props)
         self.assertIn('"NetWasm.Sdk":"0.1.0"', (self.root / "global.json").read_text())

@@ -30,7 +30,7 @@ class ProjectDependencyVersionsTests(unittest.TestCase):
         )
         (self.root / "eng/NetWasm.PublicPackageVersions.props").write_text(
             "<Project><PropertyGroup>"
-            "<NetWasmSystemIOHashingPackageVersion>0.1.0</NetWasmSystemIOHashingPackageVersion>"
+            "<NetWasmMicrosoftExtensionsHttpPackageVersion>0.1.0</NetWasmMicrosoftExtensionsHttpPackageVersion>"
             "<NetWasmTUnitPackageVersion>0.4.3</NetWasmTUnitPackageVersion>"
             "</PropertyGroup></Project>\n"
         )
@@ -45,7 +45,7 @@ class ProjectDependencyVersionsTests(unittest.TestCase):
         self.assertEqual("0.5.0", global_json["msbuild-sdks"]["NetWasm.Sdk"])
         props = (self.root / "eng/NetWasm.PublicPackageVersions.props").read_text()
         self.assertIn("<NetWasmTUnitPackageVersion>0.5.1-preview.1<", props)
-        self.assertIn("<NetWasmSystemIOHashingPackageVersion>0.1.0<", props)
+        self.assertIn("<NetWasmMicrosoftExtensionsHttpPackageVersion>0.1.0<", props)
 
     def test_rejects_invalid_versions(self) -> None:
         with self.assertRaisesRegex(ValueError, "Invalid netwasm"):

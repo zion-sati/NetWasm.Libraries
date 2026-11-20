@@ -1,12 +1,12 @@
 # NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions
 
 `NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions` supplies the
-`Microsoft.Extensions.DependencyInjection.Abstractions` assembly for the
-`netwasm0.1` profile. It is an independently versioned ported-library package
+`Microsoft.Extensions.DependencyInjection.Abstractions` assembly for NetWasm
+(`net10.0-netwasm`). It is an independently versioned ported-library package
 for applications that opt into the NetWasm dependency-injection contracts.
 
-The package carries the `NetWasm,Version=v0.1` asset and preserves the standard
-assembly identity. The package targets only `netwasm0.1`.
+The package carries `net10.0-netwasm` assets and preserves the standard
+assembly identity. The package targets only NetWasm (`net10.0-netwasm`).
 
 Keyed service extension methods are declared on
 `Microsoft.Extensions.DependencyInjection.ServiceProviderKeyedServiceExtensions`,

@@ -4,17 +4,8 @@
          when the immutable release candidate is allocated. Packages declare
          them as minimum versions of each other, not exact pins, so an
          application can take a later release of any one package. -->
-    <NetWasmSystemIOHashingPackageVersion>0.4.2</NetWasmSystemIOHashingPackageVersion>
-    <NetWasmSystemFormatsCborPackageVersion>0.4.2</NetWasmSystemFormatsCborPackageVersion>
-    <NetWasmMicrosoftExtensionsPrimitivesPackageVersion>0.4.2</NetWasmMicrosoftExtensionsPrimitivesPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>0.4.2</NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationPackageVersion>0.4.2</NetWasmMicrosoftExtensionsConfigurationPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>0.4.2</NetWasmMicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>0.4.2</NetWasmMicrosoftExtensionsConfigurationCommandLinePackageVersion>
-    <NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>0.4.2</NetWasmMicrosoftExtensionsConfigurationJsonPackageVersion>
     <NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>0.4.2</NetWasmMicrosoftExtensionsConfigurationBinderPackageVersion>
     <NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>0.4.2</NetWasmMicrosoftExtensionsOptionsConfigurationExtensionsPackageVersion>
-    <NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>0.4.2</NetWasmMicrosoftExtensionsCachingAbstractionsPackageVersion>
     <NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>0.4.2</NetWasmMicrosoftExtensionsCachingMemoryPackageVersion>
     <NetWasmMicrosoftExtensionsHttpPackageVersion>0.4.2</NetWasmMicrosoftExtensionsHttpPackageVersion>
     <NetWasmDependencyInjectionAbstractionsPackageVersion>0.4.2</NetWasmDependencyInjectionAbstractionsPackageVersion>
@@ -23,7 +14,10 @@
     <NetWasmLoggingAbstractionsPackageVersion>0.4.2</NetWasmLoggingAbstractionsPackageVersion>
     <NetWasmLoggingPackageVersion>0.4.2</NetWasmLoggingPackageVersion>
 
+    <!-- Microsoft's own packages, where they run on NetWasm unchanged; the ports depend on them. -->
+    <MicrosoftExtensionsPackageVersion>11.0.0</MicrosoftExtensionsPackageVersion>
+
     <!-- Test-only dependency. TUnit remains outside the production package DAG. -->
-    <NetWasmTUnitPackageVersion>0.14.2</NetWasmTUnitPackageVersion>
+    <NetWasmTUnitPackageVersion>0.15.0</NetWasmTUnitPackageVersion>
   </PropertyGroup>
 </Project>

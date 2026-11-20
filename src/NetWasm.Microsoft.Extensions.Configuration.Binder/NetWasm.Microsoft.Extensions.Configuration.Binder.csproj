@@ -1,6 +1,6 @@
 <Project Sdk="NetWasm.Sdk">
   <PropertyGroup>
-    <TargetFramework>netwasm0.1</TargetFramework>
+    <TargetFramework>net10.0-netwasm</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>Microsoft.Extensions.Configuration.Binder</AssemblyName>
     <Nullable>enable</Nullable>
@@ -26,19 +26,21 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Microsoft/Extensions/Configuration/*.cs" />
-    <ProjectReference Include="../NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />
-    <PackageReference Include="NetWasm.Microsoft.Extensions.Configuration.Abstractions" Version="$(NetWasmMicrosoftExtensionsConfigurationAbstractionsPackageVersion)" Condition="'$(NetWasmPackPackageGraph)' == 'true'" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="$(MicrosoftExtensionsPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="$(MicrosoftExtensionsPackageVersion)" />
     <ProjectReference Include="$(NetWasmConfigurationBinderGeneratorProject)"
                       ReferenceOutputAssembly="false"
                       OutputItemType="Analyzer"
                       PrivateAssets="all"
                       SkipGetTargetFrameworkProperties="true"
                       AdditionalProperties="TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false" />
-    <None Update="README.md" Pack="true" PackagePath="README.md" />
+    <None Remove="README.md" />
+    <None Include="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
+  <!-- The analyzer is one package file for every target framework, so one inner build adds it. -->
   <Target Name="NetWasmCollectConfigurationBinderGeneratorAsset"
           Returns="@(TfmSpecificPackageFile)"
-          Condition="'$(TargetFrameworkIdentifier)' == 'NetWasm' AND '$(TargetFrameworkVersion)' == 'v0.1'">
+          Condition="'$(NetWasmGuestFramework)' == 'true' AND '$(TargetFramework)' == 'net10.0-netwasm'">
     <MSBuild Projects="$(NetWasmConfigurationBinderGeneratorProject)"
              Targets="GetTargetPath"
              Properties="Configuration=$(Configuration);TargetFramework=netstandard2.0;TargetFrameworks=netstandard2.0;DebugType=none;DebugSymbols=false"
