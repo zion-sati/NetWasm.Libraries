@@ -15,18 +15,32 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        IncrementalValuesProvider<INamedTypeSymbol?> requests = context.SyntaxProvider
+        IncrementalValuesProvider<Request?> requests = context.SyntaxProvider
             .CreateSyntaxProvider(
                 static (node, _) => node is InvocationExpressionSyntax,
                 static (syntaxContext, _) => ReadRequest(syntaxContext))
-            .Where(static type => type is not null);
+            .Where(static request => request is not null);
 
         context.RegisterSourceOutput(
             requests.Collect(),
-            static (productionContext, types) => Emit(productionContext, types));
+            static (productionContext, input) => Emit(productionContext, input));
     }
 
-    private static INamedTypeSymbol? ReadRequest(GeneratorSyntaxContext context)
+    // A type to bind, or a type GetValue<T> reads that only generated code converts, as an enum.
+    private sealed class Request
+    {
+        public Request(INamedTypeSymbol type, bool value)
+        {
+            Type = type;
+            Value = value;
+        }
+
+        public INamedTypeSymbol Type { get; }
+
+        public bool Value { get; }
+    }
+
+    private static Request? ReadRequest(GeneratorSyntaxContext context)
     {
         var invocation = (InvocationExpressionSyntax)context.Node;
         if (context.SemanticModel.GetSymbolInfo(invocation).Symbol is not IMethodSymbol method || method.TypeArguments.Length != 1)
@@ -40,17 +54,30 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
         bool isOptionsConfiguration =
             (containingType == "Microsoft.Extensions.DependencyInjection.OptionsConfigurationServiceCollectionExtensions" && method.Name == "Configure") ||
             (containingType == "Microsoft.Extensions.DependencyInjection.OptionsBuilderConfigurationExtensions" && method.Name is "Bind" or "BindConfiguration");
+        if (containingType == "Microsoft.Extensions.Configuration.ConfigurationBinder" && method.Name == "GetValue" &&
+            method.TypeArguments[0] is INamedTypeSymbol valueType && EnumOf(valueType) is not null)
+        {
+            return new Request(valueType, value: true);
+        }
         if (!isBinder && !isOptionsConfiguration) return null;
 
-        return method.TypeArguments[0] as INamedTypeSymbol;
+        return method.TypeArguments[0] is INamedTypeSymbol type ? new Request(type, value: false) : null;
     }
 
-    private static void Emit(SourceProductionContext context, ImmutableArray<INamedTypeSymbol?> input)
+    private static void Emit(SourceProductionContext context, ImmutableArray<Request?> input)
     {
         var types = new List<INamedTypeSymbol>();
-        foreach (INamedTypeSymbol? type in input)
+        var values = new List<INamedTypeSymbol>();
+        foreach (Request? request in input)
         {
-            if (type is null || types.Any(existing => SymbolEqualityComparer.Default.Equals(existing, type))) continue;
+            if (request is { Value: true } &&
+                !values.Any(existing => SymbolEqualityComparer.Default.Equals(existing, request.Type)))
+            {
+                values.Add(request.Type);
+                continue;
+            }
+            INamedTypeSymbol? type = request?.Type;
+            if (type is null || request!.Value || types.Any(existing => SymbolEqualityComparer.Default.Equals(existing, type))) continue;
             if (type.TypeKind != TypeKind.Class)
             {
                 context.ReportDiagnostic(Diagnostic.Create(
@@ -62,23 +89,45 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
             types.Add(type);
         }
 
-        if (types.Count == 0) return;
+        if (types.Count == 0 && values.Count == 0) return;
 
-        var emitter = new Emitter(types);
+        var emitter = new Emitter(types, values);
         context.AddSource("NetWasm.Configuration.Binding.g.cs", emitter.Emit());
+        foreach (string unsupported in emitter.Unsupported)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(
+                new DiagnosticDescriptor("NWCFG011", "NetWasm configuration binding",
+                    "The NetWasm configuration binding generator cannot convert a configuration value to '{0}'",
+                    "NetWasm.Configuration", DiagnosticSeverity.Error, true),
+                Location.None, unsupported));
+        }
     }
+
+    // The enum a type is, or that a nullable type wraps.
+    private static INamedTypeSymbol? EnumOf(ITypeSymbol type) => type switch
+    {
+        INamedTypeSymbol { TypeKind: TypeKind.Enum } named => named,
+        INamedTypeSymbol { OriginalDefinition.SpecialType: SpecialType.System_Nullable_T } nullable =>
+            nullable.TypeArguments[0] as INamedTypeSymbol is { TypeKind: TypeKind.Enum } underlying ? underlying : null,
+        _ => null,
+    };
 
     private sealed class Emitter
     {
         private readonly List<INamedTypeSymbol> _roots;
+        private readonly List<INamedTypeSymbol> _values;
         private readonly List<INamedTypeSymbol> _objects = new();
         private readonly Dictionary<string, int> _ids = new();
 
-        public Emitter(List<INamedTypeSymbol> roots)
+        public Emitter(List<INamedTypeSymbol> roots, List<INamedTypeSymbol> values)
         {
             _roots = roots;
+            _values = values;
             foreach (INamedTypeSymbol root in roots) VisitObject(root);
         }
+
+        // The value types nothing here can convert, by name.
+        public SortedSet<string> Unsupported { get; } = new(System.StringComparer.Ordinal);
 
         public string Emit()
         {
@@ -96,6 +145,11 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
                 writer.Append("        global::Microsoft.Extensions.Configuration.ConfigurationBinder.Register<")
                     .Append(typeName).Append(">(Bind_").Append(_ids[Identity(root)]).Append(", Apply_").Append(_ids[Identity(root)]).AppendLine(");");
             }
+            foreach (INamedTypeSymbol value in _values)
+            {
+                writer.Append("        global::Microsoft.Extensions.Configuration.ConfigurationBinder.RegisterValue<")
+                    .Append(Display(value)).Append(">(static (value, path) => ").Append(Parse(value, "value", "path")).AppendLine(");");
+            }
 
             writer.AppendLine("    }");
             foreach (INamedTypeSymbol objectType in _objects) EmitObject(writer, objectType);
@@ -111,7 +165,7 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
             _objects.Add(type);
             foreach (IPropertySymbol property in Properties(type))
             {
-                ITypeSymbol? element = CollectionElement(property.Type);
+                ITypeSymbol? element = CollectionElement(property.Type) ?? DictionaryTypes(property.Type)?.Value;
                 ITypeSymbol? nested = element is null ? NestedType(property.Type) : NestedType(element);
                 if (nested is INamedTypeSymbol named) VisitObject(named);
             }
@@ -140,7 +194,8 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
                 string section = "section_" + suffix;
                 writer.Append("        var ").Append(section).Append(" = configuration.GetSection(\"")
                     .Append(Escape(key)).AppendLine("\");");
-                if (CollectionElement(property.Type) is not null || NestedType(property.Type) is not null)
+                if (CollectionElement(property.Type) is not null || DictionaryTypes(property.Type) is not null ||
+                    NestedType(property.Type) is not null)
                 {
                     writer.Append("        if (global::Microsoft.Extensions.Configuration.ConfigurationExtensions.Exists(")
                         .Append(section).AppendLine("))");
@@ -151,8 +206,25 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
                         .Append(section).AppendLine("))");
                 }
                 writer.AppendLine("        {");
-                if (CollectionElement(property.Type) is ITypeSymbol element)
+                if (DictionaryTypes(property.Type) is { } dictionary)
                 {
+                    EmitDictionary(writer, property, section, suffix, dictionary.Key, dictionary.Value);
+                }
+                else if (CollectionElement(property.Type) is ITypeSymbol element)
+                {
+                    // As upstream reads a byte[]: base64 when the section has a value, otherwise its elements.
+                    bool base64 = Name(property.Type) == "byte[]";
+                    if (base64)
+                    {
+                        writer.Append("            if (").Append(section).AppendLine(".Value is { } base64)");
+                        writer.AppendLine("            {");
+                        writer.Append("                result.").Append(property.Name)
+                            .Append(" = global::Microsoft.Extensions.Configuration.ConfigurationBinder.ParseBase64(base64, ")
+                            .Append(section).AppendLine(".Path);");
+                        writer.AppendLine("            }");
+                        writer.AppendLine("            else");
+                        writer.AppendLine("            {");
+                    }
                     writer.Append("            var values_").Append(suffix).Append(" = new global::System.Collections.Generic.List<")
                         .Append(Display(element)).AppendLine(">();");
                     writer.Append("            foreach (global::Microsoft.Extensions.Configuration.IConfigurationSection child in ")
@@ -164,13 +236,15 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
                     }
                     else
                     {
-                        writer.Append("                values_").Append(suffix).Append(".Add(global::Microsoft.Extensions.Configuration.ConfigurationBinder.GetValue<")
-                            .Append(Display(element)).AppendLine(">(child, string.Empty, default!));");
+                        writer.AppendLine("                var value = child.Value;");
+                        writer.Append("                values_").Append(suffix).Append(".Add(value is null ? default! : ")
+                            .Append(Parse(element, "value", "child.Path")).AppendLine(");");
                     }
                     writer.AppendLine("            }");
                     writer.Append("            result.").Append(property.Name).Append(" = ");
                     if (property.Type is IArrayTypeSymbol) writer.Append("values_").Append(suffix).AppendLine(".ToArray();");
                     else writer.Append("values_").Append(suffix).AppendLine(";");
+                    if (base64) writer.AppendLine("            }");
                 }
                 else if (NestedType(property.Type) is INamedTypeSymbol nested)
                 {
@@ -196,13 +270,98 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
                 }
                 else
                 {
-                    writer.Append("            result.").Append(property.Name).Append(" = global::Microsoft.Extensions.Configuration.ConfigurationBinder.GetValue<")
-                        .Append(Display(property.Type)).Append(">(").Append(section).AppendLine(", string.Empty, default!);");
+                    writer.Append("            var value_").Append(suffix).Append(" = ").Append(section).AppendLine(".Value;");
+                    writer.Append("            result.").Append(property.Name).Append(" = value_").Append(suffix)
+                        .Append(" is null ? default! : ").Append(Parse(property.Type, "value_" + suffix, section + ".Path"))
+                        .AppendLine(";");
                 }
                 writer.AppendLine("        }");
             }
 
             writer.AppendLine("    }");
+        }
+
+        // As upstream binds a dictionary: into the one the property holds, or a new one, each child by its key.
+        private void EmitDictionary(
+            StringBuilder writer, IPropertySymbol property, string section, string suffix, ITypeSymbol key, ITypeSymbol value)
+        {
+            string concrete = "global::System.Collections.Generic.Dictionary<" + Display(key) + ", " + Display(value) + ">";
+            bool readable = property.GetMethod is { DeclaredAccessibility: Accessibility.Public } &&
+                property.Type is INamedTypeSymbol { Name: "Dictionary" or "IDictionary" };
+            writer.Append("            var map_").Append(suffix).Append(" = ")
+                .Append(readable ? "result." + property.Name + " ?? " : "").Append("new ").Append(concrete).AppendLine("();");
+            writer.Append("            foreach (global::Microsoft.Extensions.Configuration.IConfigurationSection child in ")
+                .Append(section).AppendLine(".GetChildren())");
+            writer.AppendLine("            {");
+            writer.Append("                var key = ").Append(Parse(key, "child.Key", "child.Path")).AppendLine(";");
+            if (NestedType(value) is INamedTypeSymbol nested)
+            {
+                writer.Append("                if (map_").Append(suffix).AppendLine(".TryGetValue(key, out var existing) && existing is not null)");
+                writer.Append("                    Apply_").Append(_ids[Identity(nested)]).AppendLine("(child, options, existing);");
+                writer.AppendLine("                else");
+                writer.Append("                    map_").Append(suffix).Append("[key] = Bind_").Append(_ids[Identity(nested)])
+                    .AppendLine("(child, options);");
+            }
+            else
+            {
+                writer.AppendLine("                var value = child.Value;");
+                writer.AppendLine("                if (value is not null)");
+                writer.Append("                    map_").Append(suffix).Append("[key] = ").Append(Parse(value, "value", "child.Path"))
+                    .AppendLine(";");
+            }
+            writer.AppendLine("            }");
+            writer.Append("            result.").Append(property.Name).Append(" = map_").Append(suffix).AppendLine(";");
+        }
+
+        // The conversion of a string to the type, each upstream's TypeConverter's; a nullable's empty value is null.
+        private string Parse(ITypeSymbol type, string value, string path)
+        {
+            const string Binder = "global::Microsoft.Extensions.Configuration.ConfigurationBinder.";
+            if (type is INamedTypeSymbol { OriginalDefinition.SpecialType: SpecialType.System_Nullable_T } nullable)
+            {
+                return "(" + value + ".Length == 0 ? (" + Display(type) + ")null : " + Parse(nullable.TypeArguments[0], value, path) + ")";
+            }
+            if (type.TypeKind == TypeKind.Enum)
+            {
+                return Binder + "ParseEnum<" + Display(type) + ">(" + value + ", " + path + ")";
+            }
+            string? parser = type.SpecialType switch
+            {
+                SpecialType.System_String or SpecialType.System_Object => null,
+                SpecialType.System_Boolean => "ParseBoolean",
+                SpecialType.System_Char => "ParseChar",
+                SpecialType.System_SByte => "ParseSByte",
+                SpecialType.System_Byte => "ParseByte",
+                SpecialType.System_Int16 => "ParseInt16",
+                SpecialType.System_UInt16 => "ParseUInt16",
+                SpecialType.System_Int32 => "ParseInt32",
+                SpecialType.System_UInt32 => "ParseUInt32",
+                SpecialType.System_Int64 => "ParseInt64",
+                SpecialType.System_UInt64 => "ParseUInt64",
+                SpecialType.System_Single => "ParseSingle",
+                SpecialType.System_Double => "ParseDouble",
+                SpecialType.System_Decimal => "ParseDecimal",
+                SpecialType.System_DateTime => "ParseDateTime",
+                _ => Name(type) switch
+                {
+                    "System.DateTimeOffset" => "ParseDateTimeOffset",
+                    "System.DateOnly" => "ParseDateOnly",
+                    "System.TimeOnly" => "ParseTimeOnly",
+                    "System.TimeSpan" => "ParseTimeSpan",
+                    "System.Guid" => "ParseGuid",
+                    "System.Uri" => "ParseUri",
+                    "System.Version" => "ParseVersion",
+                    "byte[]" => "ParseBase64",
+                    _ => "",
+                },
+            };
+            if (parser is null) return value;
+            if (parser.Length == 0)
+            {
+                Unsupported.Add(Name(type));
+                return "default!";
+            }
+            return Binder + parser + "(" + value + ", " + path + ")" + (parser == "ParseUri" ? "!" : "");
         }
 
         private static IEnumerable<IPropertySymbol> Properties(INamedTypeSymbol type)
@@ -228,9 +387,18 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
         {
             if (type is INamedTypeSymbol named && named.SpecialType != SpecialType.System_String &&
                 named.TypeKind == TypeKind.Class && named.Name != "List" && named.Name != "IList" &&
-                named.Name != "IEnumerable" && named.Name != "IReadOnlyList") return named;
+                named.Name != "IEnumerable" && named.Name != "IReadOnlyList" && DictionaryTypes(named) is null &&
+                Name(named) is not ("System.Uri" or "System.Version")) return named;
             return null;
         }
+
+        // A dictionary's key and value types: Dictionary, IDictionary or IReadOnlyDictionary.
+        private static (ITypeSymbol Key, ITypeSymbol Value)? DictionaryTypes(ITypeSymbol type) =>
+            type is INamedTypeSymbol { TypeArguments.Length: 2 } named &&
+            named.ContainingNamespace?.ToDisplayString() == "System.Collections.Generic" &&
+            named.Name is "Dictionary" or "IDictionary" or "IReadOnlyDictionary"
+                ? (named.TypeArguments[0], named.TypeArguments[1])
+                : null;
 
         private static ITypeSymbol? CollectionElement(ITypeSymbol type)
         {
@@ -253,6 +421,10 @@ public sealed class NetWasmConfigurationBinderGenerator : IIncrementalGenerator
         }
 
         private static string Display(ITypeSymbol type) => type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+
+        // A type's name without its nullable annotation, as "System.Uri" for Uri?.
+        private static string Name(ITypeSymbol type) =>
+            type.WithNullableAnnotation(NullableAnnotation.NotAnnotated).ToDisplayString();
 
         private static string Identity(ITypeSymbol type) => type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
 

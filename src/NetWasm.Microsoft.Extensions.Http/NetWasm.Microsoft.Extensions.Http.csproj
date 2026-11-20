@@ -1,6 +1,6 @@
 <Project Sdk="NetWasm.Sdk">
   <PropertyGroup>
-    <TargetFramework>netwasm0.1</TargetFramework>
+    <TargetFramework>net10.0-netwasm</TargetFramework>
     <OutputType>Library</OutputType>
     <AssemblyName>Microsoft.Extensions.Http</AssemblyName>
     <Nullable>enable</Nullable>
@@ -13,7 +13,7 @@
     <PackageId>NetWasm.Microsoft.Extensions.Http</PackageId>
     <Version>$(NetWasmMicrosoftExtensionsHttpPackageVersion)</Version>
     <PackageVersion>$(NetWasmMicrosoftExtensionsHttpPackageVersion)</PackageVersion>
-    <Description>NetWasm netwasm0.1 implementation of Microsoft.Extensions.Http over the host-owned HTTP transport.</Description>
+    <Description>NetWasm implementation of Microsoft.Extensions.Http over the host-owned HTTP transport.</Description>
     <PackageTags>netwasm;microsoft;extensions;http;httpclientfactory</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -26,7 +26,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Microsoft/Extensions/Http/*.cs" />
     <Compile Include="Microsoft/Extensions/DependencyInjection/*.cs" />
-    <None Update="README.md" Pack="true" PackagePath="README.md" />
+    <None Remove="README.md" />
+    <None Include="README.md" Pack="true" PackagePath="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj" Condition="'$(NetWasmPackPackageGraph)' != 'true'" />

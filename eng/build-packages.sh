@@ -143,22 +143,13 @@ NUGET_PACKAGES="${package_cache}" dotnet restore "${seed_project}" \
 
 root_projects=(
   src/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions/NetWasm.Microsoft.Extensions.DependencyInjection.Abstractions.csproj
-  src/NetWasm.Microsoft.Extensions.Primitives/NetWasm.Microsoft.Extensions.Primitives.csproj
 )
 
 dependent_projects=(
-  src/NetWasm.System.IO.Hashing/NetWasm.System.IO.Hashing.csproj
-  src/NetWasm.System.Formats.Cbor/NetWasm.System.Formats.Cbor.csproj
   src/NetWasm.Microsoft.Extensions.DependencyInjection/NetWasm.Microsoft.Extensions.DependencyInjection.csproj
-  src/NetWasm.Microsoft.Extensions.Configuration.Abstractions/NetWasm.Microsoft.Extensions.Configuration.Abstractions.csproj
-  src/NetWasm.Microsoft.Extensions.Configuration/NetWasm.Microsoft.Extensions.Configuration.csproj
   src/NetWasm.Microsoft.Extensions.Configuration.Binder/NetWasm.Microsoft.Extensions.Configuration.Binder.csproj
-  src/NetWasm.Microsoft.Extensions.Configuration.EnvironmentVariables/NetWasm.Microsoft.Extensions.Configuration.EnvironmentVariables.csproj
-  src/NetWasm.Microsoft.Extensions.Configuration.CommandLine/NetWasm.Microsoft.Extensions.Configuration.CommandLine.csproj
-  src/NetWasm.Microsoft.Extensions.Configuration.Json/NetWasm.Microsoft.Extensions.Configuration.Json.csproj
   src/NetWasm.Microsoft.Extensions.Options/NetWasm.Microsoft.Extensions.Options.csproj
   src/NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions/NetWasm.Microsoft.Extensions.Options.ConfigurationExtensions.csproj
-  src/NetWasm.Microsoft.Extensions.Caching.Abstractions/NetWasm.Microsoft.Extensions.Caching.Abstractions.csproj
   src/NetWasm.Microsoft.Extensions.Caching.Memory/NetWasm.Microsoft.Extensions.Caching.Memory.csproj
   src/NetWasm.Microsoft.Extensions.Logging.Abstractions/NetWasm.Microsoft.Extensions.Logging.Abstractions.csproj
   src/NetWasm.Microsoft.Extensions.Logging/NetWasm.Microsoft.Extensions.Logging.csproj
@@ -185,10 +176,12 @@ for project in "${dependent_projects[@]}"; do
   pack_project "${project}"
 done
 
+# One package per packed project.
+expected_count=$(( ${#root_projects[@]} + ${#dependent_projects[@]} ))
 package_count="$(find "${OUTPUT_DIR}" -maxdepth 1 -type f -name 'NetWasm.*.nupkg' | wc -l | tr -d ' ')"
-if [[ "${package_count}" -ne 18 ]]; then
-  echo "Expected exactly 18 NetWasm library packages, found ${package_count}." >&2
+if [[ "${package_count}" -ne "${expected_count}" ]]; then
+  echo "Expected exactly ${expected_count} NetWasm library packages, found ${package_count}." >&2
   exit 1
 fi
 
-echo "Built 18 NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"
+echo "Built ${expected_count} NetWasm library packages at ${RELEASE_VERSION} in ${OUTPUT_DIR}"

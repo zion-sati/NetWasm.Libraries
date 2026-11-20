@@ -6,8 +6,6 @@ Unless listed otherwise, the library sources are adapted from
 
 | NetWasm package | Upstream source area | Adaptation boundary |
 | --- | --- | --- |
-| `NetWasm.System.IO.Hashing` | `System.IO.Hashing` | Scalar portable implementation and available stream contracts |
-| `NetWasm.System.Formats.Cbor` | `System.Formats.Cbor` | Pinned .NETCoreApp reader/writer sources; English resource fallback |
 
 The dependency-injection packages are adapted from
 <https://github.com/dotnet/dotnet> commit
